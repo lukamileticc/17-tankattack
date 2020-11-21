@@ -25,18 +25,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     code/src/main.cpp \
-    code/src/button.cpp \
+<<<<<<< HEAD
+    code/src/mainwindow.cpp \
     code/src/Map.cpp \
     code/src/Tank.cpp \
     code/src/Wall.cpp
+=======
+    code/src/button.cpp
+>>>>>>> main_window_branch
 
 HEADERS += \
-    code/include/button.hpp \
     code/include/Board.hpp \
-    code/include/Rocket.hpp \
+<<<<<<< HEAD
+    code/include/Rocket.hpp
     code/include/Map.hpp \
     code/include/Tank.hpp \
     code/include/Wall.hpp
+=======
+    code/include/Rocket.hpp \
+    code/include/button.hpp
+>>>>>>> main_window_branch
 
 FORMS +=
 

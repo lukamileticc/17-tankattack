@@ -3,11 +3,11 @@
 
 
 #include <vector>
-#include "Rocket.hpp"
+//#include "Rocket.hpp"
 
 class Tank {
 public:
-    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
+//    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
     ~Tank()  = default;
     bool IsAbleToShoot() const;
 
@@ -22,9 +22,9 @@ public:
     int GetSpeed() const;
     int GetCurrentNumsOfRockets() const;
     int GetScore() const;
-    const std::vector<Rocket> &getRockets() const;
+//    const std::vector<Rocket> &getRockets() const;
 
-    void setRockets(const std::vector<Rocket> &mRockets);
+//    void setRockets(const std::vector<Rocket> &mRockets);
     void SetX(int x);
     void SetY(int y);
     void SetSpeed(int speed);
@@ -42,7 +42,7 @@ private:
     float m_current_health; //trenutno helti
     int m_num_of_lives; //broj preostalih zivota
     int m_num_of_rockets; // broj raketa
-    std::vector<Rocket> m_rockets; //niz raketa
+//    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
     int m_score;
 

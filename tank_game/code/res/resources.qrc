@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/resources/images">
+        <file>background.jpg</file>
+        <file>menu_background.jpg</file>
+        <file>tank_backround.jpg</file>
+    </qresource>
+</RCC>

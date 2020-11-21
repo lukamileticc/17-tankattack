@@ -1,12 +1,12 @@
 #include "../include/Tank.hpp"
 
-Tank::Tank(int x,int y,int speed,std::vector<Rocket> rockets):
-        m_x(x), m_y(y), m_current_health(100), m_num_of_lives(5),
-        m_num_of_rockets(10),
-        m_rockets(std::move(rockets)),
-        m_speed(speed),m_can_shoot(true){
+//Tank::Tank(int x,int y,int speed,std::vector<Rocket> rockets):
+//        m_x(x), m_y(y), m_current_health(100), m_num_of_lives(5),
+//        m_num_of_rockets(10),
+//        m_rockets(std::move(rockets)),
+//        m_speed(speed),m_can_shoot(true){
 
-}
+//}
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
@@ -91,13 +91,13 @@ void Tank::shoot() {
     m_num_of_rockets-=1;
 }
 
-const std::vector<Rocket> &Tank::getRockets() const {
-    return m_rockets;
-}
+//const std::vector<Rocket> &Tank::getRockets() const {
+//    return m_rockets;
+//}
 
-void Tank::setRockets(const std::vector<Rocket> &mRocket) {
-    m_rockets = mRocket;
-}
+//void Tank::setRockets(const std::vector<Rocket> &mRocket) {
+//    m_rockets = mRocket;
+//}
 void Tank::IncreaseScore(int score){
     m_score+=score;
 }
