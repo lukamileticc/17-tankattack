@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     code/src/main.cpp \
-    code/src/mainwindow.cpp
+    code/src/button.cpp
 
 HEADERS += \
-    code/include/mainwindow.h \
     code/include/Board.hpp \
-    code/include/Rocket.hpp
+    code/include/Rocket.hpp \
+    code/include/button.hpp
 
-FORMS += \
-    code/res/mainwindow.ui
+FORMS +=
+
+RESOURCES += \
+    code/res/resources.qrc
