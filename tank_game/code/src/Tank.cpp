@@ -5,7 +5,6 @@
 //        m_num_of_rockets(10),
 //        m_rockets(std::move(rockets)),
 //        m_speed(speed),m_can_shoot(true){
-
 //}
 
 bool Tank::IsAbleToShoot() const {

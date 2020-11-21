@@ -2,7 +2,6 @@
 #define WALL_HPP
 
 
-
 class Wall {
 
 public:

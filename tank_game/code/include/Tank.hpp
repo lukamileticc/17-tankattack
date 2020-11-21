@@ -1,11 +1,10 @@
 #ifndef TANK_HPP
 #define TANK_HPP
-
-
+#include <QGraphicsItem>
 #include <vector>
 //#include "Rocket.hpp"
 
-class Tank {
+class Tank :QGraphicsItem {
 public:
 //    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
     ~Tank()  = default;
@@ -34,7 +33,6 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
-
 private:
     int m_x;// x koordinata polozaja
     int m_y; // y koordinata polozaja
@@ -45,6 +43,7 @@ private:
 //    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
     int m_score;
+
 
 };
 #endif //TANK_HPP
