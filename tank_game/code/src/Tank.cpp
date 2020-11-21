@@ -1,10 +1,9 @@
 #include "../include/Tank.hpp"
 
 Tank::Tank(int x,int y,int speed,std::vector<Rocket> rockets):
-        m_x(x), m_y(y), m_current_health(100), m_num_of_lives(5),
+        m_x(x), m_y(y),m_speed(speed), m_current_health(100), m_num_of_lives(5),
         m_num_of_rockets(10),
-        m_rockets(std::move(rockets)),
-        m_speed(speed),m_can_shoot(true){
+        m_rockets(std::move(rockets)),m_can_shoot(true){
 
 }
 

@@ -33,7 +33,7 @@ SOURCES += \
 HEADERS += \
     code/include/mainwindow.h \
     code/include/Board.hpp \
-    code/include/Rocket.hpp
+    code/include/Rocket.hpp \
     code/include/Map.hpp \
     code/include/Tank.hpp \
     code/include/Wall.hpp
