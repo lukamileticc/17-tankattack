@@ -28,5 +28,5 @@ void Button::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event)
     //kada se klikne na button -- on treba da emituje signal
-//    emit this->button_was_clicked();
+    //emit this->button_was_clicked();
 }
