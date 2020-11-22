@@ -1,36 +1,31 @@
 #include "../include/Wall.hpp"
+#include <QGraphicsItem>
+#include <QPainter>
+#include <QStyleOption>
 
 
-Wall::Wall(int mX, int mY, int mLength, int mWeight) : m_x(mX), m_y(mY), m_length(mLength), m_weight(mWeight) {}
-
-int Wall::getX() const {
-    return m_x;
+Wall::Wall(float x, float y, float height, float width)
+    :m_x(x), m_y(y), m_height(height), m_width(width)
+{
 }
 
-void Wall::setX(int mX) {
-    m_x = mX;
+Wall::Wall(const Wall&)
+{
+
+}
+Wall Wall::operator=(const Wall&)
+{
+
 }
 
-int Wall::getY() const {
-    return m_y;
+void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setBrush(Qt::white);
+
+    painter->drawRect(m_x, m_y, m_width, m_height);
 }
 
-void Wall::setY(int mY) {
-    m_y = mY;
-}
-
-int Wall::getLength() const {
-    return m_length;
-}
-
-void Wall::setLength(int mLength) {
-    m_length = mLength;
-}
-
-int Wall::getWeight() const {
-    return m_weight;
-}
-
-void Wall::setWeight(int mWeight) {
-    m_weight = mWeight;
+QRectF Wall::boundingRect() const
+{
+    return QRectF(m_x, m_y, 10 + m_width, 10 + m_height);
 }

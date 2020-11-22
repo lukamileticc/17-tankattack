@@ -6,16 +6,22 @@
 #include <QString>
 #include <QGraphicsTextItem>
 #include <iostream>
+#include <vector>
+#include <stack>
 #include "code/include/button.hpp"
+#include "code/include/Wall.hpp"
+#include "code/include/Tank.hpp"
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
 
     //prvo kreiramo scenu
-    QGraphicsScene *scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1600,1000);
+    QGraphicsScene scene;
+    scene.setSceneRect(0,0,1400,1000);
 
+    QGraphicsView view(&scene);
 
     //krairamo neki rectItem koji cemo da stavimo na scenu---kasnije ce ovi biti button
 //    QGraphicsRectItem *rect = new QGraphicsRectItem();
@@ -24,7 +30,7 @@ int main(int argc, char *argv[])
 //    scene->addItem(rect);
 
     //sada moramo napraviti view da bismo prikazali scenu
-    QGraphicsView *view = new QGraphicsView(scene);
+   /* QGraphicsView *view = new QGraphicsView(scene);
     view->setWindowTitle("TankAttack");
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -46,9 +52,35 @@ int main(int argc, char *argv[])
     start_button->setPos(scene->width()/2 - start_button->boundingRect().width()/2,
                 250);
     view->scene()->addItem(start_button);
+    */
 
 
-    view->show();
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setRenderHint(QPainter::Antialiasing);
+    //boja pozadine
+    view.setBackgroundBrush(Qt::black);
+    view.setDragMode(QGraphicsView::ScrollHandDrag);
+
+    //Dva tenka jedan nasuprot drugom
+    Tank *t1 = new Tank(Qt::red, 200, 400);
+    Tank *t2 = new Tank(Qt::blue, 1200, 400);
+
+    //Dva zida koja predstavljaju kako bi mogao da
+    //izgleda 1 hodnik na mapi
+    Wall *w1 = new Wall(240, 440, 6, 960);
+    Wall *w2 = new Wall(240, 380, 6, 960);
+
+    scene.addItem(t1);
+    scene.addItem(t2);
+    scene.addItem(w1);
+    scene.addItem(w2);
+
+    view.setWindowTitle("TankAttack");
+    view.resize(1300,900);
+    view.show();
+
+
 
     return a.exec();
 }

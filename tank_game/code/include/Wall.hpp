@@ -1,37 +1,36 @@
 #ifndef WALL_HPP
 #define WALL_HPP
 
+#include <QGraphicsItem>
 
-class Wall {
-
+class Wall : public QGraphicsItem
+{
 public:
-    Wall(int mX, int mY, int mLength, int mWeight);
+    //prima x,y koordinate gornjeg levog ugla pravougaonika
+    //njegovu visinu i sirinu
+    Wall(float x, float y, float height, float width);
 
-    ~Wall()=default;
+    ~Wall() = default;
 
-    int getX() const;
+    Wall(const Wall&);
+    Wall operator=(const Wall&);
 
-    void setX(int mX);
+    // QGraphicsItem interface
+    //boundingRect() definise pravougaonik u kome Qt crta objekat
+    QRectF boundingRect() const;
 
-    int getY() const;
+    //metod koji sluzi za crtanje
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    void setY(int mY);
-
-    int getLength() const;
-
-    void setLength(int mLength);
-
-    int getWeight() const;
-
-    void setWeight(int mWeight);
 
 private:
-    int m_x;
-    int m_y;
-    int m_length;
-    int m_weight;
+    //koordinate gornjeg levog ugla pravougaonika (x,y)
+    float m_x;
+    float m_y;
 
+    //visina i sirina pravougaonika
+    float m_height;
+    float m_width;
 };
-
 
 #endif //WALL_HPP

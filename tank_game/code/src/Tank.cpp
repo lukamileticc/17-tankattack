@@ -1,11 +1,26 @@
 #include "../include/Tank.hpp"
+#include <QGraphicsItem>
+#include <QPainter>
+#include <QStyleOption>
 
-//Tank::Tank(int x,int y,int speed,std::vector<Rocket> rockets):
-//        m_x(x), m_y(y), m_current_health(100), m_num_of_lives(5),
-//        m_num_of_rockets(10),
-//        m_rockets(std::move(rockets)),
-//        m_speed(speed),m_can_shoot(true){
-//}
+
+Tank::Tank(QColor color, float x, float y)
+    :m_color(color), m_x(x), m_y(y)
+{
+}
+
+void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->setBrush(m_color);
+
+    painter->drawRect(m_x, m_y, 30, 30);
+}
+
+QRectF Tank::boundingRect() const
+{
+    return QRectF(m_x, m_y, 40, 40);
+}
+
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
@@ -21,15 +36,15 @@ int Tank::GetCurrentNumsOfLife () const{
     return m_num_of_lives;
 }
 
-int Tank::GetX() const{
+float Tank::GetX() const{
     return m_x;
 }
 
-int Tank:: GetY() const{
+float Tank:: GetY() const{
     return m_y;
 }
 
-int Tank::GetSpeed() const{
+float Tank::GetSpeed() const{
     return m_speed;
 }
 
@@ -52,15 +67,15 @@ void Tank::IncreaseHealth(int health) {
 bool Tank::IsDead() const {
     return m_num_of_lives==0;
 }
-void Tank::SetX(int x){
+void Tank::SetX(float x){
     m_x=x;
 }
 
-void Tank::SetY(int y){
+void Tank::SetY(float y){
     m_y=y;
 }
 
-void Tank::SetSpeed(int speed){
+void Tank::SetSpeed(float speed){
     m_speed=speed;
 }
 
