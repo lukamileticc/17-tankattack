@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    code/src/Rocket.cpp \
     code/src/main.cpp \
     code/src/button.cpp \
     code/src/Map.cpp \
