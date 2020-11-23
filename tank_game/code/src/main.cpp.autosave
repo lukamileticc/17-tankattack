@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 //    scene->addItem(rect);
 
     //sada moramo napraviti view da bismo prikazali scenu
-    QGraphicsView *view = new QGraphicsView(scene);
+    QGraphicsView *view = new QGraphicsView(&scene);
     view->setWindowTitle("TankAttack");
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

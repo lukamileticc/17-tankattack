@@ -32,6 +32,7 @@ SOURCES += \
     code/src/Wall.cpp
 
 HEADERS += \
+    code/include/World.hpp \
     code/include/button.hpp \
     code/include/Board.hpp \
     code/include/Rocket.hpp \

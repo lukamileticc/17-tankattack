@@ -6,8 +6,10 @@
 #include <memory>
 #include <utility>
 
-#include "Tank.hpp"
-#include "Map.hpp"
+#include <vector>
+#include "code/include/Map.hpp"
+#include "code/include/Tank.hpp"
+
 
 class Board
 {
