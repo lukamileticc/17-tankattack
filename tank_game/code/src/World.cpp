@@ -12,7 +12,7 @@ World::World(QObject *parent){
     // Inicijalizacija scene i pogleda
 
     scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1400,1000);
+    scene->setSceneRect(0,0,1280,720);
 
     view = new QGraphicsView();
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -25,14 +25,14 @@ World::World(QObject *parent){
 void World::show(){
 
     view->setWindowTitle("Tank Attack");
-    view->setFixedSize(1400,1000);
+    view->setFixedSize(1280,720);
     view->show();
 }
 
 void World::main_menu(){
 
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/tank_background_2.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
 
     QPushButton *bstart = new QPushButton(QString("START GAME"));
 
