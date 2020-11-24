@@ -5,32 +5,28 @@
 #include <QPixmap>
 #include <QString>
 #include <QGraphicsTextItem>
+#include <QPushButton>
 #include <iostream>
 #include <vector>
 #include <stack>
 #include "code/include/button.hpp"
 #include "code/include/Wall.hpp"
 #include "code/include/Tank.hpp"
+#include "code/include/World.hpp"
 
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
 
-    //prvo kreiramo scenu
-    QGraphicsScene scene;
-    scene.setSceneRect(0,0,1400,1000);
+    World *world = new World();
 
-    // QGraphicsView view(&scene);
+    world->show();
 
-    //krairamo neki rectItem koji cemo da stavimo na scenu---kasnije ce ovi biti button
-//    QGraphicsRectItem *rect = new QGraphicsRectItem();
-//    rect->setRect(0,0,100,100);
+    world->main_menu();
 
-//    scene->addItem(rect);
 
-    //sada moramo napraviti view da bismo prikazali scenu
-    QGraphicsView *view = new QGraphicsView(scene);
+    /*
     view->setWindowTitle("TankAttack");
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -54,7 +50,7 @@ int main(int argc, char *argv[])
     view->scene()->addItem(start_button);
 
 
-    /*
+
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setRenderHint(QPainter::Antialiasing);
@@ -79,8 +75,6 @@ int main(int argc, char *argv[])
     view.setWindowTitle("TankAttack");
     view.resize(1300,900);
     */
-
-    view.show();
 
 
 
