@@ -14,6 +14,8 @@ public:
     Button(QString text, int height, int width, QGraphicsItem *parent = nullptr);
     ~Button();
 
+    void button_wasnt_clicked();
+
     // QGraphicsItem interface
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
