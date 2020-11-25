@@ -44,7 +44,7 @@ void World::main_menu(){
     bstart->setStyleSheet("background-color: grey");
 
     scene->addWidget(bstart);
-    QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()));
+    QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
 
     QPushButton *bquit = new QPushButton(QString("QUIT GAME"));
 
@@ -62,14 +62,11 @@ void World::main_menu(){
 
 void World::start(){
 
-
 //    for (size_t i = 0, n = scene->items().size(); i<n; i++){
-//        scene->items()[i]->setEnabled(false);
+//        scene->removeItem(scene->items()[0]);
 //    }
 
-    for (size_t i = 0, n = scene->items().size(); i<n; i++){
-        scene->removeItem(scene->items()[0]);
-    }
+    scene->clear();
 
     view->setBackgroundBrush(Qt::black);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
