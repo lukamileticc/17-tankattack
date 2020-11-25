@@ -1,10 +1,14 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
-
 #include <QGraphicsScene>
 #include <QGraphicsWidget>
 #include <QGraphicsView>
 #include <QObject>
+#include <QPushButton>
+#include <iostream>
+#include <QBrush>
+#include <QApplication>
+#include <QDebug> //biblioteka za debagovanje koristi se ovako: qDebug() << "we are here";
 
 class World : public QObject
 {
@@ -13,7 +17,7 @@ class World : public QObject
 public:
     World(QObject *parent = nullptr);
 
-    virtual ~World() {};
+    virtual ~World();
 
     void show();
 

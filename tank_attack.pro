@@ -27,14 +27,12 @@ SOURCES += \
     code/src/Rocket.cpp \
     code/src/World.cpp \
     code/src/main.cpp \
-    code/src/button.cpp \
     code/src/Map.cpp \
     code/src/Tank.cpp \
     code/src/Wall.cpp
 
 HEADERS += \
     code/include/World.hpp \
-    code/include/button.hpp \
     code/include/Board.hpp \
     code/include/Rocket.hpp \
     code/include/Map.hpp \
