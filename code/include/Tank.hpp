@@ -42,7 +42,15 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
+    //---
+    void advance(int step) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    //---
+
 private:
+
+    QColor m_color;
     float m_x;// x koordinata polozaja
     float m_y; // y koordinata polozaja
     float m_speed; // brzina tenka
@@ -52,7 +60,17 @@ private:
 //    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
     int m_score;
-    QColor m_color;
 
+    //~~~~~~~~~~~~~
+    bool up = false;
+    bool down = false;
+    bool left = false;
+    bool right = false;
+
+    float x_v = 0;
+    float y_v = 1;
+
+    float rotation_angle = 0.5;
+    //~~~~~~~~~~~~~
 };
 #endif //TANK_HPP
