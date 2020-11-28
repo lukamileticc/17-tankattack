@@ -1,11 +1,8 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
-
-
 #include <QPainter>
 #include <memory>
 #include <utility>
-
 #include <vector>
 #include "code/include/Map.hpp"
 #include "code/include/Tank.hpp"
@@ -16,18 +13,18 @@ class Board
 public:
     Board(std::shared_ptr<const Map> map, Tank player1, Tank player2, std::vector<QImage> images);
 
-    ~Board() override = default;
+    ~Board() = default;
 
-    void draw(QPainter* painter) override;
+    void draw(QPainter* painter);
 
     int get_board_width() const;
     int get_board_height() const;
 
-    void action_performed (action_event);
+    //void action_performed (action_event);
 
 protected:
-    boolean m_end_of_round = false;
-    boolean m_end_of_game = false;
+    bool m_end_of_round = false;
+    bool m_end_of_game = false;
 
 private:
     const int m_board_width = 1500;

@@ -13,7 +13,7 @@ class World : public QObject
 public:
     World(QObject *parent = nullptr);
 
-    virtual ~World() {};
+    ~World() = default;
 
     void show();
 
