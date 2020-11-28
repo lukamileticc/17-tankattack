@@ -1,55 +1,55 @@
 #include "code/include/World.hpp"
 #include "code/include/Tank.hpp"
 #include "code/include/Wall.hpp"
-
+#include "code/include/rocket_1.hpp"
 
 World::World(QObject *parent){
 
     // Inicijalizacija scene i pogleda
 
-    scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1280,720);
+    m_scene = new QGraphicsScene();
+    m_scene->setSceneRect(0,0,1280,720);
 
-    view = new QGraphicsView();
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setRenderHint(QPainter::Antialiasing);
+    m_view = new QGraphicsView();
+    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->setRenderHint(QPainter::Antialiasing);
 
-    view->setScene(scene);
+    m_view->setScene(m_scene);
 }
 World::~World(){
-    delete scene;
-    delete view;
+    delete m_scene;
+    delete m_view;
 }
 
 void World::show(){
 
-    view->setWindowTitle("Tank Attack");
-    view->setFixedSize(1280,720);
-    view->show();
+    m_view->setWindowTitle("Tank Attack");
+    m_view->setFixedSize(1280,720);
+    m_view->show();
 }
 
 void World::main_menu(){
 
-    scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
+    m_scene->clear();
+    m_view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
 
 
     QPushButton *bstart = new QPushButton(QString("START GAME"));
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
-    bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
+    bstart->move(m_scene->width()/2 - bstart->rect().width()/2,250);
     bstart->setStyleSheet("background-color: grey");
-    scene->addWidget(bstart);
+    m_scene->addWidget(bstart);
     QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
 
 
     QPushButton *bquit = new QPushButton(QString("QUIT GAME"));
     bquit->setFixedWidth(300);
     bquit->setFixedHeight(100);
-    bquit->move(scene->width()/2 - bstart->rect().width()/2, 500);
+    bquit->move(m_scene->width()/2 - bstart->rect().width()/2, 500);
     bquit->setStyleSheet("background-color: grey");
-    scene->addWidget(bquit);
+    m_scene->addWidget(bquit);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()),Qt::QueuedConnection);
     //verovatno i ovde mora ovaj QueuedCOnnection kontam
 }
@@ -60,28 +60,31 @@ void World::start(){
 //        scene->removeItem(scene->items()[0]);
 //    }
 
-    scene->clear();
+    m_scene->clear();
 
-    view->setBackgroundBrush(Qt::black);
-    view->setDragMode(QGraphicsView::ScrollHandDrag);
+    m_view->setBackgroundBrush(Qt::black);
+    m_view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Dva tenka jedan nasuprot drugom
     Tank *t1 = new Tank(Qt::red, 200, 400);
     Tank *t2 = new Tank(Qt::blue, 1200, 400);
+
+    //Namestam da tenk1 moze reagovat na stisak tastature
+    t1->setFlag(QGraphicsItem::ItemIsFocusable);
+    t1->setFocus();
+    //##################################################
 
     //Dva zida koja predstavljaju kako bi mogao da
     //izgleda 1 hodnik na mapi
     Wall *w1 = new Wall(240, 440, 6, 960);
     Wall *w2 = new Wall(240, 380, 6, 960);
 
-    scene->addItem(t1);
-    scene->addItem(t2);
-    scene->addItem(w1);
-    scene->addItem(w2);
+    m_scene->addItem(t1);
+    m_scene->addItem(t2);
+    m_scene->addItem(w1);
+    m_scene->addItem(w2);
 
-
-    std::cout << "helloooo" << std::endl;
-
+    qDebug() << "we are here";
 }
 
 void World::quit(){

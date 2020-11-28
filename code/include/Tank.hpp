@@ -2,9 +2,10 @@
 #define TANK_HPP
 #include <QGraphicsItem>
 #include <vector>
+#include "code/include/World.hpp"
 //#include "Rocket.hpp"
 
-class Tank : public QGraphicsItem {
+class Tank : public QGraphicsItem ,public World {
 public:
 //    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
 
@@ -41,6 +42,11 @@ public:
     void IncreaseNumOfLife();
     void shoot();
     void IncreaseScore(int score);
+
+
+//###########################################
+    void keyPressEvent(QKeyEvent *event);
+//###########################################
 
 private:
     float m_x;// x koordinata polozaja

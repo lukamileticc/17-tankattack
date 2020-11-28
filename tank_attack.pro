@@ -29,7 +29,8 @@ SOURCES += \
     code/src/main.cpp \
     code/src/Map.cpp \
     code/src/Tank.cpp \
-    code/src/Wall.cpp
+    code/src/Wall.cpp \
+    code/src/rocket_1.cpp
 
 HEADERS += \
     code/include/World.hpp \
@@ -37,7 +38,8 @@ HEADERS += \
     code/include/Rocket.hpp \
     code/include/Map.hpp \
     code/include/Tank.hpp \
-    code/include/Wall.hpp
+    code/include/Wall.hpp \
+    code/include/rocket_1.hpp
 
 FORMS +=
 

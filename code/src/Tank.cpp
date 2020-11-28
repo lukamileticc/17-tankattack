@@ -1,7 +1,11 @@
 #include "../include/Tank.hpp"
+#include "../include/rocket_1.hpp"
+
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QStyleOption>
+#include <QDebug>
+#include <QKeyEvent>
 
 
 Tank::Tank(QColor color, float x, float y)
@@ -114,4 +118,17 @@ void Tank::shoot() {
 //}
 void Tank::IncreaseScore(int score){
     m_score+=score;
+}
+
+//#############################################
+void Tank::keyPressEvent(QKeyEvent *event){
+//    qDebug() << "Tenk reaguje da je kliknuto na njega";
+
+    if(event->key() == Qt::Key_Space){
+        //pravimo metak
+        Rocket *rocket = new Rocket(300,300,100,2);
+        qDebug() << "Metak je napravljen";
+//        m_view->scene()->addItem(rocket);
+    }
+
 }

@@ -23,13 +23,17 @@ public:
 
     void main_menu();
 
+    QGraphicsScene* getScene() const{
+        return m_scene;
+    }
+
 public slots:
     void start();
     void quit();
 
 protected:
-    QGraphicsScene *scene = nullptr;
-    QGraphicsView  *view  = nullptr;
+    QGraphicsScene *m_scene = nullptr;
+    QGraphicsView  *m_view  = nullptr;
 
 };
 
