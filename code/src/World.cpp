@@ -1,7 +1,7 @@
 #include "code/include/World.hpp"
 #include "code/include/Tank.hpp"
 #include "code/include/Wall.hpp"
-
+#include "code/include/Map.hpp"
 
 World::World(QObject *parent){
 
@@ -25,7 +25,7 @@ World::~World(){
 void World::show(){
 
     view->setWindowTitle("Tank Attack");
-    view->setFixedSize(1280,720);
+    //view->setFixedSize(1280,720);
     view->show();
 }
 
@@ -65,20 +65,25 @@ void World::start(){
     view->setBackgroundBrush(Qt::black);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
-    //Dva tenka jedan nasuprot drugom
-    Tank *t1 = new Tank(Qt::red, 200, 400);
-    Tank *t2 = new Tank(Qt::blue, 1200, 400);
+    //TODO: Da menu bude jedne velicine, a kada se klikne
+    //na start bude fiksne druge velicine, da bi stala cela mapa
+    view->resize(1300, 900);
 
-    //Dva zida koja predstavljaju kako bi mogao da
-    //izgleda 1 hodnik na mapi
-    Wall *w1 = new Wall(240, 440, 6, 960);
-    Wall *w2 = new Wall(240, 380, 6, 960);
+    //Dva tenka jedan nasuprot drugom
+    Tank *t1 = new Tank(Qt::red, 100, 400);
+    Tank *t2 = new Tank(Qt::blue, 1200, 400);
 
     scene->addItem(t1);
     scene->addItem(t2);
-    scene->addItem(w1);
-    scene->addItem(w2);
 
+
+    //Mapa otvara odgovarajuci fajl
+    //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
+    Map *m1 = new Map("mapa1.txt");
+    std::vector<Wall*>walls = m1->getWalls();
+
+    for(auto w: walls)
+        scene->addItem(w);
 
     std::cout << "helloooo" << std::endl;
 

@@ -43,3 +43,6 @@ FORMS +=
 
 RESOURCES += \
     code/res/resources.qrc
+
+DISTFILES += \
+    code/src/mapa1.txt

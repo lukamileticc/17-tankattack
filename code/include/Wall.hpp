@@ -8,7 +8,7 @@ class Wall : public QGraphicsItem
 public:
     //prima x,y koordinate gornjeg levog ugla pravougaonika
     //njegovu visinu i sirinu
-    Wall(float x, float y, float height, float width);
+    Wall(float x, float y, float width, float height);
 
     ~Wall() = default;
 

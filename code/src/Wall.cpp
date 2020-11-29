@@ -5,7 +5,7 @@
 
 
 Wall::Wall(float x, float y, float height, float width)
-    :m_x(x), m_y(y), m_height(height), m_width(width)
+    :m_x(x), m_y(y), m_width(width), m_height(height)
 {
 }
 
@@ -22,7 +22,7 @@ void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 {
     painter->setBrush(Qt::white);
 
-    painter->drawRect(m_x, m_y, m_width, m_height);
+    painter->drawRect(m_x, m_y, m_height, m_width);
 }
 
 QRectF Wall::boundingRect() const

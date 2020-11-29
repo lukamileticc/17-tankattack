@@ -2,22 +2,30 @@
 #define MAP_HPP
 #include <vector>
 #include "Wall.hpp"
+#include <QGraphicsScene>
+
+#include <fstream>
+#include <string>
+#include <sstream>
 class Map {
 public:
 
-    Map(int mNumOfWalls, const std::vector<Wall> &mWalls);
+    Map() = default;
+    Map(std::string file);
+    Map(int mNumOfWalls, const std::vector<Wall*> &mWalls);
     ~Map()  = default;
     int getNumOfWalls() const;
 
     void setNumOfWalls(int mNumOfWalls);
 
-    const std::vector<Wall> &getWalls() const;
+    const std::vector<Wall*> getWalls() const;
 
-    void setWalls(const std::vector<Wall> &mWalls);
+    void setWalls(const std::vector<Wall*> &mWalls);
+
 
 private:
     int m_num_of_walls;
-    std::vector<Wall> m_walls;
+    std::vector<Wall*> m_walls;
 
 };
 

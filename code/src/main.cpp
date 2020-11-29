@@ -7,6 +7,7 @@
 #include <QGraphicsTextItem>
 #include <QPushButton>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <stack>
 #include "code/include/Wall.hpp"
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     World *world = new World();
+
 
     world->show();
 
