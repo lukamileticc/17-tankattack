@@ -1,11 +1,13 @@
 #include "code/include/World.hpp"
 #include "code/include/Tank.hpp"
 #include "code/include/Wall.hpp"
+#include "code/include/Input.hpp"
 #include <QPushButton>
 #include <QObject>
 #include <iostream>
 #include <QBrush>
 #include <QApplication>
+#include <QTimer>
 
 World::World(QObject *parent){
 
@@ -80,13 +82,24 @@ void World::start(){
     Wall *w1 = new Wall(240, 440, 6, 960);
     Wall *w2 = new Wall(240, 380, 6, 960);
 
+    Input *i = new Input();
+
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(w1);
     scene->addItem(w2);
+    scene->addItem(i);
 
-    t1->setFlag(QGraphicsItem::ItemIsFocusable);
-    t1->setFocus();
+    i->setFlag(QGraphicsItem::ItemIsFocusable);
+    i->setFocus();
+
+    //t1->setFlag(QGraphicsItem::ItemIsFocusable);
+    //t1->setFocus();
+
+    QTimer *timer = new QTimer();
+    QObject::connect(timer, SIGNAL(timeout()), t1, SLOT(advance()));
+    QObject::connect(timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    timer->start(33);
 
     std::cout << "helloooo" << std::endl;
 

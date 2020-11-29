@@ -30,21 +30,21 @@ QRectF Tank::boundingRect() const
     return QRectF(0, 0, 1280, 70);
 }
 
-void Tank::keyPressEvent(QKeyEvent *event) {
+//void Tank::keyPressEvent(QKeyEvent *event) {
 
-//komentar je potrebno ukloniti ukoliko zelimo da eliminisemo auto-repeat tastera
-//    if (event->isAutoRepeat()) {
-//            return;
-//    }
+////komentar je potrebno ukloniti ukoliko zelimo da eliminisemo auto-repeat tastera
+////    if (event->isAutoRepeat()) {
+////            return;
+////    }
 
-    if (event->key() == Qt::Key_W) up = true;
-    if (event->key() == Qt::Key_S) down = true;
-    if (event->key() == Qt::Key_A) left = true;
-    if (event->key() == Qt::Key_D) right = true;
-    advance(0);
-}
+//    if (event->key() == Qt::Key_W) up = true;
+//    if (event->key() == Qt::Key_S) down = true;
+//    if (event->key() == Qt::Key_A) left = true;
+//    if (event->key() == Qt::Key_D) right = true;
+//    advance(0);
+//}
 
-void Tank::advance(int step){
+void Tank::advance(){
 
     QPointF p2 = mapToScene(0, 0);
     QPointF p3 = mapToScene(0, 15);
@@ -91,13 +91,13 @@ void Tank::advance(int step){
     setPos(m_x, m_y);
 }
 
-void Tank::keyReleaseEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_W) up = false;
-    if (event->key() == Qt::Key_S) down = false;
-    if (event->key() == Qt::Key_A) left = false;
-    if (event->key() == Qt::Key_D) right = false;
-    advance(0);
-}
+//void Tank::keyReleaseEvent(QKeyEvent *event) {
+//    if (event->key() == Qt::Key_W) up = false;
+//    if (event->key() == Qt::Key_S) down = false;
+//    if (event->key() == Qt::Key_A) left = false;
+//    if (event->key() == Qt::Key_D) right = false;
+//    advance(0);
+//}
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;

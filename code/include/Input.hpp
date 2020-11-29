@@ -14,10 +14,13 @@
 class Input : public QGraphicsItem{
 public:
     Input();
-    ~Input();
+    virtual ~Input() = default;
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 protected:
     unsigned int key_tank1;

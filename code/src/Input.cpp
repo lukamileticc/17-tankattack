@@ -1,5 +1,6 @@
 #include "code/include/Input.hpp"
 #include <QTimer>
+#include <QPainter>
 #include <iostream>
 
 Input::Input(){
@@ -98,4 +99,13 @@ void Input::keyReleaseEvent(QKeyEvent *event){
             break;
     }
     std::cout << "zavrsen key event release metod" << std::endl;
+}
+
+void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+}
+
+QRectF Input::boundingRect() const
+{
+    return QRectF(0, 0, 1280, 720);
 }

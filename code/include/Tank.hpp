@@ -1,10 +1,12 @@
 #ifndef TANK_HPP
 #define TANK_HPP
 #include <QGraphicsItem>
+#include "code/include/Input.hpp"
 #include <vector>
 //#include "Rocket.hpp"
 
-class Tank : public QGraphicsItem {
+class Tank : public QObject, public Input {
+    Q_OBJECT
 public:
 //    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
 
@@ -14,8 +16,8 @@ public:
 
     // QGraphicsItem interface
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     bool IsAbleToShoot() const;
 
 
@@ -43,9 +45,10 @@ public:
     void IncreaseScore(int score);
 
     //---
-    void advance(int step) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
+public slots:
+    void advance();
+    //void keyPressEvent(QKeyEvent *event) override;
+    //void keyReleaseEvent(QKeyEvent *event) override;
     //---
 
 private:

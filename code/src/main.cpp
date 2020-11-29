@@ -76,7 +76,5 @@ int main(int argc, char *argv[])
     view.resize(1300,900);
     */
 
-
-
     return a.exec();
 }
