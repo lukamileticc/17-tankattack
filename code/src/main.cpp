@@ -13,12 +13,14 @@
 #include "code/include/Tank.hpp"
 #include "code/include/World.hpp"
 
+World *world;
+
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
 
-    World *world = new World();
+    world = new World();
 
     world->show();
 

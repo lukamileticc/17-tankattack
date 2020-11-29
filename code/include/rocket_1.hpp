@@ -6,17 +6,23 @@
 
 #include <QObject>
 #include <QPainter>
-#include <QGraphicsItem>
+#include <QGraphicsRectItem>
 
-class Rocket : public QGraphicsItem{
-
+class Rocket : public QObject,public QGraphicsItem{
+    Q_OBJECT
 public:
-    Rocket(float x,float y,float r,int rocket_power);
+    Rocket(float x,float y,float m_r,int rocket_power);
     ~Rocket() = default;
 
     // QGraphicsItem interface
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    float getX() const;
+    float getY() const;
+
+public slots:
+    void move();
 
 private:
 
@@ -25,12 +31,10 @@ private:
     int medium_rocket = 0;
     int hard_rocket = 0;
 
-    //koordinate centra
+    //koordinate rakete
     float m_x;
     float m_y;
-    //poluprecnik
     float m_r;
-
 };
 
 #endif // ROCKET_1_HPP

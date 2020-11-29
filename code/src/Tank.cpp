@@ -1,11 +1,14 @@
-#include "../include/Tank.hpp"
+#include "code/include/Tank.hpp"
 #include "../include/rocket_1.hpp"
 
+#include <QObject>>
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
 
 Tank::Tank(QColor color, float x, float y)
@@ -22,113 +25,27 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QRectF Tank::boundingRect() const
 {
-    return QRectF(m_x, m_y, 40, 40);
+    return QRectF(m_x, m_y, 30, 30);
 }
-
-
-bool Tank::IsAbleToShoot() const {
-    return m_can_shoot;
-}
-
-
-float Tank::GetCurrentHealth() const {
-    return m_current_health;
-}
-
-
-int Tank::GetCurrentNumsOfLife () const{
-    return m_num_of_lives;
-}
-
-float Tank::GetX() const{
+float Tank::getXposition() const{
     return m_x;
 }
-
-float Tank:: GetY() const{
+float Tank::getYposition() const{
     return m_y;
 }
-
-float Tank::GetSpeed() const{
-    return m_speed;
-}
-
-int Tank::GetCurrentNumsOfRockets() const{
-    return m_num_of_rockets;
-
-}
-int Tank::GetScore() const{
-    return m_score;
-}
-
-void Tank::DecreaseHealth(int health) {
-    m_current_health -= health;
-}
-
-void Tank::IncreaseHealth(int health) {
-    m_current_health += health;
-}
-
-bool Tank::IsDead() const {
-    return m_num_of_lives==0;
-}
-void Tank::SetX(float x){
-    m_x=x;
-}
-
-void Tank::SetY(float y){
-    m_y=y;
-}
-
-void Tank::SetSpeed(float speed){
-    m_speed=speed;
-}
-
-void Tank::SetCanShot(){
-    if (m_can_shoot==0){
-        m_can_shoot= false;
-    }
-    else{
-        m_can_shoot=true;
-    }
-}
-
-
-void Tank::DecreaseNumOfLife(){
-    if (m_current_health<=0){
-        m_num_of_lives-=1;
-    }
-}
-
-
-void Tank::IncreaseNumOfLife(){
-    m_num_of_lives+=1;
-}
-
-
-void Tank::shoot() {
-    m_num_of_rockets-=1;
-}
-
-//const std::vector<Rocket> &Tank::getRockets() const {
-//    return m_rockets;
-//}
-
-//void Tank::setRockets(const std::vector<Rocket> &mRocket) {
-//    m_rockets = mRocket;
-//}
-void Tank::IncreaseScore(int score){
-    m_score+=score;
-}
-
-//#############################################
 void Tank::keyPressEvent(QKeyEvent *event){
 //    qDebug() << "Tenk reaguje da je kliknuto na njega";
 
     if(event->key() == Qt::Key_Space){
         //pravimo metak
-        Rocket *rocket = new Rocket(300,300,100,2);
-        qDebug() << "Metak je napravljen";
-//        m_view->scene()->addItem(rocket);
+        float rocket_x_position = getXposition() + boundingRect().width()/2;
+        float rocket_y_position = getYposition() + boundingRect().width()/2;
+        float diff = boundingRect().width()/4;
+        Rocket *rocket = new Rocket(rocket_x_position+diff,rocket_y_position-diff,15,2);
+        rocket->setPos(rocket->x(),rocket->y());
+        qDebug() << "Rocket je napravljen!";
+        scene()->addItem(rocket);
+        qDebug() << scene()->items().size();
+//        scene()->update();
     }
-
 }

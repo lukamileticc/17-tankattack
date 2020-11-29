@@ -66,8 +66,9 @@ void World::start(){
     m_view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Dva tenka jedan nasuprot drugom
-    Tank *t1 = new Tank(Qt::red, 200, 400);
-    Tank *t2 = new Tank(Qt::blue, 1200, 400);
+    t1 = new Tank(Qt::red, 200, 400);
+    t2 = new Tank(Qt::blue, 1200, 400);
+
 
     //Namestam da tenk1 moze reagovat na stisak tastature
     t1->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -84,7 +85,8 @@ void World::start(){
     m_scene->addItem(w1);
     m_scene->addItem(w2);
 
-    qDebug() << "we are here";
+
+//    qDebug() << "we are here";
 }
 
 void World::quit(){
