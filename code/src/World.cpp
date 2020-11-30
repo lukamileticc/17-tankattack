@@ -74,32 +74,33 @@ void World::start(){
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Dva tenka jedan nasuprot drugom
-    Tank *t1 = new Tank(Qt::red, 200, 400);
-    Tank *t2 = new Tank(Qt::blue, 1200, 400);
+
+    Input *input = new Input();
+
+    Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
+    Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
 
     //Dva zida koja predstavljaju kako bi mogao da
     //izgleda 1 hodnik na mapi
     Wall *w1 = new Wall(240, 440, 6, 960);
     Wall *w2 = new Wall(240, 380, 6, 960);
 
-    Input *i = new Input();
-
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(w1);
     scene->addItem(w2);
-    scene->addItem(i);
+    scene->addItem(input);
 
-    i->setFlag(QGraphicsItem::ItemIsFocusable);
-    i->setFocus();
+    input->setFlag(QGraphicsItem::ItemIsFocusable);
+    input->setFocus();
 
     //t1->setFlag(QGraphicsItem::ItemIsFocusable);
     //t1->setFocus();
 
-    QTimer *timer = new QTimer();
-    QObject::connect(timer, SIGNAL(timeout()), t1, SLOT(advance()));
-    QObject::connect(timer, SIGNAL(timeout()), t2, SLOT(advance()));
-    timer->start(33);
+
+    QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
+    QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    input->timer->start(16);
 
     std::cout << "helloooo" << std::endl;
 

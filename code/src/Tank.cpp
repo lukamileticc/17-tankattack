@@ -4,11 +4,12 @@
 #include <QStyleOption>
 #include <QKeyEvent>
 #include <cmath>
+#include <iostream>
 #define ANGLE 5
 
 
-Tank::Tank(QColor color, float x, float y)
-    :m_color(color), m_x(x), m_y(y)
+Tank::Tank(int id,QColor color, float x, float y, Input *input)
+    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
 {
     setTransformOriginPoint(15, 15);
     setPos(m_x, m_y);
@@ -45,9 +46,43 @@ QRectF Tank::boundingRect() const
 //}
 
 void Tank::advance(){
-
+    if(m_id == 0){/*
+        unsigned int commands = m_input->key_tank1;
+        if((commands & key_up) == key_up){
+            up = !up;
+            std::cout << "W" << std::endl;
+        }
+        if((commands & key_down) == key_down)
+            down = !down;
+        if((commands & key_right) == key_right)
+            right = !right;
+        if((commands & key_left) == key_left)
+            left = !left;*/
+        up = m_input->k_w;
+        down = m_input->k_s;
+        right = m_input->k_d;
+        left = m_input->k_a;
+    }
+    else if(m_id == 1){/*
+        unsigned int commands = m_input->key_tank2;
+        if((commands & key_up) == key_up)
+            up = !up;
+        if((commands & key_down) == key_down)
+            down = !down;
+        if((commands & key_right) == key_right)
+            right = !right;
+        if((commands & key_left) == key_left)
+            left = !left;*/
+        up = m_input->k_up;
+        down = m_input->k_down;
+        right = m_input->k_right;
+        left = m_input->k_left;
+    }
+    else{
+        std::cout << "Greska, nepostojeci tenk" << std::endl;
+    }
     QPointF p2 = mapToScene(0, 0);
-    QPointF p3 = mapToScene(0, 15);
+    QPointF p3 = mapToScene(0, 30);
 
     x_v = p3.rx() - p2.rx();
     y_v = p3.ry() - p2.ry();
@@ -55,6 +90,9 @@ void Tank::advance(){
     float n = sqrt(pow(x_v, 2) + pow(y_v, 2));
     x_v /= n;
     y_v /= n;
+
+//    x_v *= 2;
+//    y_v *= 2;
 
 
     if (right && up) {

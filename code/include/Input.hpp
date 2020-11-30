@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QGraphicsItem>
+//#include "code/include/Tank.hpp"
 
 #define key_up  1
 #define key_down  2
@@ -22,13 +23,15 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-protected:
+    QTimer *timer;
+
+//protected:
     unsigned int key_tank1;
     unsigned int key_tank2;
+    bool k_w,k_s,k_d,k_a,k_space;
+    bool k_up,k_down,k_right,k_left,k_enter;
     bool pause;
     bool escape;
-    bool rocket_launch;
-    QTimer *timer;
 
 
 };

@@ -5,12 +5,12 @@
 #include <vector>
 //#include "Rocket.hpp"
 
-class Tank : public QObject, public Input {
+class Tank : public QObject, public Input{
     Q_OBJECT
 public:
 //    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
 
-    Tank(QColor color, float x, float y);
+    Tank(int id,QColor color, float x, float y, Input *input);
 
     ~Tank()  = default;
 
@@ -19,7 +19,6 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     bool IsAbleToShoot() const;
-
 
     void DecreaseHealth(int health);
     void IncreaseHealth(int health);
@@ -52,7 +51,7 @@ public slots:
     //---
 
 private:
-
+    int m_id;
     QColor m_color;
     float m_x;// x koordinata polozaja
     float m_y; // y koordinata polozaja
@@ -64,6 +63,7 @@ private:
     bool m_can_shoot;
     int m_score;
 
+    Input *m_input;
     //~~~~~~~~~~~~~
     bool up = false;
     bool down = false;
