@@ -1,23 +1,24 @@
 #ifndef TANK_HPP
 #define TANK_HPP
 #include <QGraphicsItem>
+#include "code/include/Input.hpp"
 #include <vector>
 //#include "Rocket.hpp"
 
-class Tank : public QGraphicsItem {
+class Tank : public QObject, public Input{
+    Q_OBJECT
 public:
 //    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
 
-    Tank(QColor color, float x, float y);
+    Tank(int id,QColor color, float x, float y, Input *input);
 
     ~Tank()  = default;
 
     // QGraphicsItem interface
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     bool IsAbleToShoot() const;
-
 
     void DecreaseHealth(int health);
     void IncreaseHealth(int health);
@@ -42,7 +43,16 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
+    //---
+public slots:
+    void advance();
+    //void keyPressEvent(QKeyEvent *event) override;
+    //void keyReleaseEvent(QKeyEvent *event) override;
+    //---
+
 private:
+    int m_id;
+    QColor m_color;
     float m_x;// x koordinata polozaja
     float m_y; // y koordinata polozaja
     float m_speed; // brzina tenka
@@ -52,7 +62,18 @@ private:
 //    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
     int m_score;
-    QColor m_color;
 
+    Input *m_input;
+    //~~~~~~~~~~~~~
+    bool up = false;
+    bool down = false;
+    bool left = false;
+    bool right = false;
+
+    float x_v = 0;
+    float y_v = 1;
+
+    float rotation_angle = 0.5;
+    //~~~~~~~~~~~~~
 };
 #endif //TANK_HPP

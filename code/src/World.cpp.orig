@@ -1,14 +1,17 @@
 #include "code/include/World.hpp"
 #include "code/include/Tank.hpp"
 #include "code/include/Wall.hpp"
-#include "code/include/Input.hpp"
+<<<<<<< HEAD
 #include "code/include/Map.hpp"
+=======
+#include "code/include/Input.hpp"
 #include <QPushButton>
 #include <QObject>
 #include <iostream>
 #include <QBrush>
 #include <QApplication>
 #include <QTimer>
+>>>>>>> feature/obrada_ulaza_i_kretanje
 
 World::World(QObject *parent){
 
@@ -25,11 +28,6 @@ World::World(QObject *parent){
     view->setScene(scene);
 }
 
-World::~World(){
-    delete scene;
-    delete view;
-}
-
 void World::show(){
 
     view->setWindowTitle("Tank Attack");
@@ -42,15 +40,18 @@ void World::main_menu(){
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
 
-    //QPushButton *bstart = new QPushButton(QString(" START GAME   "));
-
+<<<<<<< HEAD
+    QPushButton *bstart = new QPushButton(QString(" START GAME   "));
+=======
     QPushButton *bstart = new QPushButton(QString("START GAME"));
+>>>>>>> feature/obrada_ulaza_i_kretanje
 
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
 
     bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
 
+<<<<<<< HEAD
     bstart->setStyleSheet("background-color: teal;"
                         "border-style: outset;"
                          "border-width: 2.5px;"
@@ -58,6 +59,9 @@ void World::main_menu(){
                          "border-color: beige;"
                          "font: bold 16px;"
                          "padding: 6px;");
+=======
+    bstart->setStyleSheet("background-color: grey");
+>>>>>>> feature/obrada_ulaza_i_kretanje
 
     scene->addWidget(bstart);
     QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
@@ -77,6 +81,7 @@ void World::main_menu(){
                              "font: bold 14px;"
                              "padding: 6px;");
 
+<<<<<<< HEAD
         scene->addWidget(bcontinue);
         QObject::connect(bcontinue, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
     }
@@ -111,10 +116,21 @@ void World::main_menu(){
                          "border-color: beige;"
                          "font: bold 16px;"
                          "padding: 6px;");
+=======
+    QPushButton *bquit = new QPushButton(QString("QUIT GAME"));
+
+    bquit->setFixedWidth(300);
+    bquit->setFixedHeight(100);
+
+    bquit->move(scene->width()/2 - bstart->rect().width()/2, 500);
+
+    bquit->setStyleSheet("background-color: grey");
+>>>>>>> feature/obrada_ulaza_i_kretanje
 
     scene->addWidget(bquit);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()));
 
+<<<<<<< HEAD
 
 }
 
@@ -149,6 +165,8 @@ void World::show_battles(){
     scene->addText(lista_parova,font_lista);
 
 
+=======
+>>>>>>> feature/obrada_ulaza_i_kretanje
 }
 
 void World::start(){
@@ -168,24 +186,37 @@ void World::start(){
     //na start bude fiksne druge velicine, da bi stala cela mapa
     view->resize(1300, 900);
 
+    //Dva tenka jedan nasuprot drugom
+<<<<<<< HEAD
+    Tank *t1 = new Tank(Qt::red, 100, 400);
+    Tank *t2 = new Tank(Qt::blue, 1200, 400);
+=======
+
     Input *input = new Input();
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
     Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
-
-    //Dva zida koja predstavljaju kako bi mogao da
-    //izgleda 1 hodnik na mapi
-    Wall *w1 = new Wall(240, 440, 6, 960);
-    Wall *w2 = new Wall(240, 380, 6, 960);
+>>>>>>> feature/obrada_ulaza_i_kretanje
 
     scene->addItem(t1);
     scene->addItem(t2);
+<<<<<<< HEAD
+=======
     scene->addItem(w1);
     scene->addItem(w2);
     scene->addItem(input);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();
+
+    //t1->setFlag(QGraphicsItem::ItemIsFocusable);
+    //t1->setFocus();
+
+>>>>>>> feature/obrada_ulaza_i_kretanje
+
+    QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
+    QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    input->timer->start(33);
 
     //Mapa otvara odgovarajuci fajl
     //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
@@ -195,15 +226,10 @@ void World::start(){
     for(auto w: walls)
         scene->addItem(w);
 
-    QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
-    QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
-    input->timer->start(33);
-
     std::cout << "helloooo" << std::endl;
 
 }
 
 void World::quit(){
-      QApplication::exit(); //mislim da je ovo pravilnije
-//    QApplication::closeAllWindows();
+    QApplication::closeAllWindows();
 }

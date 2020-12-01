@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    code/src/Input.cpp \
     code/src/Rocket.cpp \
     code/src/World.cpp \
     code/src/main.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     code/src/Wall.cpp
 
 HEADERS += \
+    code/include/Input.hpp \
     code/include/World.hpp \
     code/include/Board.hpp \
     code/include/Rocket.hpp \
