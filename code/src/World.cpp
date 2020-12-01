@@ -100,7 +100,7 @@ void World::start(){
 
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
-    input->timer->start(16);
+    input->timer->start(33);
 
     std::cout << "helloooo" << std::endl;
 

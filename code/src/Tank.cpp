@@ -5,7 +5,7 @@
 #include <QKeyEvent>
 #include <cmath>
 #include <iostream>
-#define ANGLE 5
+#define ANGLE 15
 
 
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
@@ -81,11 +81,12 @@ void Tank::advance(){
     else{
         std::cout << "Greska, nepostojeci tenk" << std::endl;
     }
-    QPointF p2 = mapToScene(0, 0);
-    QPointF p3 = mapToScene(0, 30);
 
-    x_v = p3.rx() - p2.rx();
-    y_v = p3.ry() - p2.ry();
+    QPointF pos_vector_x = mapToScene(0, 0);
+    QPointF pos_vector_y = mapToScene(0, 30);
+
+    x_v = pos_vector_y.rx() - pos_vector_x.rx();
+    y_v = pos_vector_y.ry() - pos_vector_x.ry();
 
     float n = sqrt(pow(x_v, 2) + pow(y_v, 2));
     x_v /= n;
@@ -102,22 +103,22 @@ void Tank::advance(){
         m_x -= x_v;
         m_y -= y_v;
     }
-    if (left && up) {
+    else if (left && up) {
 //        rotation_angle -= 10;
         setRotation(rotation() - ANGLE);
 
         m_x -= x_v;
         m_y -= y_v;
     }
-    if(left) {
+    else if(left) {
 //        rotation_angle -= 10;
         setRotation(rotation() - ANGLE);
     }
-    if(right) {
+    else if(right) {
 //        rotation_angle += 10;
         setRotation(rotation() + ANGLE);
     }
-    if(up) {
+    else if(up) {
         m_x -= x_v;
         m_y -= y_v;
     }
