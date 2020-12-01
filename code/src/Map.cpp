@@ -1,35 +1,30 @@
 #include "../include/Map.hpp"
+#include <QFile>
+#include <QTextStream>
 #include <iostream>
 Map::Map(int mNumOfWalls, const std::vector<Wall*> &mWalls) : m_num_of_walls(mNumOfWalls), m_walls(mWalls) {}
 
-Map::Map(std::string file)
+Map::Map(const char * file)
 {
-
-    std::string line;
-    std::ifstream f1;
-
-    f1.open(file);
-
-    if(f1.is_open()){
-        std::string segment;
-        std::vector<int>coordinates;
-        while(std::getline(f1, line))
-        {
-            std::cout << line;
-            std::stringstream test(line);
-            while(std::getline(test, segment, ' '))
-            {
-                coordinates.push_back(std::stoi(segment));
-            }
-            Wall *w1 = new Wall(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
-            std::cout << coordinates[0] << coordinates[1] << coordinates[2] << coordinates[3];
-            m_walls.push_back(w1);
-            coordinates.clear();
-        }
+    QFile inputFile(file);
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       std::vector<int>coordinates;
+       while (!in.atEnd())
+       {
+          QString line = in.readLine();
+          QStringList lista=line.split(" ");
+          for (auto broj : lista)
+              coordinates.push_back(broj.toInt());
+          Wall *w1 = new Wall(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+          m_walls.push_back(w1);
+          coordinates.clear();
+       }
     }
+    inputFile.close();
     Map::setNumOfWalls(m_walls.size());
 
-    f1.close();
 }
 
 

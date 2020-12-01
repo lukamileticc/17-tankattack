@@ -45,4 +45,5 @@ RESOURCES += \
     code/res/resources.qrc
 
 DISTFILES += \
+    code/res/mapa1.txt \
     code/src/mapa1.txt

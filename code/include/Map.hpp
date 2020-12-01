@@ -11,7 +11,7 @@ class Map {
 public:
 
     Map() = default;
-    Map(std::string file);
+    Map(const char * file);
     Map(int mNumOfWalls, const std::vector<Wall*> &mWalls);
     ~Map()  = default;
     int getNumOfWalls() const;
