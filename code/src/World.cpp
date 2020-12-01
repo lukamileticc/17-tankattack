@@ -142,6 +142,8 @@ void World::show_battles(){
 }
 
 void World::start(){
+    m_started=1;
+    m_in_game=1;
 
 //    for (size_t i = 0, n = scene->items().size(); i<n; i++){
 //        scene->removeItem(scene->items()[0]);
