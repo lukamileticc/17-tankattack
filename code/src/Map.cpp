@@ -1,7 +1,6 @@
 #include "../include/Map.hpp"
-#include <QFile>
-#include <QTextStream>
-#include <iostream>
+
+
 Map::Map(int mNumOfWalls, const std::vector<Wall*> &mWalls) : m_num_of_walls(mNumOfWalls), m_walls(mWalls) {}
 
 Map::Map(const char * file)

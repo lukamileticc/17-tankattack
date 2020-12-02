@@ -4,9 +4,9 @@
 #include "Wall.hpp"
 #include <QGraphicsScene>
 
-#include <fstream>
-#include <string>
-#include <sstream>
+#include <QFile>
+#include <QTextStream>
+
 class Map {
 public:
 
@@ -26,7 +26,6 @@ public:
 private:
     int m_num_of_walls;
     std::vector<Wall*> m_walls;
-
 };
 
 

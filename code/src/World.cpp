@@ -33,7 +33,7 @@ World::~World(){
 void World::show(){
 
     view->setWindowTitle("Tank Attack");
-    view->setFixedSize(1280,720);
+    view->setFixedSize(1280, 720);
     view->show();
 }
 
@@ -163,25 +163,18 @@ void World::start(){
 
     view->setBackgroundBrush(Qt::black);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
+    view->setFixedSize(1271, 813);
 
-    //TODO: Da menu bude jedne velicine, a kada se klikne
-    //na start bude fiksne druge velicine, da bi stala cela mapa
-    view->resize(1300, 900);
 
     Input *input = new Input();
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
     Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
 
-    //Dva zida koja predstavljaju kako bi mogao da
-    //izgleda 1 hodnik na mapi
-    Wall *w1 = new Wall(240, 440, 6, 960);
-    Wall *w2 = new Wall(240, 380, 6, 960);
+
 
     scene->addItem(t1);
     scene->addItem(t2);
-    scene->addItem(w1);
-    scene->addItem(w2);
     scene->addItem(input);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);

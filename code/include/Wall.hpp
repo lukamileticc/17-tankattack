@@ -22,6 +22,14 @@ public:
     //metod koji sluzi za crtanje
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    bool isVertical() const;
+    bool isHorizontal() const;
+
+    //vraca par koordinata gornjeg levog ugla pravougaonika
+    std::pair<float,float> getCoordinates() const;
+
+    float getWidth() const;
+    float getHeight() const;
 
 private:
     //koordinate gornjeg levog ugla pravougaonika (x,y)

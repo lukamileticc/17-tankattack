@@ -25,10 +25,10 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QRectF Tank::boundingRect() const
 {
-    //return QRectF(m_x, m_y, 40, 40);
+    return QRectF(0, 0, 30, 30);
 
     //neophodan je precizniji boudnRect
-    return QRectF(0, 0, 1280, 70);
+    //return QRectF(0, 0, 1280, 70);
 }
 
 //void Tank::keyPressEvent(QKeyEvent *event) {
