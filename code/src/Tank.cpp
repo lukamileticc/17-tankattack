@@ -120,6 +120,47 @@ void Tank::advance(){
         }
     }
 
+    else if (up) {
+        m_x -= x_v;
+        m_y -= y_v;
+        setPos(m_x, m_y);
+
+        if (!scene()->collidingItems(this).isEmpty()) {
+            m_x += x_v;
+            m_y += y_v;
+            setPos(m_x, m_y);
+        }
+    }
+
+//potrebno je jos dodati if-ove za (down && left) i (down && right)
+    else if (left && down){
+        setRotation(rotation() + ANGLE);
+        m_x += x_v;
+        m_y += y_v;
+        setPos(m_x,m_y);
+
+        if (!scene()->collidingItems(this).isEmpty()){
+            setRotation(rotation() - ANGLE);
+            m_x -= x_v;
+            m_y -= y_v;
+            setPos(m_x,m_y);
+        }
+    }
+
+    else if (right && down){
+        setRotation(rotation() - ANGLE);
+        m_x += x_v;
+        m_y += y_v;
+        setPos(m_x,m_y);
+
+        if (!scene()->collidingItems(this).isEmpty()){
+            setRotation(rotation() + ANGLE);
+            m_x -= x_v;
+            m_y -= y_v;
+            setPos(m_x,m_y);
+        }
+    }
+
     else if (left) {
         setRotation(rotation() - ANGLE);
 
@@ -140,19 +181,6 @@ void Tank::advance(){
         }
     }
 
-    else if (up) {
-        m_x -= x_v;
-        m_y -= y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            m_x += x_v;
-            m_y += y_v;
-            setPos(m_x, m_y);
-        }
-    }
-
-//potrebno je jos dodati if-ove za (down && left) i (down && right)
     else if (down) {
         m_x += x_v;
         m_y += y_v;

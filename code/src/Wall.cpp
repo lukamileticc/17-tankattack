@@ -34,7 +34,7 @@ void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QRectF Wall::boundingRect() const
 {
-    return QRectF(m_x, m_y - 45, m_width, m_height);
+    return QRectF(m_x, m_y - 45, m_height, m_width);
 }
 
 bool Wall::isVertical() const
