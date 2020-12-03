@@ -122,10 +122,10 @@ void Tank::advance(){
         m_x -= x_v;
         m_y -= y_v;
     }
-//    if(down) {
-//        m_x += x_v;
-//        m_y += y_v;
-//    }
+    if(down) {
+          m_x += x_v;
+          m_y += y_v;
+    }
 
     setPos(m_x, m_y);
 }
