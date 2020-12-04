@@ -69,7 +69,7 @@ void Input::keyPressEvent(QKeyEvent *event){
         default:
             break;
     }
-    std::cout << "zavrsen key press event metod" << std::endl;
+//    std::cout << "zavrsen key press event metod" << std::endl;
 }
 
 void Input::keyReleaseEvent(QKeyEvent *event){
@@ -120,7 +120,7 @@ void Input::keyReleaseEvent(QKeyEvent *event){
         default:
             break;
     }
-    std::cout << "zavrsen key event release metod" << std::endl;
+//    std::cout << "zavrsen key event release metod" << std::endl;
 }
 
 void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -129,5 +129,5 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 QRectF Input::boundingRect() const
 {
-    return QRectF(0, 0, 1280, 720);
+    return QRectF(0, 0, 1, 1);
 }

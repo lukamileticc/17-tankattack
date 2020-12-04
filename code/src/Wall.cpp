@@ -3,9 +3,10 @@
 #include <QPainter>
 #include <QStyleOption>
 #include<QGraphicsView>
+#define UNUSED(x) (void)(x)
 
 Wall::Wall(float x, float y, float height, float width)
-    :m_x(x), m_y(y), m_width(width), m_height(height)
+    :m_x(x), m_y(y), m_height(height), m_width(width)
 {
 }
 
@@ -13,13 +14,18 @@ Wall::Wall(const Wall&)
 {
 
 }
+
 Wall Wall::operator=(const Wall&)
 {
-
+//    return *this;
 }
 
 void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+
+    UNUSED(option);
+    UNUSED(widget);
+
     painter->setBrush(Qt::white);
 
     painter->drawRect(m_x, m_y - 45, m_height, m_width);
@@ -28,7 +34,7 @@ void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QRectF Wall::boundingRect() const
 {
-    return QRectF(m_x, m_y - 45, m_width, m_height);
+    return QRectF(m_x, m_y - 45, m_height, m_width);
 }
 
 bool Wall::isVertical() const
@@ -55,6 +61,3 @@ std::pair<float,float> Wall::getCoordinates() const
 {
     return std::make_pair(m_x, m_y);
 }
-
-
-
