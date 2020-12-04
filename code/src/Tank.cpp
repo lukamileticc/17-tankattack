@@ -12,6 +12,7 @@
 #define ANGLE 10
 #define TANK_W 26
 #define TANK_H 30
+#define MAX_ROCKET 7
 
 
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
@@ -47,6 +48,11 @@ float Tank::getYposition() const
 {
     return m_y;
 }
+
+int Tank::type() const{
+    return 1;
+}
+
 void Tank::advance()
 {
     if(m_id == 0){/*
@@ -211,16 +217,31 @@ void Tank::advance()
     //ako je pritisnut space or enter pravi se raketa
     if(launch){
         //trebaju nam koordinate tenk da bismo napravili raketu
-        float tank_x_position = this->x();
-        float tank_y_position = this->y();
+        float tank_x_position = this->x() - 10*x_v;
+        float tank_y_position = this->y() - 10*y_v;
 
 
-        Rocket *rocket = new Rocket(tank_x_position,tank_y_position,15,1,this->m_input);
+        Rocket *rocket = new Rocket(tank_x_position,tank_y_position,15,1,this->m_input,m_id,2*x_v,2*y_v,rotation());
 
-        rocket->setPos(rocket->x(),rocket->y());
-        scene()->addItem(rocket);
-
-        qDebug() << "Raketa je napravljena";
+        if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
+               qDebug() << "Raketa 0 je napravljena";
+               scene()->addItem(rocket);
+               rocket->setPos(rocket->x(),rocket->y());
+        }
+        else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
+               qDebug() << "Raketa 1 je napravljena";
+               scene()->addItem(rocket);
+               rocket->setPos(rocket->x(),rocket->y());
+        }
+        else{
+            if(m_id == 1) rocket->rakete_tenka_1 -= 1;
+            if(m_id == 0) rocket->rakete_tenka_0 -= 1;
+            delete rocket;
+        }
+        if (m_id == 0)
+            m_input->k_space = false;
+        if (m_id == 1)
+            m_input->k_enter = false;
     }
 
 }
@@ -231,6 +252,10 @@ void Tank::advance()
 ////    if (event->isAutoRepeat()) {
 ////            return;
 ////    }
+///
+///
+///
+///
 
 //    if (event->key() == Qt::Key_W) up = true;
 //    if (event->key() == Qt::Key_S) down = true;

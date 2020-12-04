@@ -37,6 +37,10 @@ QRectF Wall::boundingRect() const
     return QRectF(m_x, m_y - 45, m_height, m_width);
 }
 
+int Wall::type() const {
+    return 0;
+}
+
 bool Wall::isVertical() const
 {
     return (m_height - m_width) > 0 ? true : false;

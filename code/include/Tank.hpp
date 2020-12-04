@@ -14,6 +14,8 @@ public:
 
     ~Tank()  = default;
 
+    int type() const;
+
     // QGraphicsItem interface
 
     QRectF boundingRect() const override;

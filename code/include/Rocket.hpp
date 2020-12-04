@@ -13,7 +13,11 @@
 class Rocket : public QObject , public QGraphicsItem {
     Q_OBJECT
 public:
-    Rocket(float x,float y,float r ,int rocket_power,Input* input);
+
+    static int rakete_tenka_0;
+    static int rakete_tenka_1;
+
+    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot);
     ~Rocket() = default;
 
     // QGraphicsItem interface
@@ -24,7 +28,11 @@ public slots:
     void move();
 
 private:
-
+    qreal m_rotation;
+    int m_pravac_x;
+    int m_pravac_y;
+    //da vidimo kom tenku pripada raketa
+    int m_id;
     float m_life_time = 0;
     //koordinate rakete i poluprecnik
     float m_x;

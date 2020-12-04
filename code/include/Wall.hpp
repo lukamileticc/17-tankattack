@@ -12,6 +12,8 @@ public:
 
     ~Wall() = default;
 
+    int type() const;
+
     Wall(const Wall&);
     Wall operator=(const Wall&);
 

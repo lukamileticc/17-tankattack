@@ -2,6 +2,7 @@
 #include <QTimer>
 #include <QPainter>
 #include <iostream>
+#include <QDebug>
 
 Input::Input(){
     timer = new QTimer();
@@ -16,9 +17,8 @@ Input::Input(){
 void Input::keyPressEvent(QKeyEvent *event){
 
     if (event->isAutoRepeat()) {
-            return;
+                return;
     }
-
     switch(event->key()){
         case Qt::Key_W:
             key_tank1 |= key_up;
@@ -58,6 +58,7 @@ void Input::keyPressEvent(QKeyEvent *event){
             break;
         case Qt::Key_Enter:
             key_tank2 |= key_rocket_launch;
+            qDebug() << "dsadsa";
             k_enter = true;
             break;
         case Qt::Key_P:
@@ -73,9 +74,11 @@ void Input::keyPressEvent(QKeyEvent *event){
 }
 
 void Input::keyReleaseEvent(QKeyEvent *event){
+
     if (event->isAutoRepeat()) {
             return;
     }
+
     switch(event->key()){
         case Qt::Key_W:
             key_tank1 &= ~key_up;
