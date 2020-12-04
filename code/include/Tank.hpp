@@ -44,6 +44,11 @@ public:
     void IncreaseScore(int score);
 
     //---
+
+
+    float getXposition() const;
+    float getYposition() const;
+
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;
@@ -69,6 +74,9 @@ private:
     bool down = false;
     bool left = false;
     bool right = false;
+    /////////////////////
+    bool launch = false;
+
 
     float x_v = 0;
     float y_v = 1;

@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QGraphicsItem>
+#include <QTimer>
 //#include "code/include/Tank.hpp"
 
 #define key_up  1

@@ -1,4 +1,5 @@
 #include "../include/Tank.hpp"
+#include "../include/Rocket.hpp"
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QStyleOption>
@@ -6,6 +7,7 @@
 #include <QGraphicsScene>
 #include <cmath>
 #include <iostream>
+#include <QDebug>
 #define UNUSED(x) (void)(x)
 #define ANGLE 10
 #define TANK_W 26
@@ -17,6 +19,8 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 {
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
+
+
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -35,8 +39,16 @@ QRectF Tank::boundingRect() const
 //    return QRectF(0, 0, 30, 30);
     return QRectF(-0.5, -0.5, TANK_W + 1, 1 + TANK_H);
 }
-
-void Tank::advance(){
+float Tank::getXposition() const
+{
+    return m_x;
+}
+float Tank::getYposition() const
+{
+    return m_y;
+}
+void Tank::advance()
+{
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -53,6 +65,7 @@ void Tank::advance(){
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
+        launch = m_input->k_space;
     }
     else if(m_id == 1){/*
         unsigned int commands = m_input->key_tank2;
@@ -68,6 +81,7 @@ void Tank::advance(){
         down = m_input->k_down;
         right = m_input->k_right;
         left = m_input->k_left;
+        launch = m_input->k_enter;
     }
     else{
         std::cout << "Greska, nepostojeci tenk" << std::endl;
@@ -192,6 +206,23 @@ void Tank::advance(){
             setPos(m_x, m_y);
         }
     }
+
+///////////////////////////////////////////////////////////////////
+    //ako je pritisnut space or enter pravi se raketa
+    if(launch){
+        //trebaju nam koordinate tenk da bismo napravili raketu
+        float tank_x_position = this->x();
+        float tank_y_position = this->y();
+
+
+        Rocket *rocket = new Rocket(tank_x_position,tank_y_position,15,1,this->m_input);
+
+        rocket->setPos(rocket->x(),rocket->y());
+        scene()->addItem(rocket);
+
+        qDebug() << "Raketa je napravljena";
+    }
+
 }
 
 //void Tank::keyPressEvent(QKeyEvent *event) {
