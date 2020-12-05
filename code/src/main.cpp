@@ -15,6 +15,7 @@
 #include "code/include/Tank.hpp"
 #include "code/include/World.hpp"
 #include "code/include/Server.hpp"
+#include "code/include/Client.hpp"
 int main(int argc, char *argv[])
 {
 
@@ -22,6 +23,10 @@ int main(int argc, char *argv[])
 
 
     Server server;
+
+    Client c;
+    c.Test();
+
     World *world = new World();
 
 
