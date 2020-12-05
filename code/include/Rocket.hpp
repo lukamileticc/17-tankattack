@@ -21,23 +21,26 @@ public:
     ~Rocket() = default;
 
     // QGraphicsItem interface
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    int type() const override;
 
 public slots:
     void move();
 
 private:
-    qreal m_rotation;
-    int m_pravac_x;
-    int m_pravac_y;
-    //da vidimo kom tenku pripada raketa
-    int m_id;
-    float m_life_time = 0;
+
     //koordinate rakete i poluprecnik
     float m_x;
     float m_y;
     float m_r;
+    //da vidimo kom tenku pripada raketa
+    int m_id;
+    int m_pravac_x;
+    int m_pravac_y;
+    qreal m_rotation;
+    float m_life_time = 0;
     //boja rakete ce se menjati u zavisnosti od jacine koju tenk poseduje
     QColor m_boja;
 

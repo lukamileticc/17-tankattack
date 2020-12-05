@@ -217,21 +217,27 @@ void Tank::advance()
     //ako je pritisnut space or enter pravi se raketa
     if(launch){
         //trebaju nam koordinate tenk da bismo napravili raketu
-        float tank_x_position = this->x() - 10*x_v;
-        float tank_y_position = this->y() - 10*y_v;
+//        float tank_x_position = this->x() - 10*x_v;
+//        float tank_y_position = this->y() - 10*y_v;
+
+        QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
+        float rckt_pos_x = rckt.rx();
+        float rckt_pos_y = rckt.ry();
 
 
-        Rocket *rocket = new Rocket(tank_x_position,tank_y_position,15,1,this->m_input,m_id,2*x_v,2*y_v,rotation());
+        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, this->m_input, m_id, 2 * x_v , 2 * y_v, rotation());
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
                scene()->addItem(rocket);
-               rocket->setPos(rocket->x(),rocket->y());
+               rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               rocket->setPos(rocket->x(),rocket->y());
         }
         else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
                qDebug() << "Raketa 1 je napravljena";
                scene()->addItem(rocket);
-               rocket->setPos(rocket->x(),rocket->y());
+               rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               rocket->setPos(rocket->x(),rocket->y());
         }
         else{
             if(m_id == 1) rocket->rakete_tenka_1 -= 1;

@@ -10,6 +10,8 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, 
     :m_x(x),m_y(y),m_r(r),m_id(id),m_pravac_x(x_v),m_pravac_y(y_v),m_rotation(rot)
 {
 
+    setPos(m_x, m_y);
+
     if(id == 0) //prvi tenk pravi raketu
         rakete_tenka_0 += 1;
     else //drugi tenk pravi raketu
@@ -25,6 +27,11 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, 
     connect(input->timer,SIGNAL(timeout()),this,SLOT(move()));
 
 }
+
+int Rocket::type() const{
+    return 3;
+}
+
 void Rocket::move()
 {
 
@@ -32,7 +39,7 @@ void Rocket::move()
 //    for (int i = 0; i < colliding_items.size(); i++)
 //        if (typeid(*(colliding_items[i])) == typeid(Wall))
 
-    setPos(x() - m_pravac_x,y() - m_pravac_y);
+    /*setPos(x() - m_pravac_x,y() - m_pravac_y);
 
     if (!scene()->collidingItems(this).isEmpty()) {
        //if (typeid(scene()->collidingItems(this).first()) == 0){
@@ -44,6 +51,37 @@ void Rocket::move()
             //m_rotation = m_rotation;
             setPos(x() - m_pravac_x,y() - m_pravac_y);
         //}
+    }*/
+
+    m_x -= m_pravac_x;
+    m_y -= m_pravac_y;
+    setPos(m_x, m_y);
+
+    if (!scene()->collidingItems(this).isEmpty()) {
+        auto tmp_x = m_x;
+        auto tmp_y = m_y;
+
+        if(scene()->collidingItems(this).size() == 1) {
+            //0 je id elementa Wall
+            if (scene()->collidingItems(this).first()->type() == 0) {
+                Wall *w  = qgraphicsitem_cast<Wall*>(scene()->collidingItems(this).first());
+
+                if(w->isVertical()) {
+                    auto new_x = m_pravac_x;
+                    auto new_y = -m_pravac_y;
+
+                    m_pravac_x = new_x;
+                    m_pravac_y = new_y;
+                }
+                else {
+                    auto new_x = -m_pravac_x;
+                    auto new_y = m_pravac_y;
+
+                    m_pravac_x = new_x;
+                    m_pravac_y = new_y;
+                }
+            }
+        }
     }
 
 
@@ -62,14 +100,18 @@ void Rocket::move()
 }
 QRectF Rocket::boundingRect() const
 {
-    //prodiskutovati o ovome
-    return QRectF(m_x-m_r,m_y-m_r,2*m_r,2*m_r);
+//    prodiskutovati o ovome
+//    return QRectF(m_x-m_r,m_y-m_r,2*m_r,2*m_r);
+    return QRectF(-0.5, -0.5, m_r + 1, m_r + 1);
 }
 void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(m_boja);
-    painter->drawEllipse(m_x,m_y,m_r,m_r);
+//    painter->setBrush(m_boja);
+//    painter->drawEllipse(m_x,m_y,m_r,m_r);
+
+    painter->setBrush(Qt::yellow);
+    painter->drawEllipse(0, 0, m_r, m_r);
 }
