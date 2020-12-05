@@ -14,12 +14,14 @@
 #include "code/include/Wall.hpp"
 #include "code/include/Tank.hpp"
 #include "code/include/World.hpp"
-
+#include "code/include/Server.hpp"
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
 
+
+    Server server;
     World *world = new World();
 
 

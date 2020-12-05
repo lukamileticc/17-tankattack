@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 
+QT       += network
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -26,6 +27,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     code/src/Input.cpp \
     code/src/Rocket.cpp \
+    code/src/Server.cpp \
     code/src/World.cpp \
     code/src/main.cpp \
     code/src/Map.cpp \
@@ -34,6 +36,7 @@ SOURCES += \
 
 HEADERS += \
     code/include/Input.hpp \
+    code/include/Server.hpp \
     code/include/World.hpp \
     code/include/Board.hpp \
     code/include/Rocket.hpp \
