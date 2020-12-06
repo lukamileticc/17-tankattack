@@ -81,6 +81,33 @@ void Rocket::move()
                     m_pravac_y = new_y;
                 }
             }
+            if (scene()->collidingItems(this).first()->type() == 1){
+                //1 je id elementa Tank
+                Tank *t = qgraphicsitem_cast<Tank*>(scene()->collidingItems(this).first());
+                t->is_destroyed = true;
+            }
+        }
+        else if(scene()->collidingItems(this).size() == 2){
+            // za slucaj da udari u dva zida na spoju -> odbija se od onog u kojeg je prvo udarila
+            if (scene()->collidingItems(this)[0]->type() == 0 &&
+                scene()->collidingItems(this)[1]->type() == 0){
+                Wall *w  = qgraphicsitem_cast<Wall*>(scene()->collidingItems(this).first());
+
+                if(w->isVertical()) {
+                    auto new_x = m_pravac_x;
+                    auto new_y = -m_pravac_y;
+
+                    m_pravac_x = new_x;
+                    m_pravac_y = new_y;
+                }
+                else {
+                    auto new_x = -m_pravac_x;
+                    auto new_y = m_pravac_y;
+
+                    m_pravac_x = new_x;
+                    m_pravac_y = new_y;
+                }
+            }
         }
     }
 

@@ -51,6 +51,8 @@ public:
     float getXposition() const;
     float getYposition() const;
 
+    bool is_destroyed = false;
+
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;

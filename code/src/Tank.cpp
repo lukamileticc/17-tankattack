@@ -93,6 +93,11 @@ void Tank::advance()
         std::cout << "Greska, nepostojeci tenk" << std::endl;
     }
 
+//    if (this->is_destroyed){
+//        this->destroy();
+//        // ovde bi trebala neka animacija eksplozije da se napravi
+//    }
+
     QPointF pos_vector_x = mapToScene(0, 0);
     QPointF pos_vector_y = mapToScene(0, TANK_H);
 
