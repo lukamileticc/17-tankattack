@@ -101,6 +101,7 @@ void Tank::advance()
 
     if (this->is_destroyed){
         this->destroy();
+        return;
         // ovde bi trebala neka animacija eksplozije da se napravi
     }
 
