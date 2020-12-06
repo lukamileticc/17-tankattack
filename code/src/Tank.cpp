@@ -53,6 +53,12 @@ int Tank::type() const{
     return 1;
 }
 
+void Tank::destroy() {
+    scene()->removeItem(this);
+    delete this;
+    //end_of_round();
+}
+
 void Tank::advance()
 {
     if(m_id == 0){/*
@@ -93,10 +99,10 @@ void Tank::advance()
         std::cout << "Greska, nepostojeci tenk" << std::endl;
     }
 
-//    if (this->is_destroyed){
-//        this->destroy();
-//        // ovde bi trebala neka animacija eksplozije da se napravi
-//    }
+    if (this->is_destroyed){
+        this->destroy();
+        // ovde bi trebala neka animacija eksplozije da se napravi
+    }
 
     QPointF pos_vector_x = mapToScene(0, 0);
     QPointF pos_vector_y = mapToScene(0, TANK_H);
@@ -226,8 +232,8 @@ void Tank::advance()
 //        float tank_y_position = this->y() - 10*y_v;
 
         QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
-        float rckt_pos_x = rckt.rx();
-        float rckt_pos_y = rckt.ry();
+        float rckt_pos_x = rckt.rx() - 5;
+        float rckt_pos_y = rckt.ry() - 5;
 
 
         Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, this->m_input, m_id, 2 * x_v , 2 * y_v, rotation());

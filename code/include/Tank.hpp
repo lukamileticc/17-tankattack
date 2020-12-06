@@ -46,7 +46,7 @@ public:
     void IncreaseScore(int score);
 
     //---
-
+    void destroy();
 
     float getXposition() const;
     float getYposition() const;
