@@ -11,6 +11,7 @@
 #include <QTimer>
 
 World::World(QObject *parent){
+    Q_UNUSED(parent);
 
     // Inicijalizacija scene i pogleda
 

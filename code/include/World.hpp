@@ -17,15 +17,15 @@ public:
 
     void show();
 
+    QGraphicsScene *scene = nullptr;
+    QGraphicsView  *view  = nullptr;
 
 public slots:
     void start();
     void quit();
     void main_menu();
     void show_battles();
-protected:
-    QGraphicsScene *scene = nullptr;
-    QGraphicsView  *view  = nullptr;
+
 private:
     int m_in_game=0;
     int m_started=0;

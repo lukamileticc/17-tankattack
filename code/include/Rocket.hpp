@@ -6,45 +6,45 @@
 #include <utility>
 #include "Map.hpp"
 #include "Tank.hpp"
+#include <QObject>
+#include <QGraphicsItem>
+#include "code/include/Input.hpp"
 
-class Rocket : public QGraphicsItem {  // mozda treba implementirati klasu Movable, koju cemo nasledjivati za sve funkcije
+class Rocket : public QObject , public QGraphicsItem {
+    Q_OBJECT
 public:
 
-//  buduci da klasu RocketParameters nismo kreirali, koristicemo obican int sve dok se ne saglasimo sta ta klasa treba da predstavlja
-//  Rocket(std::shared_ptr<const Map> map, std::shared_ptr<Tank> tank, RocketParameters parameters);
+    static int rakete_tenka_0;
+    static int rakete_tenka_1;
 
-    Rocket(std::shared_ptr<const Map> map, std::shared_ptr<Tank> tank, int parameters);
+    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot);
     ~Rocket() = default;
 
-    void draw(QPainter *painter);
-    QRectF boundingRect() const;
+    // QGraphicsItem interface
+    QRectF boundingRect() const override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    int get_x() const;
-    int get_y() const; // napraviti strukturu koordinate
+    int type() const override;
 
-    int get_power() const;
-    int get_speed() const;
-    bool get_break_obstacle() const;
-
-    int get_board_width() const;
-    int get_board_height() const;
+public slots:
+    void move();
 
 private:
-    int m_x;
-    int m_y;
 
-    std::shared_ptr<const Map> m_map;
-    const std::shared_ptr<const Tank> m_tank;
+    //koordinate rakete i poluprecnik
+    float m_x;
+    float m_y;
+    float m_r;
+    //da vidimo kom tenku pripada raketa
+    int m_id;
+    int m_pravac_x;
+    int m_pravac_y;
+    qreal m_rotation;
+    float m_life_time = 0;
+    //boja rakete ce se menjati u zavisnosti od jacine koju tenk poseduje
+    QColor m_boja;
 
-    int m_parameters;
-    int m_speed;
-    int m_power;
-    bool m_break_obstacle; // ako budemo implementirali da mozemo da lomimo zidove
-
-    const int m_board_width = 1500;
-    const int m_board_height = 1200;
 };
-
 #endif //ROCKET_HPP
 
 

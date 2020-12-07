@@ -14,6 +14,8 @@ public:
 
     ~Tank()  = default;
 
+    int type() const;
+
     // QGraphicsItem interface
 
     QRectF boundingRect() const override;
@@ -44,6 +46,13 @@ public:
     void IncreaseScore(int score);
 
     //---
+    void destroy();
+
+    float getXposition() const;
+    float getYposition() const;
+
+    bool is_destroyed = false;
+
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;
@@ -69,6 +78,9 @@ private:
     bool down = false;
     bool left = false;
     bool right = false;
+    /////////////////////
+    bool launch = false;
+
 
     float x_v = 0;
     float y_v = 1;

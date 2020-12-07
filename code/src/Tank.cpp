@@ -1,4 +1,5 @@
 #include "../include/Tank.hpp"
+#include "../include/Rocket.hpp"
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QStyleOption>
@@ -6,10 +7,12 @@
 #include <QGraphicsScene>
 #include <cmath>
 #include <iostream>
+#include <QDebug>
 #define UNUSED(x) (void)(x)
 #define ANGLE 10
 #define TANK_W 26
 #define TANK_H 30
+#define MAX_ROCKET 7
 
 
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
@@ -17,6 +20,8 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 {
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
+
+
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -35,8 +40,27 @@ QRectF Tank::boundingRect() const
 //    return QRectF(0, 0, 30, 30);
     return QRectF(-0.5, -0.5, TANK_W + 1, 1 + TANK_H);
 }
+float Tank::getXposition() const
+{
+    return m_x;
+}
+float Tank::getYposition() const
+{
+    return m_y;
+}
 
-void Tank::advance(){
+int Tank::type() const{
+    return 1;
+}
+
+void Tank::destroy() {
+    scene()->removeItem(this);
+    delete this;
+    //end_of_round();
+}
+
+void Tank::advance()
+{
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -53,6 +77,7 @@ void Tank::advance(){
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
+        launch = m_input->k_space;
     }
     else if(m_id == 1){/*
         unsigned int commands = m_input->key_tank2;
@@ -68,9 +93,16 @@ void Tank::advance(){
         down = m_input->k_down;
         right = m_input->k_right;
         left = m_input->k_left;
+        launch = m_input->k_enter;
     }
     else{
         std::cout << "Greska, nepostojeci tenk" << std::endl;
+    }
+
+    if (this->is_destroyed){
+        this->destroy();
+        return;
+        // ovde bi trebala neka animacija eksplozije da se napravi
     }
 
     QPointF pos_vector_x = mapToScene(0, 0);
@@ -192,6 +224,44 @@ void Tank::advance(){
             setPos(m_x, m_y);
         }
     }
+
+///////////////////////////////////////////////////////////////////
+    //ako je pritisnut space or enter pravi se raketa
+    if(launch){
+        //trebaju nam koordinate tenk da bismo napravili raketu
+//        float tank_x_position = this->x() - 10*x_v;
+//        float tank_y_position = this->y() - 10*y_v;
+
+        QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
+        float rckt_pos_x = rckt.rx() - 5;
+        float rckt_pos_y = rckt.ry() - 5;
+
+
+        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, this->m_input, m_id, 2 * x_v , 2 * y_v, rotation());
+
+        if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
+               qDebug() << "Raketa 0 je napravljena";
+               scene()->addItem(rocket);
+               rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               rocket->setPos(rocket->x(),rocket->y());
+        }
+        else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
+               qDebug() << "Raketa 1 je napravljena";
+               scene()->addItem(rocket);
+               rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               rocket->setPos(rocket->x(),rocket->y());
+        }
+        else{
+            if(m_id == 1) rocket->rakete_tenka_1 -= 1;
+            if(m_id == 0) rocket->rakete_tenka_0 -= 1;
+            delete rocket;
+        }
+        if (m_id == 0)
+            m_input->k_space = false;
+        if (m_id == 1)
+            m_input->k_enter = false;
+    }
+
 }
 
 //void Tank::keyPressEvent(QKeyEvent *event) {
@@ -200,6 +270,10 @@ void Tank::advance(){
 ////    if (event->isAutoRepeat()) {
 ////            return;
 ////    }
+///
+///
+///
+///
 
 //    if (event->key() == Qt::Key_W) up = true;
 //    if (event->key() == Qt::Key_S) down = true;
