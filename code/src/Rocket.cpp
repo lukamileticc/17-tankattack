@@ -6,7 +6,7 @@ int Rocket::rakete_tenka_0 = 0;
 int Rocket::rakete_tenka_1 = 0;
 
 //u rocket power ce se prosledjivati enum u zavisnoti koju jacinu poseduje tenk
-Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot)
+Rocket::Rocket(float x, float y, float r, int rocket_power,int id, int x_v, int y_v, qreal rot)
     :m_x(x),m_y(y),m_r(r),m_id(id),m_pravac_x(x_v),m_pravac_y(y_v),m_rotation(rot)
 {
 
@@ -24,7 +24,10 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, 
     else throw "Nepodrzana jacina metka";
 
 
-    connect(input->timer,SIGNAL(timeout()),this,SLOT(move()));
+    //dodat nezavisan timer za pomeranje rakete-to Moze!
+    QTimer *timer = new QTimer();
+    connect(timer,SIGNAL(timeout()),this,SLOT(move()));
+    timer->start(30); //move se poziva na svakih 30ms
 
 }
 
@@ -34,32 +37,75 @@ int Rocket::type() const{
 
 void Rocket::move()
 {
-
-//    QList<QGraphicsItem> colliding_items = collidingItems();
-//    for (int i = 0; i < colliding_items.size(); i++)
-//        if (typeid(*(colliding_items[i])) == typeid(Wall))
-
-    /*setPos(x() - m_pravac_x,y() - m_pravac_y);
-
-    if (!scene()->collidingItems(this).isEmpty()) {
-       //if (typeid(scene()->collidingItems(this).first()) == 0){
-            setPos(x() + m_pravac_x,y() + m_pravac_y);
-            auto new_x = m_pravac_x * cos(m_rotation) - m_pravac_y * sin(m_rotation);
-            auto new_y = m_pravac_x * sin(m_rotation) + m_pravac_y * cos(m_rotation);
-            m_pravac_x = new_x;
-            m_pravac_y = new_y;
-            //m_rotation = m_rotation;
-            setPos(x() - m_pravac_x,y() - m_pravac_y);
-        //}
-    }*/
-
+    //Menjamo poziciju i prava kretanja rakete
     m_x -= m_pravac_x;
     m_y -= m_pravac_y;
     setPos(m_x, m_y);
 
+
+    //lista svih objekata koji imaju koliziju sa rocketom
+    QList<QGraphicsItem *> colliding_items = collidingItems();
+
+    if(colliding_items.size() == 2)
+    { // za slucaj da udari u dva zida na spoju -> odbija se od onog u kojeg je prvo udarila
+         if (typeid(*(colliding_items[0])) == typeid(Wall) &&
+             typeid(*(colliding_items[1])) == typeid(Wall))
+         {
+             Wall *w  = qgraphicsitem_cast<Wall*>(colliding_items[0]);
+
+             if(w->isVertical()) {
+                 auto new_x = m_pravac_x;
+                 auto new_y = -m_pravac_y;
+
+                 m_pravac_x = new_x;
+                 m_pravac_y = new_y;
+             }
+             else {
+                 auto new_x = -m_pravac_x;
+                 auto new_y = m_pravac_y;
+
+                 m_pravac_x = new_x;
+                 m_pravac_y = new_y;
+             }
+         }
+    }
+
+    for (int i = 0; i < colliding_items.size(); i++)
+    {
+        //ako raketa udara u zid
+        if (typeid(*(colliding_items[i])) == typeid(Wall)){
+               Wall *w  = qgraphicsitem_cast<Wall*>(colliding_items.first());
+               if(w->isVertical()) {
+                   auto new_x = m_pravac_x;
+                   auto new_y = -m_pravac_y;
+
+                   m_pravac_x = new_x;
+                   m_pravac_y = new_y;
+               }
+               else {
+                   auto new_x = -m_pravac_x;
+                   auto new_y = m_pravac_y;
+
+                   m_pravac_x = new_x;
+                   m_pravac_y = new_y;
+               }
+        }
+        //ako raketa udara u tenk
+        else if(typeid(*(colliding_items[i])) == typeid(Tank)){
+              Tank *t = qgraphicsitem_cast<Tank*>(colliding_items[i]);
+              t->is_destroyed = true;
+              delete t;
+              delete this;
+              //return je neophodan jer ce doci od segfault---dole opet pristupamo raketi
+              //koja je vec obrisana!
+              return;
+        }
+    }
+/*
+
     if (!scene()->collidingItems(this).isEmpty()) {
-        auto tmp_x = m_x;
-        auto tmp_y = m_y;
+//        auto tmp_x = m_x;
+//        auto tmp_y = m_y;
 
         if(scene()->collidingItems(this).size() == 1) {
             //0 je id elementa Wall
@@ -112,7 +158,10 @@ void Rocket::move()
         }
     }
 
+*/
 
+
+   //rakete je potrebno obrisati ako su vec dugo u igri
     m_life_time++;
     if(m_life_time > 150)
     {

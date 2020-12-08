@@ -25,6 +25,7 @@ public slots:
     void quit();
     void main_menu();
     void show_battles();
+    void input_players_names();
 
 private:
     int m_in_game=0;

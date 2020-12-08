@@ -1,13 +1,15 @@
 <RCC>
     <qresource prefix="/resources/images">
-        <file>background.jpg</file>
         <file>menu_background.jpg</file>
         <file>tank_backround.jpg</file>
         <file>tank_background_2.png</file>
         <file>bckg.jpg</file>
         <file>rsz_tank_background_2.png</file>
+        <file>input_names_bg.jpg</file>
+        <file>input_names_bg_2.jpg</file>
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

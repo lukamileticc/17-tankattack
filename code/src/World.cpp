@@ -9,12 +9,12 @@
 #include <QBrush>
 #include <QApplication>
 #include <QTimer>
+#include <QGraphicsTextItem>
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
 
     // Inicijalizacija scene i pogleda
-
     scene = new QGraphicsScene();
     scene->setSceneRect(0,0,1280,720);
 
@@ -43,79 +43,58 @@ void World::main_menu(){
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
 
+    QString style_for_buttons = "QPushButton"
+                                "{"
+                                 "background-color: teal;"
+                                 "border-style: outset;"
+                                 "border-width: 2.5px;"
+                                 "border-radius: 10px;"
+                                 "border-color: beige;"
+                                 "font: bold 16px;"
+                                 "padding: 6px;"
+                                "}"
+                                "QPushButton::hover"
+                                "{"
+                                "background-color: #00CDFF"
+                                "}";
+
     //QPushButton *bstart = new QPushButton(QString(" START GAME   "));
-
     QPushButton *bstart = new QPushButton(QString("START GAME"));
-
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
-
     bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
-
-    bstart->setStyleSheet("background-color: teal;"
-                        "border-style: outset;"
-                         "border-width: 2.5px;"
-                         "border-radius: 10px;"
-                         "border-color: beige;"
-                         "font: bold 16px;"
-                         "padding: 6px;");
-
+    bstart->setStyleSheet(style_for_buttons);
     scene->addWidget(bstart);
-    QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
+    QObject::connect(bstart, SIGNAL (released()), this, SLOT (input_players_names()), Qt::QueuedConnection);
+
+
     if (m_started==1){
         QPushButton *bcontinue = new QPushButton(QString("CONTINUE GAME"));
-
         bcontinue->setFixedWidth(300);
         bcontinue->setFixedHeight(100);
-
         bcontinue->move(scene->width()/2 - bstart->rect().width()/2,625);
-
-        bcontinue->setStyleSheet("background-color: teal;"
-                            "border-style: outset;"
-                             "border-width: 2px;"
-                             "border-radius: 10px;"
-                             "border-color: beige;"
-                             "font: bold 14px;"
-                             "padding: 6px;");
-
+        bcontinue->setStyleSheet(style_for_buttons);
         scene->addWidget(bcontinue);
         QObject::connect(bcontinue, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
     }
 
+    //Button za prikaz prethodnih skorova
     QPushButton *bbattle = new QPushButton(QString("BATTLES"));
-
     bbattle->setFixedWidth(300);
     bbattle->setFixedHeight(100);
-
     bbattle->move(scene->width()/2 - bbattle->rect().width()/2,375);
-
-    bbattle->setStyleSheet("background-color: teal;"
-                        "border-style: outset;"
-                         "border-width: 2.5px;"
-                         "border-radius: 15px;"
-                         "border-color: beige;"
-                         "font: bold 16px;"
-                         "padding: 6px;");
-
+    bbattle->setStyleSheet(style_for_buttons);
     scene->addWidget(bbattle);
     QObject::connect(bbattle, SIGNAL (released()), this, SLOT (show_battles()), Qt::QueuedConnection);
 
+    //Button za izlaz
     QPushButton *bquit = new QPushButton(QString("  QUIT   GAME"));
     bquit->setFixedWidth(300);
     bquit->setFixedHeight(100);
-
     bquit->move(scene->width()/2 - bquit->rect().width()/2, 500);
-    bquit->setStyleSheet("background-color: teal;"
-                        "border-style: outset;"
-                         "border-width: 2.5px;"
-                         "border-radius: 15px;"
-                         "border-color: beige;"
-                         "font: bold 16px;"
-                         "padding: 6px;");
-
+    bquit->setStyleSheet(style_for_buttons);
     scene->addWidget(bquit);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()));
-
 
 }
 
@@ -196,8 +175,48 @@ void World::start(){
     std::cout << "helloooo" << std::endl;
 
 }
+void World::input_players_names()
+{
+    scene->clear();
+    view->setBackgroundBrush(QPixmap(":/resources/images/input_names_bg_2.jpg"));
+    view->setDragMode(QGraphicsView::ScrollHandDrag);
 
-void World::quit(){
+    QString style_for_button = "QPushButton{"
+                               "background-color: #00F7FF;"
+                               "border-style: outset;"
+                                "border-width: 2.5px;"
+                                "border-color: black;"
+                                "font: bold 16px;"
+                                "padding: 6px;"
+                                "}"
+                                "QPushButton::hover{"
+                                   "background-color: #0077FF;"
+                                "}";
+
+    //Button za start_battle
+    QPushButton *bbattle = new QPushButton(QString("Start Battle"));
+    bbattle->setFixedWidth(200);
+    bbattle->setFixedHeight(66);
+    bbattle->move(980,600);
+    scene->addWidget(bbattle);
+    bbattle->setStyleSheet(style_for_button);
+    QObject::connect(bbattle,SIGNAL(released()),this,SLOT(start()),Qt::QueuedConnection);
+
+
+    //Button za back
+    QPushButton *bback = new QPushButton(QString("Back"));
+    bback->setFixedWidth(200);
+    bback->setFixedHeight(66);
+    bback->move(100, 600);
+    scene->addWidget(bback);
+    bback->setStyleSheet(style_for_button);
+    QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
+
+
+
+}
+void World::quit()
+{
       QApplication::exit(); //mislim da je ovo pravilnije
 //    QApplication::closeAllWindows();
 }
