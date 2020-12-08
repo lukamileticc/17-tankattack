@@ -10,6 +10,8 @@
 #include <QApplication>
 #include <QTimer>
 #include <QGraphicsTextItem>
+#include <QLabel>
+#include <QLineEdit>
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
@@ -178,7 +180,7 @@ void World::start(){
 void World::input_players_names()
 {
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/input_names_bg_2.jpg"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/name_input.jpg"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     QString style_for_button = "QPushButton{"
@@ -212,7 +214,33 @@ void World::input_players_names()
     bback->setStyleSheet(style_for_button);
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
 
+    //labeli za unos imena igraca
+    QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
+    text1->setDefaultTextColor(Qt::blue);
+    text1->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
+    text1->setPos(250,250);
+    scene->addItem(text1);
 
+    QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
+    text2->setDefaultTextColor(Qt::red);
+    text2->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
+    text2->setPos(250,350);
+    scene->addItem(text2);
+
+
+    //line edit za unos imena igraca
+    QLineEdit *line1 = new QLineEdit("Enter name of blue tank");
+    QLineEdit *line2 = new QLineEdit("Enter name of red tank");
+    line1->setGeometry(600,250,310,50);
+    line2->setGeometry(600,350,310,50);
+    line1->setClearButtonEnabled(true);
+    line2->setClearButtonEnabled(true);
+    QFont font(QString("Ubuntu"),16);
+    font.setItalic(true);
+    line1->setFont(font);
+    line2->setFont(font);
+    scene->addWidget(line1);
+    scene->addWidget(line2);
 
 }
 void World::quit()
