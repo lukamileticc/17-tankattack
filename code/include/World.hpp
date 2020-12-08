@@ -5,7 +5,7 @@
 #include <QGraphicsWidget>
 #include <QGraphicsView>
 #include <QObject>
-#include <string>
+#include <QString>
 #include "code/include/Tank.hpp"
 
 class World : public QObject
@@ -24,7 +24,7 @@ public:
     Tank *t1 = nullptr;
     Tank *t2 = nullptr;
 
-    void end_of_round(std::string message);
+    void end_of_round(QString message);
 
 public slots:
     void start();

@@ -10,6 +10,7 @@
 #include <QBrush>
 #include <QApplication>
 #include <QTimer>
+#include <QLabel>
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
@@ -153,22 +154,35 @@ void World::show_battles(){
 
 }
 
-void World::end_of_round(std::string message){
-    std::cout << message << std::endl;
+void World::end_of_round(QString message){
+    //std::cout << message << std::endl;
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(50);
     scene->clear();
-    view->setBackgroundBrush(Qt::blue);
+    view->setBackgroundBrush(Qt::black);
+    view->setDragMode(QGraphicsView::ScrollHandDrag);
+    view->setFixedSize(1271, 813);
+
+//    QLabel *label = new QLabel();
+//    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+//    label->setText(message);
+//    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
+    QGraphicsTextItem *text = scene->addText(message, font);
+    text->setPos(450, 300);
+    text->setDefaultTextColor(QColor("white"));
 }
 
 void World::rounds(){
     if(t1->is_destroyed() && t2->is_destroyed()){
         // nobody win
-        end_of_round("Nobody win");
+        end_of_round("Nobody won!");
     }
     else if (t1->is_destroyed()){
 
         m_left_round_time += 1;
         if (m_left_round_time > 150){
-            end_of_round("Player2 win");
+            end_of_round("Player2 won!");
             m_skor_t2 += 1;
         }
         // t2 win
@@ -177,7 +191,7 @@ void World::rounds(){
     else if(t2->is_destroyed()){
         m_left_round_time += 1;
         if (m_left_round_time > 150){
-            end_of_round("Player1 win");
+            end_of_round("Player1 won!");
             m_skor_t1 += 1;
         }
         // t1 win
