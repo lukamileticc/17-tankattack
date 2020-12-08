@@ -38,6 +38,8 @@ private:
     int m_started=0;
     int m_skor_t1 = 0;
     int m_skor_t2 = 0;
+    int m_left_round_time = 0; // timer povecava ovaj brojac kako bi proslo odredjeno vreme nakon
+                               //unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)
 };
 
 #endif // WORLD_HPP

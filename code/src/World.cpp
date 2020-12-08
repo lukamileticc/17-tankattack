@@ -155,6 +155,8 @@ void World::show_battles(){
 
 void World::end_of_round(std::string message){
     std::cout << message << std::endl;
+    scene->clear();
+    view->setBackgroundBrush(Qt::blue);
 }
 
 void World::rounds(){
@@ -163,14 +165,21 @@ void World::rounds(){
         end_of_round("Nobody win");
     }
     else if (t1->is_destroyed()){
-        m_skor_t2 += 1;
-        end_of_round("Player2 win");
+
+        m_left_round_time += 1;
+        if (m_left_round_time > 150){
+            end_of_round("Player2 win");
+            m_skor_t2 += 1;
+        }
         // t2 win
         //end of round
     }
     else if(t2->is_destroyed()){
-        m_skor_t1 += 1;
-        end_of_round("Player1 win");
+        m_left_round_time += 1;
+        if (m_left_round_time > 150){
+            end_of_round("Player1 win");
+            m_skor_t1 += 1;
+        }
         // t1 win
         // end of round
     }
