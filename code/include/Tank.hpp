@@ -51,7 +51,7 @@ public:
     float getXposition() const;
     float getYposition() const;
 
-    bool is_destroyed = false;
+    bool is_destroyed();
 
 public slots:
     void advance();
@@ -65,13 +65,14 @@ private:
     float m_x;// x koordinata polozaja
     float m_y; // y koordinata polozaja
     float m_speed; // brzina tenka
-    float m_current_health; //trenutno helti
     int m_num_of_lives; //broj preostalih zivota
     int m_num_of_rockets; // broj raketa
 //    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
     int m_score;
+    int m_health;
 
+    bool destroyed = false;
     Input *m_input;
     //~~~~~~~~~~~~~
     bool up = false;

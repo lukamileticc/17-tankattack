@@ -3,6 +3,7 @@
 #include "code/include/Wall.hpp"
 #include "code/include/Input.hpp"
 #include "code/include/Map.hpp"
+#include <string>
 #include <QPushButton>
 #include <QObject>
 #include <iostream>
@@ -152,6 +153,32 @@ void World::show_battles(){
 
 }
 
+void World::end_of_round(std::string message){
+    std::cout << message << std::endl;
+}
+
+void World::rounds(){
+    if(t1->is_destroyed() && t2->is_destroyed()){
+        // nobody win
+        end_of_round("Nobody win");
+    }
+    else if (t1->is_destroyed()){
+        m_skor_t2 += 1;
+        end_of_round("Player2 win");
+        // t2 win
+        //end of round
+    }
+    else if(t2->is_destroyed()){
+        m_skor_t1 += 1;
+        end_of_round("Player1 win");
+        // t1 win
+        // end of round
+    }
+
+
+
+}
+
 void World::start(){
     m_started=1;
     m_in_game=1;
@@ -169,8 +196,8 @@ void World::start(){
 
     Input *input = new Input();
 
-    Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
-    Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
+    this->t1 = new Tank(0,Qt::red, 200, 400, input);
+    this->t2 = new Tank(1,Qt::blue, 1200, 400, input);
 
 
 
@@ -191,6 +218,7 @@ void World::start(){
 
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    QObject::connect(input->timer, SIGNAL(timeout()), this, SLOT(rounds()));
     input->timer->start(33);
 
     std::cout << "helloooo" << std::endl;

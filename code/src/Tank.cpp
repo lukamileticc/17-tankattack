@@ -20,6 +20,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 {
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
+    m_health = 100;
 
 
 }
@@ -54,9 +55,14 @@ int Tank::type() const{
 }
 
 void Tank::destroy() {
+    this->destroyed = true;
     scene()->removeItem(this);
-    delete this;
+    //delete this;
     //end_of_round();
+}
+
+bool Tank::is_destroyed(){
+    return this->destroyed;
 }
 
 void Tank::advance()
@@ -99,8 +105,7 @@ void Tank::advance()
         std::cout << "Greska, nepostojeci tenk" << std::endl;
     }
 
-    if (this->is_destroyed){
-        this->destroy();
+    if (this->is_destroyed()){
         return;
         // ovde bi trebala neka animacija eksplozije da se napravi
     }
@@ -295,7 +300,7 @@ bool Tank::IsAbleToShoot() const {
 }
 
 float Tank::GetCurrentHealth() const {
-    return m_current_health;
+    return m_health;
 }
 
 int Tank::GetCurrentNumsOfLife () const{
@@ -323,11 +328,11 @@ int Tank::GetScore() const{
 }
 
 void Tank::DecreaseHealth(int health) {
-    m_current_health -= health;
+    m_health -= health;
 }
 
 void Tank::IncreaseHealth(int health) {
-    m_current_health += health;
+    m_health += health;
 }
 
 bool Tank::IsDead() const {
@@ -355,7 +360,7 @@ void Tank::SetCanShot(){
 }
 
 void Tank::DecreaseNumOfLife(){
-    if (m_current_health<=0){
+    if (m_health<=0){
         m_num_of_lives-=1;
     }
 }

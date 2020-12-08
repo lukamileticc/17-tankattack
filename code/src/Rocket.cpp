@@ -84,7 +84,7 @@ void Rocket::move()
             if (scene()->collidingItems(this).first()->type() == 1){
                 //1 je id elementa Tank
                 Tank *t = qgraphicsitem_cast<Tank*>(scene()->collidingItems(this).first());
-                t->is_destroyed = true;
+                t->destroy();
                 delete this;
             }
         }
