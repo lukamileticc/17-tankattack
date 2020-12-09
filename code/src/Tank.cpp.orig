@@ -68,7 +68,12 @@ bool Tank::is_destroyed(){
 QString Tank::get_name() const{
     return m_name;
 }
+<<<<<<< HEAD
+
+void Tank::set_name(QString name){
+=======
 void Tank::set_name(const QString &name){
+>>>>>>> f250fd028172c106b5425de211fd795a21e3da89
     m_name = name;
 }
 
@@ -121,6 +126,8 @@ void Tank::advance()
         return;
         // ovde bi trebala neka animacija eksplozije da se napravi
     }
+
+
 
     QPointF pos_vector_x = mapToScene(0, 0);
     QPointF pos_vector_y = mapToScene(0, TANK_H);
@@ -309,10 +316,6 @@ void Tank::advance()
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
-}
-
-float Tank::GetCurrentHealth() const {
-    return m_health;
 }
 
 int Tank::GetCurrentNumsOfLife () const{

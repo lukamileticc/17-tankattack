@@ -2,6 +2,7 @@
 #define TANK_HPP
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
+//#include "code/include/Rocket.hpp"
 #include <vector>
 //#include "Rocket.hpp"
 
@@ -49,8 +50,14 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
+<<<<<<< HEAD
+    QString get_name();
+    void set_name(QString name);
+
+=======
     QString get_name() const;
     void set_name(const QString &name);
+>>>>>>> f250fd028172c106b5425de211fd795a21e3da89
     //---
     void destroy();
 

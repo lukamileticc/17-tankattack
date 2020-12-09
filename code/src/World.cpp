@@ -11,10 +11,11 @@
 #include <QTimer>
 #include <QGraphicsTextItem>
 #include <QLabel>
-#include <QLineEdit>
 
-World::World(QObject *parent){
-    Q_UNUSED(parent);
+
+World::World(QObject *parent)
+    :QObject(parent)
+{
 
     // Inicijalizacija scene i pogleda
 
@@ -61,27 +62,13 @@ void World::main_menu(){
                                 "background-color: #00CDFF"
                                 "}";
 
-    //QPushButton *bstart = new QPushButton(QString(" START GAME   "));
-
     QPushButton *bstart = new QPushButton(QString("START GAME"));
-
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
-
     bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
     bstart->setStyleSheet(style_for_buttons);
     scene->addWidget(bstart);
     QObject::connect(bstart, SIGNAL (released()), this, SLOT (input_players_names()), Qt::QueuedConnection);
-
-    bstart->setStyleSheet("background-color: teal;"
-                        "border-style: outset;"
-                         "border-width: 2.5px;"
-                         "border-radius: 10px;"
-                         "border-color: beige;"
-                         "font: bold 16px;"
-                         "padding: 6px;");
-
-    scene->addWidget(bstart);
 
     if (m_started==1){
         QPushButton *bcontinue = new QPushButton(QString("CONTINUE GAME"));
@@ -97,20 +84,18 @@ void World::main_menu(){
 
     //Button za prikaz prethodnih scoreova
     QPushButton *bbattle = new QPushButton(QString("BATTLES"));
-
     bbattle->setFixedWidth(300);
     bbattle->setFixedHeight(100);
-
     bbattle->move(scene->width()/2 - bbattle->rect().width()/2,375);
     bbattle->setStyleSheet(style_for_buttons);
     scene->addWidget(bbattle);
     QObject::connect(bbattle, SIGNAL (released()), this, SLOT (show_battles()), Qt::QueuedConnection);
 
+
     //Button za izlaz
     QPushButton *bquit = new QPushButton(QString("  QUIT   GAME"));
     bquit->setFixedWidth(300);
     bquit->setFixedHeight(100);
-
     bquit->move(scene->width()/2 - bquit->rect().width()/2, 500);
     bquit->setStyleSheet(style_for_buttons);
     scene->addWidget(bquit);
@@ -123,13 +108,27 @@ void World::main_menu(){
 void World::show_battles(){
     scene->clear();
 
-    view->setBackgroundBrush(Qt::blue);
+    view->setBackgroundBrush(QPixmap(":/resources/images/images.jpg"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     QPushButton *bback = new QPushButton(QString("Back"));
-    bback->setFixedWidth(100);
-    bback->setFixedHeight(33);
-    bback->move(1100, 600);
+    bback->setFixedWidth(200);
+    bback->setFixedHeight(66);
+    bback->move(100, 600);
     scene->addWidget(bback);
+    bback->setStyleSheet("QPushButton"
+                         "{"
+                          "background-color: teal;"
+                          "border-style: outset;"
+                          "border-width: 2.5px;"
+                          "border-radius: 10px;"
+                          "border-color: beige;"
+                          "font: bold 16px;"
+                          "padding: 6px;"
+                         "}"
+                         "QPushButton::hover"
+                         "{"
+                         "background-color: #00CDFF"
+                         "}");
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
 
     QString string="                TOP 10 BATTLES :                 \n";
@@ -251,9 +250,6 @@ void World::start(){
     m_started=1;
     m_in_game=1;
 
-//    for (size_t i = 0, n = scene->items().size(); i<n; i++){
-//        scene->removeItem(scene->items()[0]);
-//    }
 
     scene->clear();
 
@@ -266,8 +262,8 @@ void World::start(){
 
     this->t1 = new Tank(0,Qt::red, 200, 400, input);
     this->t2 = new Tank(1,Qt::blue, 1200, 400, input);
-
-
+    t1->set_name(this->ime_prvog_tenka);
+    t2->set_name(this->ime_drugog_tenka);
 
     scene->addItem(t1);
     scene->addItem(t2);
@@ -290,26 +286,31 @@ void World::start(){
     input->timer->start(33);
     //show_tank_info();
 
-    std::cout << "helloooo" << std::endl;
+    qDebug() << "helloooo";
+    qDebug() << "Ime prvog tenka: " << t1->get_name();
+    qDebug() << "Ime drugog tenka: " << t2->get_name();
 
 }
 void World::input_players_names()
 {
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/images.jpg"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
-    QString style_for_button = "QPushButton{"
-                               "background-color: #00F7FF;"
+    QString style_for_button ="QPushButton"
+                              "{"
+                               "background-color: teal;"
                                "border-style: outset;"
-                                "border-width: 2.5px;"
-                                "border-color: black;"
-                                "font: bold 16px;"
-                                "padding: 6px;"
-                                "}"
-                                "QPushButton::hover{"
-                                   "background-color: #0077FF;"
-                                "}";
+                               "border-width: 2.5px;"
+                               "border-radius: 10px;"
+                               "border-color: beige;"
+                               "font: bold 16px;"
+                               "padding: 6px;"
+                              "}"
+                              "QPushButton::hover"
+                              "{"
+                              "background-color: #00CDFF"
+                              "}";;
 
     //Button za start_battle
     QPushButton *bbattle = new QPushButton(QString("Start Battle"));
@@ -331,13 +332,13 @@ void World::input_players_names()
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
 
     //labeli za unos imena igraca
-    QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
+    QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
     text1->setDefaultTextColor(Qt::blue);
     text1->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
     text1->setPos(250,250);
     scene->addItem(text1);
 
-    QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
+    QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
     text2->setDefaultTextColor(Qt::red);
     text2->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
     text2->setPos(250,350);
@@ -345,20 +346,37 @@ void World::input_players_names()
 
 
     //line edit za unos imena igraca
-    QLineEdit *line1 = new QLineEdit("Enter name of blue tank");
-    QLineEdit *line2 = new QLineEdit("Enter name of red tank");
+    line1 = new QLineEdit("Enter red tank name");
     line1->setGeometry(600,250,310,50);
-    line2->setGeometry(600,350,310,50);
     line1->setClearButtonEnabled(true);
-    line2->setClearButtonEnabled(true);
     QFont font(QString("Ubuntu"),16);
     font.setItalic(true);
     line1->setFont(font);
-    line2->setFont(font);
     scene->addWidget(line1);
+
+
+    line2= new QLineEdit("Enter blue tank name");
+    line2->setGeometry(600,350,310,50);
+    line2->setClearButtonEnabled(true);
+    line2->setFont(font);
     scene->addWidget(line2);
 
+
+    QObject::connect(line1,SIGNAL(textChanged(QString)),this,SLOT(change_name_of_first_tank()),Qt::QueuedConnection);
+    QObject::connect(line2,SIGNAL(textChanged(QString)),this,SLOT(change_name_of_second_tank()),Qt::QueuedConnection);
+//    this->ime_prvog_tenka = line1->text();
+//    this->ime_drugog_tenka = line2->text();
+
 }
+void World::change_name_of_first_tank()
+{
+    this->ime_prvog_tenka = line1->text();
+}
+void World::change_name_of_second_tank()
+{
+   this->ime_drugog_tenka = line2->text();
+}
+
 void World::quit()
 {
       QApplication::exit(); //mislim da je ovo pravilnije
