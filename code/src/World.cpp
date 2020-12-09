@@ -180,7 +180,7 @@ void World::start(){
 void World::input_players_names()
 {
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/name_input.jpg"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     QString style_for_button = "QPushButton{"
