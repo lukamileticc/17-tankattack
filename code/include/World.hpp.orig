@@ -31,8 +31,11 @@ public slots:
     void quit();
     void main_menu();
     void show_battles();
-    void input_players_names();
+<<<<<<< HEAD
     void rounds();
+=======
+    void input_players_names();
+>>>>>>> feature/Informacije_o_rundi
 
 private:
     int m_in_game=0;

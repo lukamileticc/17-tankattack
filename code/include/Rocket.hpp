@@ -2,13 +2,14 @@
 #define ROCKET_HPP
 
 #include <QPainter>
-#include <memory>
-#include <utility>
-#include "Map.hpp"
-#include "Tank.hpp"
 #include <QObject>
 #include <QGraphicsItem>
-#include "code/include/Input.hpp"
+#include <QTimer>
+#include <memory>
+#include <utility>
+#include "Wall.hpp"
+#include "Map.hpp"
+#include "Tank.hpp"
 
 class Rocket : public QObject , public QGraphicsItem {
     Q_OBJECT
@@ -17,7 +18,7 @@ public:
     static int rakete_tenka_0;
     static int rakete_tenka_1;
 
-    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot);
+    Rocket(float x,float y,float r ,int rocket_power,int id, int x_v, int y_v, qreal rot);
     ~Rocket() = default;
 
     // QGraphicsItem interface

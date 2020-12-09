@@ -242,7 +242,7 @@ void Tank::advance()
         float rckt_pos_y = rckt.ry() - 5;
 
 
-        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, this->m_input, m_id, 2 * x_v , 2 * y_v, rotation());
+        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, m_id, 2 * x_v , 2 * y_v, rotation());
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
