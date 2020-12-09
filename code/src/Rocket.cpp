@@ -93,7 +93,7 @@ void Rocket::move()
         //ako raketa udara u tenk
         else if(typeid(*(colliding_items[i])) == typeid(Tank)){
               Tank *t = qgraphicsitem_cast<Tank*>(colliding_items[i]);
-              t->is_destroyed = true;
+              t->destroy();
               delete t;
               delete this;
               //return je neophodan jer ce doci od segfault---dole opet pristupamo raketi
