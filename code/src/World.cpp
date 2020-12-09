@@ -171,6 +171,14 @@ void World::end_of_round(QString message){
     QGraphicsTextItem *text = scene->addText(message, font);
     text->setPos(450, 300);
     text->setDefaultTextColor(QColor("white"));
+
+
+    QString score_text;
+    score_text.reserve(100);
+    score_text.append("Score\n").append("Player1 ").append("1").append(" : ").append("2 ").append("Player2");
+    QGraphicsTextItem *score = scene->addText(score_text,font);
+    score->setPos(450,350);
+    score->setDefaultTextColor(QColor("white"));
 }
 
 void World::rounds(){
