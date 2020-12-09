@@ -65,6 +65,12 @@ bool Tank::is_destroyed(){
     return this->destroyed;
 }
 
+QString Tank::get_name(){
+    return m_name;
+}
+void Tank::set_name(QString name){
+    m_name = name;
+}
 void Tank::advance()
 {
     if(m_id == 0){/*

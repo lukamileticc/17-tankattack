@@ -45,6 +45,8 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
+    QString get_name();
+    void set_name(QString name);
     //---
     void destroy();
 
@@ -71,6 +73,7 @@ private:
     bool m_can_shoot;
     int m_score;
     int m_health;
+    QString m_name;
 
     bool destroyed = false;
     Input *m_input;
