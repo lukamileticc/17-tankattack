@@ -6,8 +6,8 @@ int Rocket::rakete_tenka_0 = 0;
 int Rocket::rakete_tenka_1 = 0;
 
 //u rocket power ce se prosledjivati enum u zavisnoti koju jacinu poseduje tenk
-Rocket::Rocket(float x, float y, float r, int rocket_power,int id, int x_v, int y_v, qreal rot)
-    :m_x(x),m_y(y),m_r(r),m_id(id),m_pravac_x(x_v),m_pravac_y(y_v),m_rotation(rot)
+Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, int x_v, int y_v, qreal rot)
+    :m_x(x),m_y(y),m_r(r),m_rocket_type(rocket_type),m_id(id),m_pravac_x(x_v),m_pravac_y(y_v),m_rotation(rot)
 {
 
     setPos(m_x, m_y);
@@ -18,9 +18,18 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,int id, int x_v, int 
         rakete_tenka_1 += 1;
 
 
-    if(rocket_power == 0) m_boja = Qt::red;
-    else if(rocket_power == 1) m_boja = Qt::yellow;
-    else if(rocket_power == 2) m_boja = Qt::blue;
+    if(m_rocket_type == Rocket_type::Low_power) {
+        m_boja = Qt::red;
+        m_rocket_power = 25;
+    }
+    else if(m_rocket_type == Rocket_type::Medium_power){
+        m_boja = Qt::yellow;
+        m_rocket_power = 50;
+    }
+    else if(m_rocket_type == Rocket_type::High_power){
+        m_boja = Qt::blue;
+        m_rocket_power = 100;
+    }
     else throw "Nepodrzana jacina metka";
 
 
@@ -93,8 +102,11 @@ void Rocket::move()
         //ako raketa udara u tenk
         else if(typeid(*(colliding_items[i])) == typeid(Tank)){
               Tank *t = qgraphicsitem_cast<Tank*>(colliding_items[i]);
-              t->destroy();
-              delete t;
+              t->decrease_health(this->m_rocket_power);
+              if (t->get_current_health() <= 0){
+                  t->destroy();
+              }
+
               delete this;
               //return je neophodan jer ce doci od segfault---dole opet pristupamo raketi
               //koja je vec obrisana!

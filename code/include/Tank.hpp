@@ -2,6 +2,7 @@
 #define TANK_HPP
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
+//#include "code/include/Rocket.hpp"
 #include <vector>
 //#include "Rocket.hpp"
 
@@ -22,17 +23,21 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     bool IsAbleToShoot() const;
 
-    void DecreaseHealth(int health);
-    void IncreaseHealth(int health);
+    void decrease_health(int health);
+    void increase_health(int health);
 
-    float GetCurrentHealth() const;
+    void show_tank_info();
+
+    int get_current_health() const;
     bool IsDead() const;
     int GetCurrentNumsOfLife () const;
     float GetX() const;
     float GetY() const;
     float GetSpeed() const;
     int GetCurrentNumsOfRockets() const;
-    int GetScore() const;
+
+    int get_score() const;
+    void set_score(int score);
 //    const std::vector<Rocket> &getRockets() const;
 
 //    void setRockets(const std::vector<Rocket> &mRockets);
@@ -47,6 +52,7 @@ public:
 
     QString get_name();
     void set_name(QString name);
+
     //---
     void destroy();
 
@@ -71,9 +77,11 @@ private:
     int m_num_of_rockets; // broj raketa
 //    std::vector<Rocket> m_rockets; //niz raketa
     bool m_can_shoot;
-    int m_score;
-    int m_health;
+    int m_score = 0;
+    int m_health = 100;
     QString m_name;
+
+    Rocket_type m_tank_rocket_type = Rocket_type::Low_power;
 
     bool destroyed = false;
     Input *m_input;

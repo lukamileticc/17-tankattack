@@ -95,7 +95,7 @@ void World::main_menu(){
         QObject::connect(bcontinue, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
     }
 
-    //Button za prikaz prethodnih skorova
+    //Button za prikaz prethodnih scoreova
     QPushButton *bbattle = new QPushButton(QString("BATTLES"));
 
     bbattle->setFixedWidth(300);
@@ -153,7 +153,9 @@ void World::show_battles(){
 }
 
 void World::end_of_round(QString message){
+    //show_tank_info();
     //std::cout << message << std::endl;
+    m_ended_round = true;
     QFont font;
     font.setBold(true);
     font.setPointSize(50);
@@ -167,19 +169,54 @@ void World::end_of_round(QString message){
 //    label->setText(message);
 //    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
     QGraphicsTextItem *text = scene->addText(message, font);
-    text->setPos(450, 300);
+    text->setPos(450, 100);
     text->setDefaultTextColor(QColor("white"));
 
 
     QString score_text;
     score_text.reserve(100);
-    score_text.append("Score\n").append("Player1 ").append("1").append(" : ").append("2 ").append("Player2");
+    score_text.append("\n            Score\n").append("Player1 ").append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2)).append(" Player2");
     QGraphicsTextItem *score = scene->addText(score_text,font);
-    score->setPos(450,350);
+    score->setPos(360,250);
     score->setDefaultTextColor(QColor("white"));
 }
 
+void World::show_tank_info(){
+    if (m_showed_info){
+        scene->removeItem(info_t1);
+        scene->removeItem(info_t2);
+    }
+    m_showed_info = true;
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(12);
+
+    QString info_string_t1,info_string_t2;
+    info_string_t1.reserve(50);
+    info_string_t2.reserve(50);
+
+    info_string_t1.append("Player1\n").append("Score: ").append(QString::number(t1->get_score()))
+                  .append("\nHealth: ").append(QString::number(t1->get_current_health()));
+
+    info_t1 = scene->addText(info_string_t1,font);
+    info_t1->setPos(8,-35);
+    info_t1->setDefaultTextColor("red");
+   // info_t1->setPlainText(info_string_t1);
+
+    info_string_t2.append("Player2\n").append("Score: ").append(QString::number(t2->get_score()))
+                  .append("\nHealth: ").append(QString::number(t2->get_current_health()));
+
+    info_t2 = scene->addText(info_string_t2,font);
+    info_t2->setPos(1168,-35);
+    info_t2->setDefaultTextColor("blue");
+    //info_t2->setPlainText(info_string_t2);
+
+}
+
 void World::rounds(){
+    if(m_ended_round)
+        return;
+    show_tank_info();
     if(t1->is_destroyed() && t2->is_destroyed()){
         // nobody win
         end_of_round("Nobody won!");
@@ -188,8 +225,9 @@ void World::rounds(){
 
         m_left_round_time += 1;
         if (m_left_round_time > 150){
+            m_score_t2 += 1;
+            t2->set_score(m_score_t2);
             end_of_round("Player2 won!");
-            m_skor_t2 += 1;
         }
         // t2 win
         //end of round
@@ -197,8 +235,9 @@ void World::rounds(){
     else if(t2->is_destroyed()){
         m_left_round_time += 1;
         if (m_left_round_time > 150){
+            m_score_t1 += 1;
+            t1->set_score(m_score_t1);
             end_of_round("Player1 won!");
-            m_skor_t1 += 1;
         }
         // t1 win
         // end of round
@@ -249,6 +288,7 @@ void World::start(){
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), this, SLOT(rounds()));
     input->timer->start(33);
+    //show_tank_info();
 
     std::cout << "helloooo" << std::endl;
 

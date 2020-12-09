@@ -68,9 +68,16 @@ bool Tank::is_destroyed(){
 QString Tank::get_name(){
     return m_name;
 }
+
 void Tank::set_name(QString name){
     m_name = name;
 }
+
+int Tank::get_current_health() const{
+    return m_health;
+}
+
+
 void Tank::advance()
 {
     if(m_id == 0){/*
@@ -115,6 +122,8 @@ void Tank::advance()
         return;
         // ovde bi trebala neka animacija eksplozije da se napravi
     }
+
+
 
     QPointF pos_vector_x = mapToScene(0, 0);
     QPointF pos_vector_y = mapToScene(0, TANK_H);
@@ -248,7 +257,7 @@ void Tank::advance()
         float rckt_pos_y = rckt.ry() - 5;
 
 
-        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, m_id, 2 * x_v , 2 * y_v, rotation());
+        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, this->m_tank_rocket_type, m_id, 2 * x_v , 2 * y_v, rotation());
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
@@ -305,10 +314,6 @@ bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
 }
 
-float Tank::GetCurrentHealth() const {
-    return m_health;
-}
-
 int Tank::GetCurrentNumsOfLife () const{
     return m_num_of_lives;
 }
@@ -329,15 +334,19 @@ int Tank::GetCurrentNumsOfRockets() const{
     return m_num_of_rockets;
 
 }
-int Tank::GetScore() const{
+int Tank::get_score() const{
     return m_score;
 }
 
-void Tank::DecreaseHealth(int health) {
+void Tank::set_score(int score){
+    m_score = score;
+}
+
+void Tank::decrease_health(int health) {
     m_health -= health;
 }
 
-void Tank::IncreaseHealth(int health) {
+void Tank::increase_health(int health) {
     m_health += health;
 }
 
