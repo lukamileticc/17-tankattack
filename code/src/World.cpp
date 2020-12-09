@@ -82,7 +82,7 @@ void World::main_menu(){
                          "padding: 6px;");
 
     scene->addWidget(bstart);
-    QObject::connect(bstart, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
+
     if (m_started==1){
         QPushButton *bcontinue = new QPushButton(QString("CONTINUE GAME"));
 
