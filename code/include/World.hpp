@@ -46,7 +46,6 @@ public slots:
 private:
     int m_in_game=0;
     int m_started=0;
-    int m_in_game = 0;
     int m_score_t1 = 0;
     int m_score_t2 = 0;
     bool m_ended_round = false;

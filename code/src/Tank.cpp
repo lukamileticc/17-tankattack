@@ -311,10 +311,6 @@ bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
 }
 
-float Tank::GetCurrentHealth() const {
-    return m_health;
-}
-
 int Tank::GetCurrentNumsOfLife () const{
     return m_num_of_lives;
 }

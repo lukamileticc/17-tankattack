@@ -167,14 +167,14 @@ void World::end_of_round(QString message){
 //    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 //    label->setText(message);
 //    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-    QGraphicsTextItem *text = scene->addText(message, font);
+    QGraphicsTextItem *text = scene->addText(message+" won!", font);
     text->setPos(450, 100);
     text->setDefaultTextColor(QColor("white"));
 
 
     QString score_text;
     score_text.reserve(100);
-    score_text.append("\n            Score\n").append("Player1 ").append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2)).append(" Player2");
+    score_text.append("\n            Score\n").append(t1->get_name()).append(" ").append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2)).append(" ").append(t2->get_name());
     QGraphicsTextItem *score = scene->addText(score_text,font);
     score->setPos(360,250);
     score->setDefaultTextColor(QColor("white"));
@@ -194,7 +194,7 @@ void World::show_tank_info(){
     info_string_t1.reserve(50);
     info_string_t2.reserve(50);
 
-    info_string_t1.append("Player1\n").append("Score: ").append(QString::number(t1->get_score()))
+    info_string_t1.append(t1->get_name()).append("\nScore: ").append(QString::number(t1->get_score()))
                   .append("\nHealth: ").append(QString::number(t1->get_current_health()));
 
     info_t1 = scene->addText(info_string_t1,font);
@@ -202,7 +202,7 @@ void World::show_tank_info(){
     info_t1->setDefaultTextColor("red");
    // info_t1->setPlainText(info_string_t1);
 
-    info_string_t2.append("Player2\n").append("Score: ").append(QString::number(t2->get_score()))
+    info_string_t2.append(t2->get_name()).append("\nScore: ").append(QString::number(t2->get_score()))
                   .append("\nHealth: ").append(QString::number(t2->get_current_health()));
 
     info_t2 = scene->addText(info_string_t2,font);
@@ -226,7 +226,7 @@ void World::rounds(){
         if (m_left_round_time > 150){
             m_score_t2 += 1;
             t2->set_score(m_score_t2);
-            end_of_round("Player2 won!");
+            end_of_round(t2->get_name());
         }
         // t2 win
         //end of round
@@ -236,7 +236,7 @@ void World::rounds(){
         if (m_left_round_time > 150){
             m_score_t1 += 1;
             t1->set_score(m_score_t1);
-            end_of_round("Player1 won!");
+            end_of_round(t1->get_name());
         }
         // t1 win
         // end of round
