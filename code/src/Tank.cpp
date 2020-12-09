@@ -65,10 +65,10 @@ bool Tank::is_destroyed(){
     return this->destroyed;
 }
 
-QString Tank::get_name(){
+QString Tank::get_name() const{
     return m_name;
 }
-void Tank::set_name(QString name){
+void Tank::set_name(const QString &name){
     m_name = name;
 }
 void Tank::advance()

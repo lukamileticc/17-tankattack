@@ -8,6 +8,7 @@
         <file>input_names_bg.jpg</file>
         <file>input_names_bg_2.jpg</file>
         <file>name_input.jpg</file>
+        <file>images.jpg</file>
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>

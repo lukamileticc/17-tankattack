@@ -45,8 +45,8 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
-    QString get_name();
-    void set_name(QString name);
+    QString get_name() const;
+    void set_name(const QString &name);
     //---
     void destroy();
 
