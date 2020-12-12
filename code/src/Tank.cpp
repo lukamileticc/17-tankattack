@@ -8,49 +8,50 @@
 #include <cmath>
 #include <iostream>
 #include <QDebug>
-#define UNUSED(x) (void)(x)
-#define ANGLE 10
+
+#define ANGLE 9
 #define TANK_W 26
 #define TANK_H 30
-#define MAX_ROCKET 7
+#define PIPE_H 20
+#define PIPE_W 6
+#define ROCKET_RADIUS 4
+#define MAX_ROCKET 5
 
 
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
     :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
 {
-    setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
+    setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 4);
     setPos(m_x, m_y);
-
-
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    UNUSED(option);
-    UNUSED(widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
     painter->setBrush(m_color);
+    painter->drawRect(0, PIPE_H / 4, TANK_W, TANK_H);
 
-    painter->drawRect(0, 0, TANK_W, TANK_H);
-    //painter->drawRect(m_x, m_y, 30, 30);
+    painter->setBrush(Qt::white);
+    painter->drawRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H);
+
+    painter->setBrush(Qt::white);
+    painter->drawEllipse(5, 12, 16, 16);
 }
 
 QRectF Tank::boundingRect() const
 {
-//    return QRectF(0, 0, 30, 30);
-    return QRectF(-0.5, -0.5, TANK_W + 1, 1 + TANK_H);
-}
-float Tank::getXposition() const
-{
-    return m_x;
-}
-float Tank::getYposition() const
-{
-    return m_y;
+    return QRectF(-0.5, -0.5, TANK_W + 1, TANK_H + (PIPE_H / 4) + 1);
 }
 
-int Tank::type() const{
-    return 1;
+QPainterPath Tank::shape() const {
+    QPainterPath OuterPath;
+    OuterPath.setFillRule(Qt::WindingFill);
+    OuterPath.addRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H / 4);
+    OuterPath.addRect(0, PIPE_H / 4, TANK_W, TANK_H);
+
+    return OuterPath;
 }
 
 void Tank::destroy() {
@@ -106,7 +107,7 @@ void Tank::advance()
     }
 
     QPointF pos_vector_x = mapToScene(0, 0);
-    QPointF pos_vector_y = mapToScene(0, TANK_H);
+    QPointF pos_vector_y = mapToScene(0, 1);
 
     x_v = pos_vector_y.rx() - pos_vector_x.rx();
     y_v = pos_vector_y.ry() - pos_vector_x.ry();
@@ -114,6 +115,9 @@ void Tank::advance()
     float n = sqrt(pow(x_v, 2) + pow(y_v, 2));
     x_v /= n;
     y_v /= n;
+
+    float r_speed_x = x_v;
+    float r_speed_y = y_v;
 
     x_v *= 4.0;
     y_v *= 4.0;
@@ -152,19 +156,6 @@ void Tank::advance()
         }
     }
 
-    else if (up) {
-        m_x -= x_v;
-        m_y -= y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            m_x += x_v;
-            m_y += y_v;
-            setPos(m_x, m_y);
-        }
-    }
-
-//potrebno je jos dodati if-ove za (down && left) i (down && right)
     else if (left && down){
         setRotation(rotation() + ANGLE);
         m_x += x_v;
@@ -190,6 +181,19 @@ void Tank::advance()
             m_x -= x_v;
             m_y -= y_v;
             setPos(m_x,m_y);
+        }
+    }
+
+    else if (up) {
+        m_x -= x_v;
+        m_y -= y_v;
+        setPos(m_x, m_y);
+
+        if (!scene()->collidingItems(this).isEmpty()) {
+            m_x += x_v;
+            m_y += y_v;
+            setPos(m_x, m_y);
+//            return;
         }
     }
 
@@ -222,38 +226,45 @@ void Tank::advance()
             m_x -= x_v;
             m_y -= y_v;
             setPos(m_x, m_y);
+//              return;
         }
     }
 
 ///////////////////////////////////////////////////////////////////
     //ako je pritisnut space or enter pravi se raketa
     if(launch){
-        //trebaju nam koordinate tenk da bismo napravili raketu
+
 //        float tank_x_position = this->x() - 10*x_v;
 //        float tank_y_position = this->y() - 10*y_v;
 
-        QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
-        float rckt_pos_x = rckt.rx() - 5;
-        float rckt_pos_y = rckt.ry() - 5;
+//        QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
+//        float rckt_pos_x = rckt.rx() - 5;
+//        float rckt_pos_y = rckt.ry() - 5;
+
+        QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
 
 
-        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, 0, this->m_input, m_id, 2 * x_v , 2 * y_v, rotation());
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, 0, this->m_input, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation());
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+               rocket->move();
 //               rocket->setPos(rocket->x(),rocket->y());
         }
         else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
                qDebug() << "Raketa 1 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+               rocket->move();
 //               rocket->setPos(rocket->x(),rocket->y());
         }
         else{
-            if(m_id == 1) rocket->rakete_tenka_1 -= 1;
-            if(m_id == 0) rocket->rakete_tenka_0 -= 1;
+            if(m_id == 1)
+                rocket->rakete_tenka_1 -= 1;
+            if(m_id == 0)
+                rocket->rakete_tenka_0 -= 1;
             delete rocket;
         }
         if (m_id == 0)
@@ -265,16 +276,6 @@ void Tank::advance()
 }
 
 //void Tank::keyPressEvent(QKeyEvent *event) {
-
-////komentar je potrebno ukloniti ukoliko zelimo da eliminisemo auto-repeat tastera
-////    if (event->isAutoRepeat()) {
-////            return;
-////    }
-///
-///
-///
-///
-
 //    if (event->key() == Qt::Key_W) up = true;
 //    if (event->key() == Qt::Key_S) down = true;
 //    if (event->key() == Qt::Key_A) left = true;
@@ -289,6 +290,18 @@ void Tank::advance()
 //    if (event->key() == Qt::Key_D) right = false;
 //    advance(0);
 //}
+
+float Tank::getXposition() const {
+    return m_x;
+}
+
+float Tank::getYposition() const {
+    return m_y;
+}
+
+int Tank::type() const {
+    return 1;
+}
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
@@ -375,6 +388,7 @@ void Tank::shoot() {
 //void Tank::setRockets(const std::vector<Rocket> &mRocket) {
 //    m_rockets = mRocket;
 //}
+
 void Tank::IncreaseScore(int score){
     m_score+=score;
 }

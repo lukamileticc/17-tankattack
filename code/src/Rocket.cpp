@@ -9,7 +9,7 @@ int Rocket::rakete_tenka_1 = 0;
 Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot)
     :m_x(x),m_y(y),m_r(r),m_id(id),m_pravac_x(x_v),m_pravac_y(y_v),m_rotation(rot)
 {
-
+    setRotation(rot);
     setPos(m_x, m_y);
 
     if(id == 0) //prvi tenk pravi raketu
@@ -25,11 +25,33 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, 
 
 
     connect(input->timer,SIGNAL(timeout()),this,SLOT(move()));
-
 }
 
-int Rocket::type() const{
-    return 3;
+
+void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+//    painter->setBrush(m_boja);
+//    painter->drawEllipse(m_x,m_y,m_r,m_r);
+
+    painter->setBrush(Qt::yellow);
+    painter->drawEllipse(0, 0, m_r, m_r);
+}
+
+QRectF Rocket::boundingRect() const
+{
+    return QRectF(-0.5, -0.5, m_r + 1, m_r + 1);
+}
+
+QPainterPath Rocket::shape() const
+{
+    QPainterPath OuterPath;
+    OuterPath.setFillRule(Qt::WindingFill);
+    OuterPath.addEllipse(-0.5, -0.5, m_r + 1, m_r + 1);
+
+    return OuterPath;
 }
 
 void Rocket::move()
@@ -39,7 +61,8 @@ void Rocket::move()
 //    for (int i = 0; i < colliding_items.size(); i++)
 //        if (typeid(*(colliding_items[i])) == typeid(Wall))
 
-    /*setPos(x() - m_pravac_x,y() - m_pravac_y);
+/*
+    setPos(x() - m_pravac_x,y() - m_pravac_y);
 
     if (!scene()->collidingItems(this).isEmpty()) {
        //if (typeid(scene()->collidingItems(this).first()) == 0){
@@ -51,66 +74,93 @@ void Rocket::move()
             //m_rotation = m_rotation;
             setPos(x() - m_pravac_x,y() - m_pravac_y);
         //}
-    }*/
-
+    }
+*/
+    QPointF center_old = mapToScene(m_r / 2, m_r / 2);
     m_x -= m_pravac_x;
     m_y -= m_pravac_y;
     setPos(m_x, m_y);
 
     if (!scene()->collidingItems(this).isEmpty()) {
-        auto tmp_x = m_x;
-        auto tmp_y = m_y;
 
-        if(scene()->collidingItems(this).size() == 1) {
+        bool bounced_once = false;
+        QList<QGraphicsItem *> items = scene()->collidingItems(this);
+
+        for (auto item : items) {
             //0 je id elementa Wall
-            if (scene()->collidingItems(this).first()->type() == 0) {
-                Wall *w  = qgraphicsitem_cast<Wall*>(scene()->collidingItems(this).first());
+            if (item->type() == 0 && !bounced_once) {
+                bounced_once = true;
+                Wall *w  = qgraphicsitem_cast<Wall*>(item);
+
+                float cent_x = center_old.x();
+                float cent_y = center_old.y();
 
                 if(w->isVertical()) {
-                    auto new_x = m_pravac_x;
-                    auto new_y = -m_pravac_y;
+                    if ((cent_y + (m_r / 2)) < w->getY() || (cent_y - (m_r / 2)) > w->getY() + w->getHeight()) {
+                        auto new_x = m_pravac_x;
+                        auto new_y = -m_pravac_y;
 
-                    m_pravac_x = new_x;
-                    m_pravac_y = new_y;
+                        m_pravac_x = new_x;
+                        m_pravac_y = new_y;
+                    }
+                    else {
+                        auto new_x = -m_pravac_x;
+                        auto new_y = m_pravac_y;
+
+                        m_pravac_x = new_x;
+                        m_pravac_y = new_y;
+                    }
                 }
                 else {
-                    auto new_x = -m_pravac_x;
-                    auto new_y = m_pravac_y;
+                    if ((cent_x + (m_r / 2)) < w->getX() || (cent_x - (m_r / 2)) > w->getX() + w->getWidth()) {
+                        auto new_x = -m_pravac_x;
+                        auto new_y = m_pravac_y;
 
-                    m_pravac_x = new_x;
-                    m_pravac_y = new_y;
+                        m_pravac_x = new_x;
+                        m_pravac_y = new_y;
+                    }
+
+                    else {
+                        auto new_x = m_pravac_x;
+                        auto new_y = -m_pravac_y;
+
+                        m_pravac_x = new_x;
+                        m_pravac_y = new_y;
+
+                    }
                 }
             }
-            if (scene()->collidingItems(this).first()->type() == 1){
-                //1 je id elementa Tank
-                Tank *t = qgraphicsitem_cast<Tank*>(scene()->collidingItems(this).first());
+            //1 je id elementa Tank
+            if (item->type() == 1){
+                Tank *t = qgraphicsitem_cast<Tank*>(item);
                 t->is_destroyed = true;
                 delete this;
-            }
-        }
-        else if(scene()->collidingItems(this).size() == 2){
-            // za slucaj da udari u dva zida na spoju -> odbija se od onog u kojeg je prvo udarila
-            if (scene()->collidingItems(this)[0]->type() == 0 &&
-                scene()->collidingItems(this)[1]->type() == 0){
-                Wall *w  = qgraphicsitem_cast<Wall*>(scene()->collidingItems(this).first());
-
-                if(w->isVertical()) {
-                    auto new_x = m_pravac_x;
-                    auto new_y = -m_pravac_y;
-
-                    m_pravac_x = new_x;
-                    m_pravac_y = new_y;
-                }
-                else {
-                    auto new_x = -m_pravac_x;
-                    auto new_y = m_pravac_y;
-
-                    m_pravac_x = new_x;
-                    m_pravac_y = new_y;
-                }
+                return;
             }
         }
     }
+//        else if(scene()->collidingItems(this).size() == 2){
+//            // za slucaj da udari u dva zida na spoju -> odbija se od onog u kojeg je prvo udarila
+//            if (scene()->collidingItems(this)[0]->type() == 0 &&
+//                scene()->collidingItems(this)[1]->type() == 0){
+//                Wall *w  = qgraphicsitem_cast<Wall*>(scene()->collidingItems(this).first());
+
+//                if(w->isVertical()) {
+//                    auto new_x = m_pravac_x;
+//                    auto new_y = -m_pravac_y;
+
+//                    m_pravac_x = new_x;
+//                    m_pravac_y = new_y;
+//                }
+//                else {
+//                    auto new_x = -m_pravac_x;
+//                    auto new_y = m_pravac_y;
+
+//                    m_pravac_x = new_x;
+//                    m_pravac_y = new_y;
+//                }
+//            }
+//        }
 
 
     m_life_time++;
@@ -126,20 +176,7 @@ void Rocket::move()
         qDebug() << "Raketa je unistena: " << rakete_tenka_0;
     }
 }
-QRectF Rocket::boundingRect() const
-{
-//    prodiskutovati o ovome
-//    return QRectF(m_x-m_r,m_y-m_r,2*m_r,2*m_r);
-    return QRectF(-0.5, -0.5, m_r + 1, m_r + 1);
-}
-void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
 
-//    painter->setBrush(m_boja);
-//    painter->drawEllipse(m_x,m_y,m_r,m_r);
-
-    painter->setBrush(Qt::yellow);
-    painter->drawEllipse(0, 0, m_r, m_r);
+int Rocket::type() const{
+    return 3;
 }

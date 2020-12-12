@@ -164,7 +164,7 @@ void World::start(){
 
     view->setBackgroundBrush(Qt::black);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
-    view->setFixedSize(1271, 813);
+    view->setFixedSize(1280, 720);
 
 
     Input *input = new Input();

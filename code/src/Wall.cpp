@@ -3,38 +3,36 @@
 #include <QPainter>
 #include <QStyleOption>
 #include<QGraphicsView>
-#define UNUSED(x) (void)(x)
 
-Wall::Wall(float x, float y, float height, float width)
+Wall::Wall(float x, float y, float width, float height)
     :m_x(x), m_y(y), m_height(height), m_width(width)
 {
+    setPos(m_x, m_y);
 }
 
 Wall::Wall(const Wall&)
 {
-
 }
 
 Wall Wall::operator=(const Wall&)
 {
-//    return *this;
+    return *this;
 }
 
 void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 
-    UNUSED(option);
-    UNUSED(widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
     painter->setBrush(Qt::white);
 
-    painter->drawRect(m_x, m_y - 45, m_height, m_width);
-
+    painter->drawRect(0, 0, m_width, m_height);
 }
 
 QRectF Wall::boundingRect() const
 {
-    return QRectF(m_x, m_y - 45, m_height, m_width);
+    return QRectF(0, 0, m_width, m_height);
 }
 
 int Wall::type() const {
@@ -48,7 +46,7 @@ bool Wall::isVertical() const
 
 bool Wall::isHorizontal() const
 {
-    return !(Wall::isVertical()) ? true : false;
+    return !isVertical();
 }
 
 float Wall::getHeight() const
@@ -59,6 +57,14 @@ float Wall::getHeight() const
 float Wall::getWidth() const
 {
     return m_width;
+}
+
+float Wall::getX() const{
+    return m_x;
+}
+
+float Wall::getY() const{
+    return m_y;
 }
 
 std::pair<float,float> Wall::getCoordinates() const

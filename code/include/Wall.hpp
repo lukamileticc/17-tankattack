@@ -33,6 +33,9 @@ public:
     float getWidth() const;
     float getHeight() const;
 
+    float getX() const;
+    float getY() const;
+
 private:
     //koordinate gornjeg levog ugla pravougaonika (x,y)
     float m_x;

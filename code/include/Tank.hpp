@@ -14,7 +14,7 @@ public:
 
     ~Tank()  = default;
 
-    int type() const;
+    int type() const override;
 
     // QGraphicsItem interface
 
@@ -45,7 +45,6 @@ public:
     void shoot();
     void IncreaseScore(int score);
 
-    //---
     void destroy();
 
     float getXposition() const;
@@ -53,11 +52,12 @@ public:
 
     bool is_destroyed = false;
 
+    QPainterPath shape() const override;
+
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;
     //void keyReleaseEvent(QKeyEvent *event) override;
-    //---
 
 private:
     int m_id;
@@ -73,19 +73,15 @@ private:
     int m_score;
 
     Input *m_input;
-    //~~~~~~~~~~~~~
     bool up = false;
     bool down = false;
     bool left = false;
     bool right = false;
-    /////////////////////
     bool launch = false;
-
 
     float x_v = 0;
     float y_v = 1;
 
     float rotation_angle = 0.5;
-    //~~~~~~~~~~~~~
 };
 #endif //TANK_HPP
