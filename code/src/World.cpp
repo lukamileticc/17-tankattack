@@ -3,6 +3,7 @@
 #include "code/include/Wall.hpp"
 #include "code/include/Input.hpp"
 #include "code/include/Map.hpp"
+#include <iostream>
 #include <QPushButton>
 #include <QObject>
 #include <iostream>
@@ -11,6 +12,9 @@
 #include <QTimer>
 #include <QGraphicsTextItem>
 #include <QLabel>
+#include <QVector>
+#include <QFile>
+#include <exception>
 
 
 World::World(QObject *parent)
@@ -31,6 +35,7 @@ World::World(QObject *parent)
 }
 
 World::~World(){
+    //treba editovati destrkutor posto imamo gomilu pokazivaca u klasi!
     delete scene;
     delete view;
 }
@@ -131,17 +136,33 @@ void World::show_battles(){
                          "}");
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
 
-    QString string="                TOP 10 BATTLES :                 \n";
-    QString lista_parova = "\n\n\t\t\t1.  tank1 Name1 score1 - score2 tank2 Name2\n"
-                           "\t\t\t2.  tank1 Name1 score1 - score2 tank2 Name2\n"
-                           "\t\t\t3.\n"
-                           "\t\t\t4.\n"
-                           "\t\t\t5.\n"
-                           "\t\t\t6.\n"
-                           "\t\t\t7.\n"
-                           "\t\t\t8.\n"
-                           "\t\t\t9.\n"
-                           "\t\t\t10.\n";
+    //citamo prethodne borbe iz funkcije
+     QVector<QString> *previous_battles;
+    try{
+        previous_battles = read_previous_battles(":/resources/files/istorija_borbi.txt");
+    }
+    catch(QString e)
+    {
+       qDebug() << e;
+       exit(EXIT_FAILURE);
+    }
+
+     QString string="                TOP 10 BATTLES :                 \n";
+     QString lista_parova;
+     lista_parova.append("\n");
+     for(const auto& battle : *previous_battles)
+        lista_parova.append("\n").append(battle);
+
+//    QString lista_parova = "\t\t\t1.  tank1 Name1 score1 - score2 tank2 Name2\n"
+//                           "\t\t\t2.  tank1 Name1 score1 - score2 tank2 Name2\n"
+//                           "\t\t\t3.\n"
+//                           "\t\t\t4.\n"
+//                           "\t\t\t5.\n"
+//                           "\t\t\t6.\n"
+//                           "\t\t\t7.\n"
+//                           "\t\t\t8.\n"
+//                           "\t\t\t9.\n"
+//                           "\t\t\t10.\n";
     QFont font("Comic Sans MS", 40, QFont::Bold);
     QFont font_lista("Comic Sans MS", 26);
     font_lista.setItalic(true);
@@ -149,6 +170,8 @@ void World::show_battles(){
     scene->addText(lista_parova,font_lista);
 
 
+
+    delete previous_battles;
 }
 
 void World::end_of_round(QString message){
@@ -178,6 +201,80 @@ void World::end_of_round(QString message){
     QGraphicsTextItem *score = scene->addText(score_text,font);
     score->setPos(360,250);
     score->setDefaultTextColor(QColor("white"));
+
+    //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
+    write_the_last_battle(":/resources/files/istorija_borbi.txt");
+
+}
+void World::write_the_last_battle(const char *file)
+{
+    //citamo prethodne borbe iz funkcije
+     QVector<QString> *previous_battles;
+    try{
+        previous_battles = read_previous_battles(file);
+    }
+    catch(QString e)
+    {
+       qDebug() << e;
+       exit(EXIT_FAILURE);
+    }
+
+    //izbacam 10. brobu!
+    previous_battles->pop_back();
+    //ubacam na pocetak poslednju borbu koja se desila
+    QString last_battle;
+    last_battle.append("        Red Tank ")
+               .append(ime_prvog_tenka).append(" ")
+               .append(QString::number(m_score_t1)).append(" ")
+               .append("- ")
+               .append(QString::number(m_score_t2)).append(" ")
+               .append(ime_drugog_tenka).append(" ")
+               .append("Blue Tank");
+    //ovde moze da se doda sa leve i desne strane recimo crvena i plava kockica da ne pise redtank
+    //i blue tank --- predlog kad budemo dodavali teksture
+    previous_battles->push_front(last_battle);
+
+    for(const auto& battle : *previous_battles)
+        qDebug() << battle;
+
+    //editujemo file istorija borbi,odnosno pisemo u njega ceo vektor
+    QFile output_file(file);
+    if(output_file.open(QIODevice::ReadWrite))
+    {
+        QTextStream out(&output_file);
+        for(const auto& battle : *previous_battles)
+            out << battle;
+    }
+
+    output_file.close();
+    delete previous_battles;
+}
+QVector<QString>* World::read_previous_battles(const char *file)
+{
+    //citam poslednjih 10 rundi iz file-a istorija brobi i smestam ih u vektor
+
+    QFile input_file(file);
+    //ako nismo uspeli da procitamo file , podizemo exception
+    if(!input_file.open(QIODevice::ReadOnly))
+        throw QString("Open file failed");
+
+    //pravim vektor gde postavljam isotriju brobi
+    QVector<QString> *battle_history = new QVector<QString>;
+    battle_history->resize(0);
+
+    QTextStream in(&input_file);
+    while(!in.atEnd())
+    {
+        QString line = in.readLine();
+        battle_history->push_back(line);
+    }
+
+    input_file.close();
+
+//    for(const auto& battle : *battle_history)
+//        qDebug() << battle;
+
+    return battle_history;
 }
 
 void World::show_tank_info(){
@@ -333,13 +430,13 @@ void World::input_players_names()
 
     //labeli za unos imena igraca
     QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
-    text1->setDefaultTextColor(Qt::blue);
+    text1->setDefaultTextColor(Qt::red);
     text1->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
     text1->setPos(250,250);
     scene->addItem(text1);
 
     QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
-    text2->setDefaultTextColor(Qt::red);
+    text2->setDefaultTextColor(Qt::blue);
     text2->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
     text2->setPos(250,350);
     scene->addItem(text2);

@@ -33,6 +33,10 @@ public:
     void end_of_round(QString message);
     void show_tank_info();
 
+    //funkcije koje vrse ispis i upis borbi
+    QVector<QString>* read_previous_battles(const char *file);
+    void write_the_last_battle(const char *file);
+
 public slots:
     void start();
     void quit();
