@@ -113,12 +113,12 @@ void World::main_menu(){
 void World::show_battles(){
     scene->clear();
 
-    view->setBackgroundBrush(QPixmap(":/resources/images/images.jpg"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     QPushButton *bback = new QPushButton(QString("Back"));
     bback->setFixedWidth(200);
     bback->setFixedHeight(66);
-    bback->move(100, 600);
+    bback->move(980, 600);
     scene->addWidget(bback);
     bback->setStyleSheet("QPushButton"
                          "{"
@@ -147,28 +147,23 @@ void World::show_battles(){
        exit(EXIT_FAILURE);
     }
 
-     QString string="                TOP 10 BATTLES :                 \n";
+     QString string="                 LAST 10 BATTLES :                 \n";
      QString lista_parova;
-     lista_parova.append("\n");
+     lista_parova.append("\n\n");
+     int i = 1;
+     QString tab = "                                                ";
      for(const auto& battle : *previous_battles)
-        lista_parova.append("\n").append(battle);
+        lista_parova.append("\n").append(tab)
+                .append(QString::number(i++)).append(". ")
+                .append(battle);
 
-//    QString lista_parova = "\t\t\t1.  tank1 Name1 score1 - score2 tank2 Name2\n"
-//                           "\t\t\t2.  tank1 Name1 score1 - score2 tank2 Name2\n"
-//                           "\t\t\t3.\n"
-//                           "\t\t\t4.\n"
-//                           "\t\t\t5.\n"
-//                           "\t\t\t6.\n"
-//                           "\t\t\t7.\n"
-//                           "\t\t\t8.\n"
-//                           "\t\t\t9.\n"
-//                           "\t\t\t10.\n";
+
     QFont font("Comic Sans MS", 40, QFont::Bold);
-    QFont font_lista("Comic Sans MS", 26);
-    font_lista.setItalic(true);
-    scene->addText(string, font);
-    scene->addText(lista_parova,font_lista);
-
+    QFont font_lista("Comic Sans MS", 18);
+    QGraphicsTextItem *text = scene->addText(string, font);
+    QGraphicsTextItem *text_list = scene->addText(lista_parova,font_lista);
+    text->setDefaultTextColor(QColor("white"));
+    text_list->setDefaultTextColor(QColor("white"));
 
 
     delete previous_battles;
@@ -181,29 +176,87 @@ void World::end_of_round(QString message){
     QFont font;
     font.setBold(true);
     font.setPointSize(50);
-    scene->clear();
-    view->setBackgroundBrush(Qt::black);
-    view->setDragMode(QGraphicsView::ScrollHandDrag);
-    view->setFixedSize(1271, 813);
+//    scene->clear();
+//    view->setBackgroundBrush(Qt::black);
+//    view->setDragMode(QGraphicsView::ScrollHandDrag);
+//    view->setFixedSize(1271, 813);
 
 //    QLabel *label = new QLabel();
 //    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 //    label->setText(message);
 //    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-    QGraphicsTextItem *text = scene->addText(message+" won!", font);
-    text->setPos(450, 100);
+    QGraphicsTextItem *text = scene->addText(message + " won!", font);
+    int x_position = 640 - text->boundingRect().width()/2;
+    text->setPos(x_position, 100);
     text->setDefaultTextColor(QColor("white"));
 
+    //"Score" ispis
+    QString score1("Score:");
+    QGraphicsTextItem *score2 = scene->addText(score1,font);
+    int x_pos = 640 - score2->boundingRect().width()/2;
+    int y_pos = 300;
+    score2->setPos(x_pos,y_pos);
+    score2->setDefaultTextColor(QColor("white"));
+    //"1:0" rezultat ispis
+    QString score3;
+    score3.reserve(100);
+    score3.append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2));
+    QGraphicsTextItem *score4 = scene->addText(score3,font);
+    int x_pos1 = 640 - score4->boundingRect().width()/2;
+    int y_pos1 = 400;
+    score4->setPos(x_pos1,y_pos1);
+    score4->setDefaultTextColor(QColor("white"));
+    //ime prvog -- ispis
+    QGraphicsTextItem *name1 = scene->addText(ime_prvog_tenka,font);
+    int x = 640 - score4->boundingRect().width()/2 - name1->boundingRect().width() - 5;
+    int y = 400;
+    name1->setPos(x,y);
+    name1->setDefaultTextColor(QColor("white"));
+    //ime drugog -- ispis
+    QGraphicsTextItem *name2 = scene->addText(ime_drugog_tenka,font);
+    name2->setPos(640 + score4->boundingRect().width()/2 + 5,y);
+    name2->setDefaultTextColor(QColor("white"));
 
-    QString score_text;
-    score_text.reserve(100);
-    score_text.append("\n            Score\n").append(t1->get_name()).append(" ").append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2)).append(" ").append(t2->get_name());
-    QGraphicsTextItem *score = scene->addText(score_text,font);
-    score->setPos(360,250);
-    score->setDefaultTextColor(QColor("white"));
+    QString style_for_button ="QPushButton"
+                              "{"
+                               "background-color: teal;"
+                               "border-style: outset;"
+                               "border-width: 2.5px;"
+                               "border-radius: 10px;"
+                               "border-color: beige;"
+                               "font: bold 16px;"
+                               "padding: 6px;"
+                              "}"
+                              "QPushButton::hover"
+                              "{"
+                              "background-color: #00CDFF"
+                              "}";;
+
+    //Button za next battle
+    QPushButton *bnext = new QPushButton(QString("Next Battle"));
+    bnext->setFixedWidth(200);
+    bnext->setFixedHeight(66);
+    bnext->move(980,600);
+    scene->addWidget(bnext);
+    bnext->setStyleSheet(style_for_button);
+    //jos uvek nemamo metod next_battle
+//    QObject::connect(bnext,SIGNAL(released()),this,SLOT(next_battle()),Qt::QueuedConnection);
+
+
+    //Button za quit_game
+    QPushButton *bquit = new QPushButton(QString("Quit Game"));
+    bquit->setFixedWidth(200);
+    bquit->setFixedHeight(66);
+    bquit->move(100, 600);
+    scene->addWidget(bquit);
+    bquit->setStyleSheet(style_for_button);
+    QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()),Qt::QueuedConnection);
+
+
+
 
     //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
-    write_the_last_battle("../17-TankAttack/code/res/istorija_borbi.txt");
+    write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
 
 }
 void World::write_the_last_battle(const char *file)
@@ -224,13 +277,12 @@ void World::write_the_last_battle(const char *file)
         previous_battles->pop_back();
     //ubacam na pocetak poslednju borbu koja se desila
     QString last_battle;
-    last_battle.append("                    Red Tank ")
-               .append(ime_prvog_tenka).append(" ")
+    last_battle.append(ime_prvog_tenka).append(" ")
                .append(QString::number(m_score_t1)).append(" ")
                .append("- ")
                .append(QString::number(m_score_t2)).append(" ")
-               .append(ime_drugog_tenka).append(" ")
-               .append("Blue Tank\n");
+               .append(ime_drugog_tenka).append("\n");
+
     //ovde moze da se doda sa leve i desne strane recimo crvena i plava kockica da ne pise redtank
     //i blue tank --- predlog kad budemo dodavali teksture
     previous_battles->push_front(last_battle);
@@ -239,22 +291,15 @@ void World::write_the_last_battle(const char *file)
         qDebug() << battle;
 
     //editujemo file istorija borbi,odnosno pisemo u njega ceo vektor
-//    QFile output_file(file);
-//    if(output_file.open(QIODevice::ReadWrite))
-//    {
-//        QTextStream out(&output_file);
-//        for(const auto& battle : *previous_battles)
-//            out << battle;
-//    }
 
-//    output_file.close();
     std::ofstream myfile;
-         myfile.open(file,std::ofstream::trunc);
-         if (myfile.is_open()){
+     myfile.open(file,std::ofstream::trunc);
+     if (myfile.is_open()){
          for(const auto& battle : *previous_battles)
-                   myfile << battle.toStdString();
-         myfile.close();
-         }
+               myfile << battle.toStdString();
+        myfile.close();
+     }
+
     delete previous_battles;
 }
 QVector<QString>* World::read_previous_battles(const char *file)
@@ -400,7 +445,7 @@ void World::start(){
 void World::input_players_names()
 {
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/images.jpg"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     QString style_for_button ="QPushButton"
