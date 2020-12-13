@@ -15,7 +15,7 @@
 #include <QVector>
 #include <QFile>
 #include <exception>
-
+#include <fstream>
 
 World::World(QObject *parent)
     :QObject(parent)
@@ -203,7 +203,7 @@ void World::end_of_round(QString message){
     score->setDefaultTextColor(QColor("white"));
 
     //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
-    write_the_last_battle(":/resources/files/istorija_borbi.txt");
+    write_the_last_battle("../17-TankAttack/code/res/istorija_borbi.txt");
 
 }
 void World::write_the_last_battle(const char *file)
@@ -220,16 +220,17 @@ void World::write_the_last_battle(const char *file)
     }
 
     //izbacam 10. brobu!
-    previous_battles->pop_back();
+    if (previous_battles->length()==10)
+        previous_battles->pop_back();
     //ubacam na pocetak poslednju borbu koja se desila
     QString last_battle;
-    last_battle.append("        Red Tank ")
+    last_battle.append("                    Red Tank ")
                .append(ime_prvog_tenka).append(" ")
                .append(QString::number(m_score_t1)).append(" ")
                .append("- ")
                .append(QString::number(m_score_t2)).append(" ")
                .append(ime_drugog_tenka).append(" ")
-               .append("Blue Tank");
+               .append("Blue Tank\n");
     //ovde moze da se doda sa leve i desne strane recimo crvena i plava kockica da ne pise redtank
     //i blue tank --- predlog kad budemo dodavali teksture
     previous_battles->push_front(last_battle);
@@ -238,15 +239,22 @@ void World::write_the_last_battle(const char *file)
         qDebug() << battle;
 
     //editujemo file istorija borbi,odnosno pisemo u njega ceo vektor
-    QFile output_file(file);
-    if(output_file.open(QIODevice::ReadWrite))
-    {
-        QTextStream out(&output_file);
-        for(const auto& battle : *previous_battles)
-            out << battle;
-    }
+//    QFile output_file(file);
+//    if(output_file.open(QIODevice::ReadWrite))
+//    {
+//        QTextStream out(&output_file);
+//        for(const auto& battle : *previous_battles)
+//            out << battle;
+//    }
 
-    output_file.close();
+//    output_file.close();
+    std::ofstream myfile;
+         myfile.open(file,std::ofstream::trunc);
+         if (myfile.is_open()){
+         for(const auto& battle : *previous_battles)
+                   myfile << battle.toStdString();
+         myfile.close();
+         }
     delete previous_battles;
 }
 QVector<QString>* World::read_previous_battles(const char *file)
@@ -266,6 +274,7 @@ QVector<QString>* World::read_previous_battles(const char *file)
     while(!in.atEnd())
     {
         QString line = in.readLine();
+        line.append("\n");
         battle_history->push_back(line);
     }
 

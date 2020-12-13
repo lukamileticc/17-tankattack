@@ -1,10 +1,5 @@
-        prvi mec
-        drugi mec
-        treci
-        cetvrti
-        peti
-        sesti
-        sedmi
-        osmi
-        deveti
-        desetiiiii
+                    Red Tank MIKAC123 0 - 1 KAC123 Blue Tank
+                    Red Tank MIHAILO 0 - 1 OLIAHIM Blue Tank
+                    Red Tank Mikac 0 - 1 Kacmi Blue Tank
+                    Red Tank Mihailo 0 - 1 Mikac Blue Tank
+                    Red Tank Kac 0 - 1 Cak Blue Tank
