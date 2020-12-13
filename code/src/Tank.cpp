@@ -62,13 +62,6 @@ void Tank::destroy() {
 
 void Tank::advance()
 {
-    QList<QGraphicsItem *> items = scene()->collidingItems(this);
-    for (auto item : items) {
-        //0 je id elementa Wall
-        if (item->type() ==3 ) {
-           scene()->removeItem(item);
-        }
-    }
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -141,6 +134,14 @@ void Tank::advance()
         setPos(m_x, m_y);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() + ANGLE);
             m_x += x_v;
             m_y += y_v;
@@ -149,12 +150,21 @@ void Tank::advance()
         }
     }
     else if (right && up) {
+
         setRotation(rotation() + ANGLE);
         m_x -= x_v;
         m_y -= y_v;
         setPos(m_x, m_y);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() - ANGLE);
             m_x += x_v;
             m_y += y_v;
@@ -170,6 +180,14 @@ void Tank::advance()
         setPos(m_x,m_y);
 
         if (!scene()->collidingItems(this).isEmpty()){
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() - ANGLE);
             m_x -= x_v;
             m_y -= y_v;
@@ -184,6 +202,14 @@ void Tank::advance()
         setPos(m_x,m_y);
 
         if (!scene()->collidingItems(this).isEmpty()){
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() + ANGLE);
             m_x -= x_v;
             m_y -= y_v;
@@ -197,6 +223,14 @@ void Tank::advance()
         setPos(m_x, m_y);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             m_x += x_v;
             m_y += y_v;
             setPos(m_x, m_y);
@@ -208,6 +242,14 @@ void Tank::advance()
         setRotation(rotation() - ANGLE);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() + ANGLE);
             std::cout << scene()->collidingItems(this).size() << std::endl;
 //            return;
@@ -218,6 +260,14 @@ void Tank::advance()
         setRotation(rotation() + ANGLE);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             setRotation(rotation() - ANGLE);
             std::cout << scene()->collidingItems(this).size() << std::endl;
 //            return;
@@ -230,6 +280,14 @@ void Tank::advance()
         setPos(m_x, m_y);
 
         if (!scene()->collidingItems(this).isEmpty()) {
+            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
+            for (auto item : itemsss) {
+                //0 je id elementa Wall
+                if (item->type() == 4 ) {
+                   scene()->removeItem(item);
+                   delete item;
+                }
+            }
             m_x -= x_v;
             m_y -= y_v;
             setPos(m_x, m_y);

@@ -14,6 +14,7 @@ public:
     char * getType() const;
 
     void setType(char * type);
+    int type() const;
 
 private:
     char * m_type;

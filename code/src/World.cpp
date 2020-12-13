@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <QTimer>
 #include "code/include/SuperPower.hpp"
+#include <QRandomGenerator>
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
@@ -172,7 +173,8 @@ void World::start(){
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
     Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
-    SuperPower *sp= new SuperPower("health",130,80,30);
+    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+    SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 
 
 
@@ -180,6 +182,7 @@ void World::start(){
     scene->addItem(t2);
     scene->addItem(input);
     scene->addItem(sp);
+    scene->addItem(sp1);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();
