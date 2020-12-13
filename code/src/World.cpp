@@ -9,6 +9,7 @@
 #include <QBrush>
 #include <QApplication>
 #include <QTimer>
+#include "code/include/SuperPower.hpp"
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
@@ -171,12 +172,14 @@ void World::start(){
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
     Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
+    SuperPower *sp= new SuperPower("health",130,80,30);
 
 
 
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(input);
+    scene->addItem(sp);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();

@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     code/src/Input.cpp \
     code/src/Rocket.cpp \
+    code/src/SuperPower.cpp \
     code/src/World.cpp \
     code/src/main.cpp \
     code/src/Map.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
     code/include/Input.hpp \
+    code/include/SuperPower.hpp \
     code/include/World.hpp \
     code/include/Board.hpp \
     code/include/Rocket.hpp \

@@ -62,13 +62,13 @@ void Tank::destroy() {
 
 void Tank::advance()
 {
-    QList<QGraphicsItem *> items = scene()->collidingItems(this);
-    for (auto item : items) {
-        //0 je id elementa Wall
-        if (item->type() ==3 ) {
-           scene()->removeItem(item);
-        }
-    }
+//    QList<QGraphicsItem *> items = scene()->collidingItems(this);
+//    for (auto item : items) {
+//        //0 je id elementa Wall
+//        if (item->type() ==3 ) {
+//           scene()->removeItem(item);
+//        }
+//    }
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
