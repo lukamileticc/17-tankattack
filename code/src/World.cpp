@@ -203,7 +203,7 @@ void World::end_of_round(QString message){
     score->setDefaultTextColor(QColor("white"));
 
     //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
-    write_the_last_battle("../17-TankAttack/code/res/istorija_borbi.txt");
+    write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
 
 }
 void World::write_the_last_battle(const char *file)
