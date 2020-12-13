@@ -17,7 +17,7 @@ public:
     static int rakete_tenka_0;
     static int rakete_tenka_1;
 
-    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot);
+    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot, Tank *t);
     ~Rocket() = default;
 
     // QGraphicsItem interface
@@ -26,6 +26,10 @@ public:
 
     int type() const override;
     QPainterPath shape() const override;
+
+
+
+
 
 public slots:
     void move();
@@ -44,6 +48,8 @@ private:
     float m_life_time = 0;
     //boja rakete ce se menjati u zavisnosti od jacine koju tenk poseduje
     QColor m_boja;
+
+    Tank *t;
 
 };
 #endif //ROCKET_HPP
