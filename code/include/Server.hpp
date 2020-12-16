@@ -1,29 +1,41 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <QObject>
 #include <QTcpServer>
-#include <QTcpSocket>
+#include <QVector>
 
-class Server : public QObject
+class QThread;
+class ServerWorker;
+class QJsonObject;
+class Server : public QTcpServer
 {
     Q_OBJECT
-
+    Q_DISABLE_COPY(Server)
 public:
-    explicit Server(QObject * parent=0);
-
-
-signals:
-
-
-
-public slots:
-    void newConnection();
-
+    explicit Server(QObject *parent = nullptr);
+    ~Server();
+protected:
+    void incomingConnection(qintptr socketDescriptor) override;
 private:
-    QTcpServer *server;
+    const int m_idealThreadCount;
+    QVector<QThread *> m_availableThreads;
+    QVector<int> m_threadsLoad;
+    QVector<ServerWorker *> m_clients;
+private slots:
+    void broadcast(const QJsonObject &message, ServerWorker *exclude);
+    void jsonReceived(ServerWorker *sender, const QJsonObject &doc);
+    void userDisconnected(ServerWorker *sender, int threadIdx);
+    void userError(ServerWorker *sender);
+public slots:
+    void stopServer();
+private:
+    void jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &doc);
+    void jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &doc);
+    void sendJson(ServerWorker *destination, const QJsonObject &message);
+signals:
+    void logMessage(const QString &msg);
+    void stopAllClients();
+};
 
-
- };
 
 #endif // SERVER_HPP
