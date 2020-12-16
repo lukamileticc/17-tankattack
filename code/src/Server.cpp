@@ -35,7 +35,6 @@ void Server::incomingConnection(qintptr socketDescriptor)
         m_threadsLoad.append(1);
         m_availableThreads.last()->start();
     } else {
-        // find the thread with the least amount of clients and use it
         threadIdx = std::distance(m_threadsLoad.cbegin(), std::min_element(m_threadsLoad.cbegin(), m_threadsLoad.cend()));
         ++m_threadsLoad[threadIdx];
     }
