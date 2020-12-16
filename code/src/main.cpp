@@ -16,6 +16,7 @@
 #include "code/include/World.hpp"
 #include "code/include/Server.hpp"
 #include "../ServerWindow.hpp"
+#include "code/ClientWindow.hpp"
 int main(int argc, char *argv[])
 {
 
@@ -25,9 +26,12 @@ int main(int argc, char *argv[])
 
     World *world = new World();
 
+    qDebug()  << "da";
+    ClientWindow cw;
+    cw.show();
+    //ServerWindow sw;
+    //sw.show();
 
-    ServerWindow sw;
-    sw.show();
 
     world->show();
 
