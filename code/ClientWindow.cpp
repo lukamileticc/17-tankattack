@@ -27,6 +27,7 @@ ClientWindow::ClientWindow(QWidget *parent)
     connect(ui->connectButton, &QPushButton::clicked, this, &ClientWindow::attemptConnection);
     connect(ui->sendButton, &QPushButton::clicked, this, &ClientWindow::sendMessage);
     connect(ui->messageEdit, &QLineEdit::returnPressed, this, &ClientWindow::sendMessage);
+
 }
 
 ClientWindow::~ClientWindow()
@@ -56,6 +57,11 @@ void ClientWindow::connectedToServer()
         return m_Client->disconnectFromHost();
     }
     attemptLogin(newUsername);
+}
+
+void ClientWindow::set_Client(float x, float y)
+{
+    m_Client->setPozicija_TenkaX(x, y);
 }
 
 void ClientWindow::attemptLogin(const QString &userName)
@@ -200,3 +206,4 @@ void ClientWindow::error(QAbstractSocket::SocketError socketError)
     ui->chatView->setEnabled(false);
     m_lastUserName.clear();
 }
+

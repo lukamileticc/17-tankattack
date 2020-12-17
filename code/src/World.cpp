@@ -3,12 +3,14 @@
 #include "code/include/Wall.hpp"
 #include "code/include/Input.hpp"
 #include "code/include/Map.hpp"
+#include "code/ClientWindow.hpp"
 #include <QPushButton>
 #include <QObject>
 #include <iostream>
 #include <QBrush>
 #include <QApplication>
 #include <QTimer>
+
 
 World::World(QObject *parent){
 
@@ -31,6 +33,7 @@ World::~World(){
 }
 
 void World::show(){
+
 
     view->setWindowTitle("Tank Attack");
     view->setFixedSize(1280, 720);
@@ -155,6 +158,8 @@ void World::start(){
     m_started=1;
     m_in_game=1;
 
+
+
 //    for (size_t i = 0, n = scene->items().size(); i<n; i++){
 //        scene->removeItem(scene->items()[0]);
 //    }
@@ -164,17 +169,20 @@ void World::start(){
     view->setBackgroundBrush(Qt::black);
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setFixedSize(1271, 813);
+    //view->setFocusPolicy(Qt::ClickFocus);
+
 
 
     Input *input = new Input();
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
-    Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
+    //Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
+
 
 
 
     scene->addItem(t1);
-    scene->addItem(t2);
+    //scene->addItem(t2);
     scene->addItem(input);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -189,7 +197,7 @@ void World::start(){
         scene->addItem(w);
 
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
-    QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    //QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
     input->timer->start(33);
 
     std::cout << "helloooo" << std::endl;

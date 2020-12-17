@@ -12,6 +12,7 @@ Client::Client(QObject *parent)
     , m_clientSocket(new QTcpSocket(this))
     , m_loggedIn(false)
 {
+
     connect(m_clientSocket, &QTcpSocket::connected, this, &Client::connected);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
@@ -21,6 +22,8 @@ Client::Client(QObject *parent)
 
 void Client::login(const QString &userName)
 {
+    m_pozicija_tenka_x = 0;
+    m_pozicija_tenka_y = 0;
     if (m_clientSocket->state() == QAbstractSocket::ConnectedState) { // if the client is connected
         QDataStream clientStream(m_clientSocket);
         clientStream.setVersion(QDataStream::Qt_5_7);
@@ -33,14 +36,21 @@ void Client::login(const QString &userName)
 
 void Client::sendMessage(const QString &text)
 {
+
     if (text.isEmpty())
         return;
     QDataStream clientStream(m_clientSocket);
     clientStream.setVersion(QDataStream::Qt_5_7);
-    QJsonObject message;
-    message[QStringLiteral("type")] = QStringLiteral("message");
-    message[QStringLiteral("text")] = text;
+    QJsonObject message = {
+      {"x", m_pozicija_tenka_x},
+      {"y", m_pozicija_tenka_y}
+    };
+    qDebug() << getPozicija_TenkaX();
+
+    //message[QStringLiteral("type")] = QStringLiteral("message");
+    //message[QStringLiteral("text")] = text;
     clientStream << QJsonDocument(message).toJson();
+
 }
 
 void Client::disconnectFromHost()
@@ -116,5 +126,28 @@ void Client::onReadyRead()
             break;
         }
     }
+}
+
+void Client::setPozicija_TenkaX(float pozicija_tenka_x, float pozicija_tenka_y)
+{
+    //connect(m_clientSocket, &Client::sendMessage, this, &Client::sendMessage);
+
+    m_pozicija_tenka_x = pozicija_tenka_x;
+    m_pozicija_tenka_y = pozicija_tenka_y;
+}
+
+void Client::setPozicija_TenkaY(float pozicija_tenka_y)
+{
+    m_pozicija_tenka_y = pozicija_tenka_y;
+}
+
+float Client::getPozicija_TenkaX()
+{
+    return m_pozicija_tenka_x;
+}
+
+float Client::getPozicija_TenkaY()
+{
+    return m_pozicija_tenka_y;
 }
 

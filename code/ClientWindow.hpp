@@ -13,6 +13,8 @@ class ClientWindow : public QWidget
 public:
     explicit ClientWindow(QWidget *parent = nullptr);
     ~ClientWindow();
+
+    void set_Client(float x, float y);
 private:
     Ui::ClientWindow *ui;
     Client *m_Client;

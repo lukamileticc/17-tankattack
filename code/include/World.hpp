@@ -5,6 +5,7 @@
 #include <QGraphicsWidget>
 #include <QGraphicsView>
 #include <QObject>
+#include "Tank.hpp"
 
 class World : public QObject
 {

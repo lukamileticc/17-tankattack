@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
 #include <vector>
+#include "code/include/Client.hpp"
 //#include "Rocket.hpp"
 
 class Tank : public QObject, public Input{
@@ -44,6 +45,8 @@ public:
     void IncreaseScore(int score);
 
     //---
+
+    Client *returnClient();
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;
@@ -75,5 +78,10 @@ private:
 
     float rotation_angle = 0.5;
     //~~~~~~~~~~~~~
+
+
+    Client m_Client;
+
+
 };
 #endif //TANK_HPP

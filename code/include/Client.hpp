@@ -11,6 +11,12 @@ class Client : public QObject
     Q_DISABLE_COPY(Client)
 public:
     explicit Client(QObject *parent = nullptr);
+
+    void setPozicija_TenkaX(float pozicija_tenka_x, float pozicija_tenka_y);
+    void setPozicija_TenkaY(float pozicija_tenka_y);
+
+    float getPozicija_TenkaY();
+    float getPozicija_TenkaX();
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
     void login(const QString &userName);
@@ -31,5 +37,7 @@ private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;
     void jsonReceived(const QJsonObject &doc);
+    float m_pozicija_tenka_x;
+    float m_pozicija_tenka_y;
 };
 #endif // CLIENT_HPP

@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <cmath>
 #include <iostream>
+#include <QTcpSocket>
 #define UNUSED(x) (void)(x)
 #define ANGLE 10
 #define TANK_W 26
@@ -130,6 +131,10 @@ void Tank::advance(){
             m_y += y_v;
             setPos(m_x, m_y);
         }
+        m_Client.setPozicija_TenkaX(m_x, m_y);
+        m_Client.setPozicija_TenkaY(m_y);
+
+        //qDebug() << m_Client.getPozicija_TenkaX();
     }
 
 //potrebno je jos dodati if-ove za (down && left) i (down && right)
@@ -304,3 +309,5 @@ void Tank::shoot() {
 void Tank::IncreaseScore(int score){
     m_score+=score;
 }
+
+
