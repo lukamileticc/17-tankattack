@@ -84,7 +84,6 @@ int Tank::get_current_health() const{
 
 void Tank::advance()
 {
-    if (m_end_of_round) return;
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -247,6 +246,8 @@ void Tank::advance()
             setPos(m_x, m_y);
         }
     }
+
+    if (m_end_of_round) return;
 
 ///////////////////////////////////////////////////////////////////
     //ako je pritisnut space or enter pravi se raketa

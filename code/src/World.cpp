@@ -174,8 +174,6 @@ void World::end_of_round(QString message){
     //show_tank_info();
     //std::cout << message << std::endl;
     m_ended_round = true;
-    t1->set_end_of_round();
-    t2->set_end_of_round();
     QFont font;
     font.setBold(true);
     font.setPointSize(50);
@@ -335,10 +333,6 @@ QVector<QString>* World::read_previous_battles(const char *file)
     return battle_history;
 }
 
-void World::next_round(){
-
-}
-
 void World::show_tank_info(){
     if (m_showed_info){
         scene->removeItem(info_t1);
@@ -353,7 +347,7 @@ void World::show_tank_info(){
     info_string_t1.reserve(50);
     info_string_t2.reserve(50);
 
-    info_string_t1.append(t1->get_name()).append("\nScore: ").append(QString::number(t1->get_score()))
+    info_string_t1.append(t1->get_name()).append("\nScore: ").append(QString::number(m_score_t1))
                   .append("\nHealth: ").append(QString::number(t1->get_current_health()));
 
     info_t1 = scene->addText(info_string_t1,font);
@@ -361,7 +355,7 @@ void World::show_tank_info(){
     info_t1->setDefaultTextColor("red");
    // info_t1->setPlainText(info_string_t1);
 
-    info_string_t2.append(t2->get_name()).append("\nScore: ").append(QString::number(t2->get_score()))
+    info_string_t2.append(t2->get_name()).append("\nScore: ").append(QString::number(m_score_t2))
                   .append("\nHealth: ").append(QString::number(t2->get_current_health()));
 
     info_t2 = scene->addText(info_string_t2,font);
@@ -382,6 +376,10 @@ void World::rounds(){
     else if (t1->is_destroyed()){
 
         m_left_round_time += 1;
+        qDebug() << m_left_round_time;
+        if(m_left_round_time == 1) {
+            t2->set_end_of_round();
+        }
         if (m_left_round_time > 150){
             m_score_t2 += 1;
             t2->set_score(m_score_t2);
@@ -392,6 +390,10 @@ void World::rounds(){
     }
     else if(t2->is_destroyed()){
         m_left_round_time += 1;
+
+        if(m_left_round_time == 1) {
+            t1->set_end_of_round();
+        }
         if (m_left_round_time > 150){
             m_score_t1 += 1;
             t1->set_score(m_score_t1);
@@ -405,11 +407,25 @@ void World::rounds(){
 
 }
 
+void World::load_map(){
+
+    //Mapa otvara odgovarajuci fajl
+    //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
+    Map *m1 = new Map(":/resources/files/mapa1.txt");
+    std::vector<Wall*>walls = m1->getWalls();
+
+    for(auto w: walls)
+        scene->addItem(w);
+
+}
+
+
 void World::start(){
     m_ended_round = false;
     m_showed_info = false;
     Rocket::rakete_tenka_0 = 0;
     Rocket::rakete_tenka_1 = 0;
+    m_left_round_time = 0;
     m_started=1;
     m_in_game=1;
 
@@ -435,13 +451,7 @@ void World::start(){
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();
 
-    //Mapa otvara odgovarajuci fajl
-    //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
-    Map *m1 = new Map(":/resources/files/mapa1.txt");
-    std::vector<Wall*>walls = m1->getWalls();
-
-    for(auto w: walls)
-        scene->addItem(w);
+    load_map();
 
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));

@@ -46,7 +46,7 @@ public slots:
     void rounds();
     void change_name_of_first_tank();
     void change_name_of_second_tank();
-    void next_round();
+    void load_map();
 
 private:
     int m_in_game=0;
