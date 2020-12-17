@@ -19,8 +19,8 @@ Rocket::Rocket(float x, float y, float r, int rocket_power,Input* input,int id, 
         rakete_tenka_1 += 1;
 
 
-    if(rocket_power == 0) m_boja = Qt::red;
-    else if(rocket_power == 1) m_boja = Qt::yellow;
+    if(rocket_power == 0) m_boja = Qt::yellow;
+    else if(rocket_power == 1) m_boja = Qt::red;
     else if(rocket_power == 2) m_boja = Qt::blue;
     else throw "Nepodrzana jacina metka";
 
@@ -38,7 +38,7 @@ void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 //    painter->setBrush(m_boja);
 //    painter->drawEllipse(m_x,m_y,m_r,m_r);
 
-    painter->setBrush(Qt::yellow);
+    painter->setBrush(m_boja);
     painter->drawEllipse(0, 0, m_r, m_r);
 }
 
@@ -91,6 +91,14 @@ void Rocket::move()
 
         for (auto item : items) {
             //0 je id elementa Wall
+            if(item->type()==4){
+                scene()->removeItem(this);
+                delete this;
+                if(m_id == 0)
+                    rakete_tenka_0 -= 1;
+                else
+                    rakete_tenka_1 -= 1;
+            }
             if (item->type() == 0 && !bounced_once) {
 
                 if(timer < 0.0021){

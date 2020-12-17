@@ -8,7 +8,8 @@
 #include <cmath>
 #include <iostream>
 #include <QDebug>
-
+#include <code/include/SuperPower.hpp>
+#include <QRandomGenerator>
 #define ANGLE 9
 #define TANK_W 26
 #define TANK_H 30
@@ -17,7 +18,10 @@
 #define ROCKET_RADIUS 4
 #define MAX_ROCKET 5
 
-
+float timer0 = 0.1;
+float timer1=0.1;
+int r_power=0;
+int timer2=0;
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
     :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
 {
@@ -62,6 +66,31 @@ void Tank::destroy() {
 
 void Tank::advance()
 {
+    timer2+=1;
+    if(timer2%1000==0){
+        int rand=QRandomGenerator::global()->bounded(3);
+        qDebug()<<rand;
+        qDebug()<<"usoo";
+        if(rand==0){
+        SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+        scene()->addItem(sp);
+        }
+        else if(rand==1){
+        SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+        scene()->addItem(sp1);
+        }
+        else if(rand==2){
+        SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+        scene()->addItem(sp2);
+        }
+    }
+    if(timer0>10){
+        m_speed=0;
+    }
+    if(timer1>10){
+        r_power=0;
+        m_power=0;
+    }
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -126,7 +155,21 @@ void Tank::advance()
 //    if ((left && right) || (up && down && (left || right))) {
 //        return;
 //    }
+    if(m_speed==1){
+        timer0+=0.1;
+        x_v*=1.8;
+        y_v*=1.8;
+        r_speed_x*=1.8;
+        r_speed_y*=1.8;
 
+    }
+
+    if(m_power==1){
+        timer1+=0.1;
+        r_speed_x*=1.8;
+        r_speed_y*=1.8;
+
+    }
     if (left && up) {
         setRotation(rotation() - ANGLE);
         m_x -= x_v;
@@ -138,6 +181,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -161,6 +217,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -184,6 +253,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -206,6 +288,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -227,6 +322,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -246,6 +354,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -264,6 +385,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -284,6 +418,19 @@ void Tank::advance()
             for (auto item : itemsss) {
                 //0 je id elementa Wall
                 if (item->type() == 4 ) {
+                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+                   if(strcmp(sp->getType(),"speed")==0){
+                       this->SetSpeed(1);
+                       timer0=0.1;
+                   }
+                   else if(strcmp(sp->getType(),"superpower")==0){
+                       m_power=1;
+                       timer1=0.1;
+                       r_power=1;
+                   }
+                   else if(strcmp(sp->getType(),"health")==0){
+                       this->IncreaseHealth(100);
+                   }
                    scene()->removeItem(item);
                    delete item;
                 }
@@ -309,7 +456,7 @@ void Tank::advance()
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
 
 
-        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, 0, this->m_input, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, r_power, this->m_input, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";

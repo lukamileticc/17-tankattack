@@ -11,6 +11,7 @@
 #include <QTimer>
 #include "code/include/SuperPower.hpp"
 #include <QRandomGenerator>
+#include <QDebug>
 
 World::World(QObject *parent){
     Q_UNUSED(parent);
@@ -175,14 +176,16 @@ void World::start(){
     Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
     SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
     SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+    SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 
-
+    qDebug()<<"ovdeded";
 
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(input);
     scene->addItem(sp);
     scene->addItem(sp1);
+    scene->addItem(sp2);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();
@@ -198,7 +201,6 @@ void World::start(){
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
     input->timer->start(33);
-
     std::cout << "helloooo" << std::endl;
 
 }

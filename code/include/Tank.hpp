@@ -64,7 +64,8 @@ private:
     QColor m_color;
     float m_x;// x koordinata polozaja
     float m_y; // y koordinata polozaja
-    float m_speed; // brzina tenka
+    float m_speed=0;
+    float m_power=0;// brzina tenka
     float m_current_health; //trenutno helti
     int m_num_of_lives; //broj preostalih zivota
     int m_num_of_rockets; // broj raketa
