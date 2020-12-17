@@ -12,6 +12,8 @@ public:
     SuperPower(char * type,float x,float y,float size);
     ~SuperPower()  = default;
     char * getType() const;
+    float getSize() const;
+    void setSize(float size);
 
     void setType(char * type);
     int type() const;

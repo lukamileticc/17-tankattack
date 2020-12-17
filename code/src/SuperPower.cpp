@@ -16,6 +16,16 @@ char * SuperPower::getType() const
     return m_type;
 }
 
+float SuperPower::getSize() const
+{
+    return m_size;
+}
+
+void SuperPower::setSize(float size)
+{
+    m_size=size;
+}
+
 void SuperPower::setType(char *type)
 {
     m_type=type;
@@ -31,33 +41,28 @@ QRectF SuperPower::boundingRect() const
     return QRectF(0, 0, m_size, m_size);
 }
 
+
 void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
     if(strcmp(m_type,"health")==0){
-        painter->setBrush(Qt::white);
+        QPixmap pixmap=QPixmap(":/resources/images/health1_resize.png");
+        pixmap.scaled(m_size,m_size);
+        painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
-        painter->setBrush(Qt::red);
-        painter->drawRect(0, 10,m_size,10);
-        painter->drawRect(10, 0,10,m_size);
     }
     else if (strcmp(m_type,"superpower")==0){
-        painter->setBrush(Qt::yellow);
+        QPixmap pixmap=QPixmap(":/resources/images/superpower.jpg");
+        pixmap.scaled(m_size,m_size);
+        painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
-        painter->setBrush(Qt::red);
-        painter->drawRect(5, 0,21,7);
-        painter->drawRect(5, 0,7,13);
-        painter->drawRect(5, 13,21,7);
-        painter->drawRect(18,13,7,17);
-        painter->drawRect(5, 23,21,7);
     }
     else if (strcmp(m_type,"speed")==0){
-        painter->setBrush(Qt::green);
+        QPixmap pixmap=QPixmap(":/resources/images/speed.png");
+        pixmap.scaled(m_size,m_size);
+        painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
-        painter->setBrush(Qt::white);
-        painter->drawRect(0, 10,m_size,10);
-        painter->drawRect(10, 0,10,m_size);
     }
 
     while (!scene()->collidingItems(this).isEmpty()) {
