@@ -2,8 +2,8 @@
 #include <QDebug>
 #include <cmath>
 
-int Rocket::rakete_tenka_0 = 0;
-int Rocket::rakete_tenka_1 = 0;
+int Rocket::rakete_tenka_0;
+int Rocket::rakete_tenka_1;
 
 //u rocket power ce se prosledjivati enum u zavisnoti koju jacinu poseduje tenk
 Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, int x_v, int y_v, qreal rot)

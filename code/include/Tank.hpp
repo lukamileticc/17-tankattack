@@ -58,6 +58,7 @@ public:
     float getYposition() const;
 
     bool is_destroyed();
+    void set_end_of_round();
 
 public slots:
     void advance();
@@ -77,6 +78,7 @@ private:
     bool m_can_shoot;
     int m_score = 0;
     int m_health = 100;
+    bool m_end_of_round = false;
     QString m_name;
 
     Rocket_type m_tank_rocket_type = Rocket_type::Low_power;

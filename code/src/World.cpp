@@ -3,6 +3,7 @@
 #include "code/include/Wall.hpp"
 #include "code/include/Input.hpp"
 #include "code/include/Map.hpp"
+#include "code/include/Rocket.hpp"
 #include <iostream>
 #include <QPushButton>
 #include <QObject>
@@ -173,6 +174,8 @@ void World::end_of_round(QString message){
     //show_tank_info();
     //std::cout << message << std::endl;
     m_ended_round = true;
+    t1->set_end_of_round();
+    t2->set_end_of_round();
     QFont font;
     font.setBold(true);
     font.setPointSize(50);
@@ -241,6 +244,7 @@ void World::end_of_round(QString message){
     bnext->setStyleSheet(style_for_button);
     //jos uvek nemamo metod next_battle
 //    QObject::connect(bnext,SIGNAL(released()),this,SLOT(next_battle()),Qt::QueuedConnection);
+    QObject::connect(bnext, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
 
 
     //Button za quit_game
@@ -331,6 +335,10 @@ QVector<QString>* World::read_previous_battles(const char *file)
     return battle_history;
 }
 
+void World::next_round(){
+
+}
+
 void World::show_tank_info(){
     if (m_showed_info){
         scene->removeItem(info_t1);
@@ -369,7 +377,7 @@ void World::rounds(){
     show_tank_info();
     if(t1->is_destroyed() && t2->is_destroyed()){
         // nobody win
-        end_of_round("Nobody won!");
+        end_of_round("Nobody");
     }
     else if (t1->is_destroyed()){
 
@@ -398,6 +406,10 @@ void World::rounds(){
 }
 
 void World::start(){
+    m_ended_round = false;
+    m_showed_info = false;
+    Rocket::rakete_tenka_0 = 0;
+    Rocket::rakete_tenka_1 = 0;
     m_started=1;
     m_in_game=1;
 

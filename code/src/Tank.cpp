@@ -21,6 +21,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
     m_health = 100;
+    m_num_of_rockets = 0;
 
 
 }
@@ -65,6 +66,10 @@ bool Tank::is_destroyed(){
     return this->destroyed;
 }
 
+void Tank::set_end_of_round(){
+    m_end_of_round = true;
+}
+
 QString Tank::get_name() const{
     return m_name;
 }
@@ -79,6 +84,7 @@ int Tank::get_current_health() const{
 
 void Tank::advance()
 {
+    if (m_end_of_round) return;
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
