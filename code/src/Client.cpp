@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QHostAddress>
 
 Client::Client(QObject *parent)
     : QObject(parent)
@@ -18,6 +19,8 @@ Client::Client(QObject *parent)
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
     connect(m_clientSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::error);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
+   // connect(m_clientSocket, SIGNAL(), this, SLOT(sendMessage(QString)));
+   // connect(ui->sendButton, &QPushButton::clicked, this, &ClientWindow::sendMessage);
 }
 
 void Client::login(const QString &userName)
@@ -102,9 +105,8 @@ void Client::jsonReceived(const QJsonObject &docObj)
 
 void Client::connectToServer(const QHostAddress &address, quint16 port)
 {
-    m_clientSocket->connectToHost(address, port);
+    m_clientSocket->connectToHost(QHostAddress::LocalHost, 1967);
 }
-
 void Client::onReadyRead()
 {
     QByteArray jsonData;

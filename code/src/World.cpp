@@ -176,6 +176,8 @@ void World::start(){
     Input *input = new Input();
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
+   // Client c;
+   // c.setPozicija_TenkaX(t1->);
     //Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
 
 

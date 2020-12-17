@@ -25,6 +25,7 @@ public slots:
 private slots:
     void onReadyRead();
 signals:
+    //void sendMessage(const QString &text);
     void connected();
     void loggedIn();
     void loginError(const QString &reason);

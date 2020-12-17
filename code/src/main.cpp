@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-    ClientWindow cw;
-    cw.show();
+//    ClientWindow cw;
+//    cw.show();
 
     World *world = new World();
 

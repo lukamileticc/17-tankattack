@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include <QTcpSocket>
+#include <QHostAddress>
 #define UNUSED(x) (void)(x)
 #define ANGLE 10
 #define TANK_W 26
@@ -18,6 +19,8 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 {
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
+
+    m_Client.connectToServer(QHostAddress::LocalHost, 1967);
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -133,6 +136,7 @@ void Tank::advance(){
         }
         m_Client.setPozicija_TenkaX(m_x, m_y);
         m_Client.setPozicija_TenkaY(m_y);
+        m_Client.sendMessage("proba");
 
         //qDebug() << m_Client.getPozicija_TenkaX();
     }
