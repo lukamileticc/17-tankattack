@@ -1,10 +1,10 @@
+ 0 - 1 
+ 0 - 1 
+n 0 - 1 l
+nik 0 - 1 luk
+Nik 0 - 1 LUg
 uk 0 - 2 uajsd
 uk 0 - 1 uajsd
 lu 0 - 3 ni
 lu 0 - 2 ni
 lu 0 - 1 ni
-nik 0 - 4 luk
-nik 0 - 3 luk
-nik 0 - 2 luk
-nik 0 - 1 luk
-nik 0 - 2 luk

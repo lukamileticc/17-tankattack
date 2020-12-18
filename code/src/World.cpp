@@ -17,6 +17,7 @@
 #include <QFile>
 #include <exception>
 #include <fstream>
+#include <random>
 
 World::World(QObject *parent)
     :QObject(parent)
@@ -407,11 +408,36 @@ void World::rounds(){
 
 }
 
+int rand_int(int nMin, int nMax)
+{
+    return nMin + (int)((double)rand() / (RAND_MAX+1) * (nMax-nMin+1));
+}
+
 void World::load_map(){
 
     //Mapa otvara odgovarajuci fajl
     //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
-    Map *m1 = new Map(":/resources/files/mapa1.txt");
+    char mapa[] = ":/resources/files/mapa_.txt";
+
+    // u zavisnosti od odabrane mape char mapa[] "../mapa_.txt"
+    // se menja u "../mapax.txt" gde je x random broj dobijen funkcijom RandU
+
+    int random_integer = rand_int(1,1);
+    /* PROVERA DA LI JE NOVA MAPA RAZLICITA OD PRETHODNE, NEMA SMISLA SAD JER IMAMO SAMO JEDNU MAPU
+    while(random_integer == m_last_map){
+        random_integer = rand_int(1,1);
+        qDebug() << random_integer;
+    }
+    */
+
+    m_last_map = random_integer;
+
+    char number_of_map[2];
+    std::sprintf(number_of_map, "%d", random_integer);
+    mapa[22] = number_of_map[0];
+    qDebug() << mapa;
+
+    Map *m1 = new Map(mapa);
     std::vector<Wall*>walls = m1->getWalls();
 
     for(auto w: walls)

@@ -57,6 +57,7 @@ private:
     bool m_showed_info = false;
     QString ime_prvog_tenka;
     QString ime_drugog_tenka;
+    int m_last_map = -1; // number of last map
     int m_left_round_time = 0; // timer povecava ovaj brojac kako bi proslo odredjeno vreme nakon
                                //unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)
 };
