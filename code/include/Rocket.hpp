@@ -27,10 +27,6 @@ public:
     int type() const override;
     QPainterPath shape() const override;
 
-
-
-
-
 public slots:
     void move();
 
@@ -51,6 +47,8 @@ private:
 
     Tank *t;
 
+    bool first = true;
+    QPointF center;
 };
 #endif //ROCKET_HPP
 

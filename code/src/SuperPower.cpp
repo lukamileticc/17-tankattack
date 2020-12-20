@@ -8,7 +8,6 @@
 SuperPower::SuperPower(char *type,float x,float y,float size)
     : m_type(type),m_x(x),m_y(y),m_size(size)
 {
-
     setPos(m_x, m_y);
 }
 char * SuperPower::getType() const
@@ -65,6 +64,7 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->drawRect(0, 0, m_size, m_size);
     }
 
+    //ovo parce koda dovodi do greske kad raketa ima koliziju sa objektom ove klase
     while (!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
         for (auto item : itemsss) {
@@ -77,7 +77,6 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             }
         }
     }
-
 }
 
 //void SuperPower::advance()

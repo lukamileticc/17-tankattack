@@ -265,6 +265,7 @@ void Tank::advance()
 //    if ((left && right) || (up && down && (left || right))) {
 //        return;
 //    }
+
     if(m_speed == 1){
         timer0+=0.1;
         x_v*=1.8;
