@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <code/include/SuperPower.hpp>
 #include <QRandomGenerator>
+
 #define ANGLE 9
 #define TANK_W 26
 #define TANK_H 30
@@ -19,9 +20,10 @@
 #define MAX_ROCKET 5
 
 float timer0 = 0.1;
-float timer1=0.1;
-int r_power=0;
-int timer2=0;
+float timer1 = 0.1;
+int r_power = 0;
+int timer2 = 0;
+
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
     :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
 {
@@ -64,33 +66,141 @@ void Tank::destroy() {
     //end_of_round();
 }
 
+void Tank::move_forward() {
+    m_x -= x_v;
+    m_y -= y_v;
+    setPos(m_x, m_y);
+
+    if(!scene()->collidingItems(this).isEmpty()) {
+        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
+        for(auto item : col_list) {
+            if (item->type() == 4 ) {
+               SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+               if(strcmp(sp->getType(),"speed")==0){
+                   this->SetSpeed(1);
+                   timer0=0.1;
+               }
+               else if(strcmp(sp->getType(),"superpower")==0){
+                   m_power=1;
+                   timer1=0.1;
+                   r_power=1;
+               }
+               else if(strcmp(sp->getType(),"health")==0){
+                   this->IncreaseHealth(100);
+               }
+               scene()->removeItem(item);
+               delete item;
+            }
+            else {
+                while(this->collidesWithItem(item) && item->type() != 3) {
+                    m_x += x_v / 5;
+                    m_y += y_v / 5;
+                    setPos(m_x, m_y);
+                }
+            }
+            col_list = scene()->collidingItems(this);
+        }
+    }
+}
+
+void Tank::move_backward() {
+    m_x += x_v / 5 * 2;
+    m_y += y_v / 5 * 2;
+    setPos(m_x, m_y);
+
+    if(!scene()->collidingItems(this).isEmpty()) {
+        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
+        for(auto item : col_list) {
+            if (item->type() == 4 ) {
+               SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+               if(strcmp(sp->getType(),"speed")==0){
+                   this->SetSpeed(1);
+                   timer0=0.1;
+               }
+               else if(strcmp(sp->getType(),"superpower")==0){
+                   m_power=1;
+                   timer1=0.1;
+                   r_power=1;
+               }
+               else if(strcmp(sp->getType(),"health")==0){
+                   this->IncreaseHealth(100);
+               }
+               scene()->removeItem(item);
+               delete item;
+            }
+            else {
+                while(this->collidesWithItem(item) && item->type() != 3) {
+                    m_x -= x_v / 5;
+                    m_y -= y_v / 5;
+                    setPos(m_x, m_y);
+                }
+            }
+            col_list = scene()->collidingItems(this);
+        }
+    }
+}
+
+void Tank::rotate(float angle) {
+    setRotation(rotation() + angle);
+
+    if (!scene()->collidingItems(this).isEmpty()) {
+        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
+        for(auto item : col_list) {
+
+            if (item->type() == 4) {
+               SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
+               if(strcmp(sp->getType(),"speed")==0){
+                   this->SetSpeed(1);
+                   timer0=0.1;
+               }
+               else if(strcmp(sp->getType(),"superpower")==0){
+                   m_power=1;
+                   timer1=0.1;
+                   r_power=1;
+               }
+               else if(strcmp(sp->getType(),"health")==0){
+                   this->IncreaseHealth(100);
+               }
+               scene()->removeItem(item);
+               delete item;
+            }
+
+            else {
+                setRotation(rotation() - angle);
+            }
+        }
+    }
+}
+
 void Tank::advance()
 {
-    timer2+=1;
-    if(timer2%1000==0){
-        int rand=QRandomGenerator::global()->bounded(3);
-        qDebug()<<rand;
-        qDebug()<<"usoo";
-        if(rand==0){
-        SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-        scene()->addItem(sp);
+    timer2 += 1;
+    if(timer2 % 1000 == 0){
+        int rand = QRandomGenerator::global()->bounded(3);
+        qDebug() << rand;
+        qDebug() << "SuperPower";
+        if(rand == 0){
+            SuperPower *sp1 = new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+            scene()->addItem(sp1);
         }
-        else if(rand==1){
-        SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-        scene()->addItem(sp1);
+        else if(rand == 1){
+            SuperPower *sp2 = new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+            scene()->addItem(sp2);
         }
-        else if(rand==2){
-        SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-        scene()->addItem(sp2);
+        else if(rand == 2){
+            SuperPower *sp3 = new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+            scene()->addItem(sp3);
         }
     }
-    if(timer0>10){
-        m_speed=0;
+    if(timer0 > 10){
+        m_speed = 0;
     }
-    if(timer1>10){
-        r_power=0;
-        m_power=0;
+
+    if(timer1 > 10){
+        r_power = 0;
+        m_power = 0;
     }
+
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -148,320 +258,73 @@ void Tank::advance()
     float r_speed_x = x_v;
     float r_speed_y = y_v;
 
-    x_v *= 4.0;
-    y_v *= 4.0;
+    x_v *= 5.0;
+    y_v *= 5.0;
 
 //kombinacije tastera u narednoj if naredbi nisu semanticki ispravne, nema ih smisla kombinovati
 //    if ((left && right) || (up && down && (left || right))) {
 //        return;
 //    }
-    if(m_speed==1){
+    if(m_speed == 1){
         timer0+=0.1;
         x_v*=1.8;
         y_v*=1.8;
         r_speed_x*=1.8;
         r_speed_y*=1.8;
-
     }
-
-    if(m_power==1){
+    if(m_power == 1){
         timer1+=0.1;
         r_speed_x*=1.8;
         r_speed_y*=1.8;
-
-    }
-    if (left && up) {
-        setRotation(rotation() - ANGLE);
-        m_x -= x_v;
-        m_y -= y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() + ANGLE);
-            m_x += x_v;
-            m_y += y_v;
-            setPos(m_x, m_y);
-//            return;
-        }
-    }
-    else if (right && up) {
-
-        setRotation(rotation() + ANGLE);
-        m_x -= x_v;
-        m_y -= y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() - ANGLE);
-            m_x += x_v;
-            m_y += y_v;
-            setPos(m_x, m_y);
-//            return;
-        }
-    }
-
-    else if (left && down){
-        setRotation(rotation() + ANGLE);
-        m_x += x_v;
-        m_y += y_v;
-        setPos(m_x,m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()){
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() - ANGLE);
-            m_x -= x_v;
-            m_y -= y_v;
-            setPos(m_x,m_y);
-        }
-    }
-
-    else if (right && down){
-        setRotation(rotation() - ANGLE);
-        m_x += x_v;
-        m_y += y_v;
-        setPos(m_x,m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()){
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() + ANGLE);
-            m_x -= x_v;
-            m_y -= y_v;
-            setPos(m_x,m_y);
-        }
-    }
-
-    else if (up) {
-        m_x -= x_v;
-        m_y -= y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            m_x += x_v;
-            m_y += y_v;
-            setPos(m_x, m_y);
-//            return;
-        }
-    }
-
-    else if (left) {
-        setRotation(rotation() - ANGLE);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() + ANGLE);
-            std::cout << scene()->collidingItems(this).size() << std::endl;
-//            return;
-        }
-    }
-
-    else if (right) {
-        setRotation(rotation() + ANGLE);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            setRotation(rotation() - ANGLE);
-            std::cout << scene()->collidingItems(this).size() << std::endl;
-//            return;
-        }
-    }
-
-    else if (down) {
-        m_x += x_v;
-        m_y += y_v;
-        setPos(m_x, m_y);
-
-        if (!scene()->collidingItems(this).isEmpty()) {
-            QList<QGraphicsItem *> itemsss = scene()->collidingItems(this);
-            for (auto item : itemsss) {
-                //0 je id elementa Wall
-                if (item->type() == 4 ) {
-                   SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-                   if(strcmp(sp->getType(),"speed")==0){
-                       this->SetSpeed(1);
-                       timer0=0.1;
-                   }
-                   else if(strcmp(sp->getType(),"superpower")==0){
-                       m_power=1;
-                       timer1=0.1;
-                       r_power=1;
-                   }
-                   else if(strcmp(sp->getType(),"health")==0){
-                       this->IncreaseHealth(100);
-                   }
-                   scene()->removeItem(item);
-                   delete item;
-                }
-            }
-            m_x -= x_v;
-            m_y -= y_v;
-            setPos(m_x, m_y);
-//              return;
-        }
     }
 
 ///////////////////////////////////////////////////////////////////
-    //ako je pritisnut space or enter pravi se raketa
+    if (left && up) {
+        move_forward();
+        rotate(-ANGLE);
+    }
+    else if (right && up) {
+        move_forward();
+        rotate(ANGLE);
+    }
+
+    else if (left && down) {
+        move_backward();
+        rotate(ANGLE);
+    }
+
+    else if (right && down) {
+        move_backward();
+        rotate(-ANGLE);
+    }
+
+    else if (up) {
+        move_forward();
+    }
+
+    else if (left) {
+        rotate(-ANGLE);
+    }
+
+    else if (right) {
+        rotate(ANGLE);
+    }
+
+    else if (down) {
+        move_backward();
+    }
+
+///////////////////////////////////////////////////////////////////
     if(launch){
 
-//        float tank_x_position = this->x() - 10*x_v;
-//        float tank_y_position = this->y() - 10*y_v;
-
-//        QPointF rckt = mapToScene(ceil((TANK_W / 2) - 5), -6);
-//        float rckt_pos_x = rckt.rx() - 5;
-//        float rckt_pos_y = rckt.ry() - 5;
-
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
-
-
         Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, r_power, this->m_input, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               update();
                rocket->move();
 //               rocket->setPos(rocket->x(),rocket->y());
         }
@@ -469,6 +332,7 @@ void Tank::advance()
                qDebug() << "Raketa 1 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
+//               update();
                rocket->move();
 //               rocket->setPos(rocket->x(),rocket->y());
         }
@@ -484,7 +348,6 @@ void Tank::advance()
         if (m_id == 1)
             m_input->k_enter = false;
     }
-
 }
 
 

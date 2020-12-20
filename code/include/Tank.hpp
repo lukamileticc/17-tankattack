@@ -54,6 +54,10 @@ public:
 
     QPainterPath shape() const override;
 
+    void move_forward();
+    void move_backward();
+    void rotate(float angle);
+
 public slots:
     void advance();
     //void keyPressEvent(QKeyEvent *event) override;
