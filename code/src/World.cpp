@@ -19,6 +19,8 @@
 #include <fstream>
 #include <random>
 
+bool World::world_pause;
+
 World::World(QObject *parent)
     :QObject(parent)
 {
@@ -334,6 +336,24 @@ QVector<QString>* World::read_previous_battles(const char *file)
     return battle_history;
 }
 
+void World::pause(){
+    if(m_showed_pause){
+        scene->removeItem(info_pause);
+    }
+    m_showed_pause = true;
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(40);
+    QString pause_string;
+    pause_string.reserve(50);
+    pause_string.append("Pause! Press P to continue");
+
+    info_pause = scene->addText(pause_string,font);
+    int x_position = 640 - info_pause->boundingRect().width()/2;
+    info_pause->setPos(x_position, 300);
+    info_pause->setDefaultTextColor(QColor("white"));
+}
+
 void World::show_tank_info(){
     if (m_showed_info){
         scene->removeItem(info_t1);
@@ -369,6 +389,17 @@ void World::show_tank_info(){
 void World::rounds(){
     if(m_ended_round)
         return;
+
+    if(t1->is_pause() || t2->is_pause()){
+        world_pause = true;
+        pause();
+        return;
+    }
+    else{
+        world_pause = false;
+        scene->removeItem(info_pause);
+    }
+
     show_tank_info();
     if(t1->is_destroyed() && t2->is_destroyed()){
         // nobody win
@@ -445,10 +476,10 @@ void World::load_map(){
 
 }
 
-
 void World::start(){
     m_ended_round = false;
     m_showed_info = false;
+    World::world_pause = false;
     Rocket::rakete_tenka_0 = 0;
     Rocket::rakete_tenka_1 = 0;
     m_left_round_time = 0;

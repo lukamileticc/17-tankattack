@@ -1,4 +1,5 @@
 #include "code/include/Rocket.hpp"
+#include "code/include/World.hpp"
 #include <QDebug>
 #include <cmath>
 
@@ -47,6 +48,9 @@ int Rocket::type() const{
 void Rocket::move()
 {
     //Menjamo poziciju i prava kretanja rakete
+    if(World::world_pause){
+        return;
+    }
     m_x -= m_pravac_x;
     m_y -= m_pravac_y;
     setPos(m_x, m_y);

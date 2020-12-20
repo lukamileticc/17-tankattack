@@ -81,9 +81,18 @@ int Tank::get_current_health() const{
     return m_health;
 }
 
+bool Tank::is_pause(){
+    return m_pause;
+}
 
 void Tank::advance()
 {
+    m_pause = m_input->pause;
+    qDebug() << "Pause: " << m_pause;
+
+    if(m_pause)
+        return;
+
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){

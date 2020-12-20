@@ -10,6 +10,9 @@
 #include <QLineEdit>
 #include "code/include/Tank.hpp"
 
+
+
+
 class World : public QObject
 {
     Q_OBJECT
@@ -25,13 +28,16 @@ public:
     QGraphicsView  *view  = nullptr;
     QGraphicsTextItem *info_t1 = nullptr;
     QGraphicsTextItem *info_t2 = nullptr;
+    QGraphicsTextItem *info_pause = nullptr;
     Tank *t1 = nullptr;
     Tank *t2 = nullptr;
     QLineEdit* line1 = nullptr;
     QLineEdit* line2 = nullptr;
+    static bool world_pause;
 
     void end_of_round(QString message);
     void show_tank_info();
+    void pause();
 
     //funkcije koje vrse ispis i upis borbi
     QVector<QString>* read_previous_battles(const char *file);
@@ -55,6 +61,7 @@ private:
     int m_score_t2 = 0;
     bool m_ended_round = false;
     bool m_showed_info = false;
+    bool m_showed_pause = false;
     QString ime_prvog_tenka;
     QString ime_drugog_tenka;
     int m_last_map = -1; // number of last map

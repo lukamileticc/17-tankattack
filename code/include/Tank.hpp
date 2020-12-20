@@ -57,6 +57,7 @@ public:
     float getXposition() const;
     float getYposition() const;
 
+    bool is_pause();
     bool is_destroyed();
     void set_end_of_round();
 
@@ -92,6 +93,7 @@ private:
     bool right = false;
     /////////////////////
     bool launch = false;
+    bool m_pause = false;
 
 
     float x_v = 0;
