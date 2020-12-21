@@ -23,6 +23,11 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     m_health = 100;
     m_num_of_rockets = 0;
 
+    //u tenku pravim muziku za raketu
+    //inicijalizujemo sound za rocket
+    rocket_sound = new QMediaPlayer();
+    rocket_sound->setMedia(QUrl("qrc:/resources/sounds/rocket_sound.wav"));
+    rocket_sound->setVolume(10);
 
 }
 
@@ -277,12 +282,24 @@ void Tank::advance()
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
 //               rocket->setPos(rocket->x(),rocket->y());
+
+               //zvuk rakete se pusta ukoliko je moguce napraviti raketu
+               if(rocket_sound->state() == QMediaPlayer::PlayingState)
+                    rocket_sound->setPosition(0);
+               else if(rocket_sound->state() == QMediaPlayer::StoppedState)
+                   rocket_sound->play();
         }
         else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
                qDebug() << "Raketa 1 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
 //               rocket->setPos(rocket->x(),rocket->y());
+
+               //zvuk rakete se pusta ukoliko je moguce napraviti raketu
+               if(rocket_sound->state() == QMediaPlayer::PlayingState)
+                    rocket_sound->setPosition(0);
+               else if(rocket_sound->state() == QMediaPlayer::StoppedState)
+                   rocket_sound->play();
         }
         else{
             if(m_id == 1) rocket->rakete_tenka_1 -= 1;

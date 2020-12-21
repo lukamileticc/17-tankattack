@@ -16,5 +16,6 @@
     <qresource prefix="/resources/sounds">
         <file>game_song.mp3</file>
         <file>button_click.wav</file>
+        <file>rocket_sound.wav</file>
     </qresource>
 </RCC>

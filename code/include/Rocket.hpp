@@ -33,7 +33,6 @@ public slots:
     void move();
 
 private:
-
     //koordinate rakete i poluprecnik
     float m_x;
     float m_y;

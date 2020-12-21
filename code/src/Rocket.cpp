@@ -39,8 +39,8 @@ Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, 
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
     timer->start(30); //move se poziva na svakih 30ms
 
-}
 
+}
 int Rocket::type() const{
     return 3;
 }

@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
 #include <vector>
+#include <QMediaPlayer>
 //#include "Rocket.hpp"
 
 class Tank : public QObject, public Input{
@@ -68,6 +69,8 @@ public slots:
     //---
 
 private:
+    //zvuk rakete
+    QMediaPlayer *rocket_sound = nullptr;
     int m_id;
     QColor m_color;
     float m_x;// x koordinata polozaja

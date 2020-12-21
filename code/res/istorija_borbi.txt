@@ -1,3 +1,6 @@
+ 2 - 1 
+ 1 - 1 
+ 1 - 0 
  0 - 1 
  0 - 2 
  0 - 1 
@@ -5,6 +8,3 @@
 Nikola 0 - 2 Lukindra
 Nikola 0 - 1 Lukindra
 LUka 0 - 1 Nikola
-Lukindra 1 - 1 Nikola
-Lukindra 1 - 0 Nikola
-nik 1 - 0 luk
