@@ -8,9 +8,9 @@
 #include <QString>
 #include <QDebug>
 #include <QLineEdit>
+#include <QMediaPlayer>
+#include <QPushButton>
 #include "code/include/Tank.hpp"
-
-
 
 
 class World : public QObject
@@ -33,8 +33,11 @@ public:
     Tank *t2 = nullptr;
     QLineEdit* line1 = nullptr;
     QLineEdit* line2 = nullptr;
+    QMediaPlayer *music = nullptr;
+
     static bool world_pause;
 
+    QPushButton* make_button(QString name);
     void end_of_round(QString message);
     void show_tank_info();
     void pause();
@@ -53,6 +56,7 @@ public slots:
     void change_name_of_first_tank();
     void change_name_of_second_tank();
     void load_map();
+    void button_clicked();
 
 private:
     int m_in_game=0;
