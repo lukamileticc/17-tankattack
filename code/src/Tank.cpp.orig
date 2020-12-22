@@ -29,6 +29,8 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 {
     setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 4);
     setPos(m_x, m_y);
+<<<<<<< HEAD
+=======
     m_health = 100;
     m_num_of_rockets = 0;
 
@@ -38,6 +40,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     rocket_sound->setMedia(QUrl("qrc:/resources/sounds/rocket_sound.wav"));
     rocket_sound->setVolume(10);
 
+>>>>>>> feature/interfejs_runde
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -57,20 +60,9 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 QRectF Tank::boundingRect() const
 {
-//    return QRectF(0, 0, 30, 30);
     return QRectF(-0.5, -0.5, TANK_W + 1, TANK_H + (PIPE_H / 4) + 1);
 }
-float Tank::getXposition() const
-{
-    return m_x;
-}
-float Tank::getYposition() const
-{
-    return m_y;
-}
-int Tank::type() const{
-    return 1;
-}
+
 QPainterPath Tank::shape() const {
     QPainterPath OuterPath;
     OuterPath.setFillRule(Qt::WindingFill);
@@ -87,6 +79,7 @@ void Tank::destroy() {
     //end_of_round();
 }
 
+<<<<<<< HEAD
 void Tank::move_forward() {
     m_x -= x_v;
     m_y -= y_v;
@@ -107,7 +100,7 @@ void Tank::move_forward() {
                    r_power=1;
                }
                else if(strcmp(sp->getType(),"health")==0){
-                   this->increase_health(100);
+                   this->IncreaseHealth(100);
                }
                scene()->removeItem(item);
                delete item;
@@ -144,7 +137,7 @@ void Tank::move_backward() {
                    r_power=1;
                }
                else if(strcmp(sp->getType(),"health")==0){
-                   this->increase_health(100);
+                   this->IncreaseHealth(100);
                }
                scene()->removeItem(item);
                delete item;
@@ -180,7 +173,7 @@ void Tank::rotate(float angle) {
                    r_power=1;
                }
                else if(strcmp(sp->getType(),"health")==0){
-                   this->increase_health(100);
+                   this->IncreaseHealth(100);
                }
                scene()->removeItem(item);
                delete item;
@@ -191,7 +184,7 @@ void Tank::rotate(float angle) {
             }
         }
     }
-}
+=======
 bool Tank::is_destroyed(){
     return this->destroyed;
 }
@@ -213,17 +206,12 @@ int Tank::get_current_health() const{
 
 bool Tank::is_pause(){
     return m_pause;
+>>>>>>> feature/interfejs_runde
 }
 
 void Tank::advance()
 {
-    m_pause = m_input->pause;
-    qDebug() << "Pause: " << m_pause;
-
-    if(m_pause)
-        return;
-
-
+<<<<<<< HEAD
     timer2 += 1;
     if(timer2 % 1000 == 0){
         int rand = QRandomGenerator::global()->bounded(3);
@@ -250,6 +238,13 @@ void Tank::advance()
         r_power = 0;
         m_power = 0;
     }
+=======
+    m_pause = m_input->pause;
+    qDebug() << "Pause: " << m_pause;
+
+    if(m_pause)
+        return;
+>>>>>>> feature/interfejs_runde
 
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
@@ -290,7 +285,6 @@ void Tank::advance()
     }
 
     if (this->is_destroyed()){
-       //this->destroy(); 
         return;
         // ovde bi trebala neka animacija eksplozije da se napravi
     }
@@ -365,16 +359,17 @@ void Tank::advance()
         move_backward();
     }
 
-///////////////////////////////////////////////////////////////////
-    //ako je pritisnut space or enter pravi se raketa
-    if(launch){
-        //trebaju nam koordinate tenk da bismo napravili raketu
-//        float tank_x_position = this->x() - 10*x_v;
-//        float tank_y_position = this->y() - 10*y_v;
+    if (m_end_of_round) return;
 
+///////////////////////////////////////////////////////////////////
+    if(launch){
+
+<<<<<<< HEAD
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
-        //cetvrti argument r_power
-        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, Rocket_type::High_power, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, r_power, this->m_input, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+=======
+        Rocket *rocket = new Rocket(rckt_pos_x, rckt_pos_y, 10, this->m_tank_rocket_type, m_id, 2 * x_v , 2 * y_v, rotation());
+>>>>>>> feature/interfejs_runde
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
@@ -416,20 +411,10 @@ void Tank::advance()
         if (m_id == 1)
             m_input->k_enter = false;
     }
-
 }
 
+
 //void Tank::keyPressEvent(QKeyEvent *event) {
-
-////komentar je potrebno ukloniti ukoliko zelimo da eliminisemo auto-repeat tastera
-////    if (event->isAutoRepeat()) {
-////            return;
-////    }
-///
-///
-///
-///
-
 //    if (event->key() == Qt::Key_W) up = true;
 //    if (event->key() == Qt::Key_S) down = true;
 //    if (event->key() == Qt::Key_A) left = true;
@@ -445,6 +430,17 @@ void Tank::advance()
 //    advance(0);
 //}
 
+float Tank::getXposition() const {
+    return m_x;
+}
+
+float Tank::getYposition() const {
+    return m_y;
+}
+
+int Tank::type() const {
+    return 1;
+}
 
 bool Tank::IsAbleToShoot() const {
     return m_can_shoot;
@@ -531,6 +527,7 @@ void Tank::shoot() {
 //void Tank::setRockets(const std::vector<Rocket> &mRocket) {
 //    m_rockets = mRocket;
 //}
+
 void Tank::IncreaseScore(int score){
     m_score+=score;
 }

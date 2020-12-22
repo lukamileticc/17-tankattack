@@ -10,9 +10,8 @@
 #include "Wall.hpp"
 #include "Map.hpp"
 #include "Tank.hpp"
-#include <QObject>
-#include <QGraphicsItem>
 #include "code/include/Input.hpp"
+
 
 class Rocket : public QObject , public QGraphicsItem {
     Q_OBJECT
@@ -20,8 +19,12 @@ public:
 
     static int rakete_tenka_0;
     static int rakete_tenka_1;
-//    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot, Tank *t);
-    Rocket(float x,float y,float r ,const Rocket_type,int id, int x_v, int y_v, qreal rot,Tank *t);
+
+<<<<<<< HEAD
+    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot, Tank *t);
+=======
+    Rocket(float x,float y,float r ,const Rocket_type,int id, int x_v, int y_v, qreal rot);
+>>>>>>> feature/interfejs_runde
     ~Rocket() = default;
 
     // QGraphicsItem interface
@@ -35,12 +38,10 @@ public slots:
     void move();
 
 private:
-
     //koordinate rakete i poluprecnik
     float m_x;
     float m_y;
     float m_r;
-    Rocket_type m_rocket_type;
     //da vidimo kom tenku pripada raketa
     int m_id;
     int m_pravac_x;
@@ -50,11 +51,16 @@ private:
     //boja rakete ce se menjati u zavisnosti od jacine koju tenk poseduje
     QColor m_boja;
 
-    Tank *m_t;
-    int m_rocket_power;
+<<<<<<< HEAD
+    Tank *t;
 
     bool first = true;
     QPointF center;
+=======
+    Rocket_type m_rocket_type;
+    int m_rocket_power;
+
+>>>>>>> feature/interfejs_runde
 };
 #endif //ROCKET_HPP
 

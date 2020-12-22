@@ -6,6 +6,12 @@
 #include <QTimer>
 //#include "code/include/Tank.hpp"
 
+enum class Rocket_type{
+    Low_power,
+    Medium_power,
+    High_power
+};
+
 #define key_up  1
 #define key_down  2
 #define key_right  4

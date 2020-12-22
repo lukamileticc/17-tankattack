@@ -16,7 +16,7 @@ Map::Map(const char * file)
           QStringList lista=line.split(" ");
           for (auto broj : lista)
               coordinates.push_back(broj.toInt());
-          Wall *w1 = new Wall(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+          Wall *w1 = new Wall(coordinates[0], coordinates[1] - 45, coordinates[2], coordinates[3]);
           m_walls.push_back(w1);
           coordinates.clear();
        }

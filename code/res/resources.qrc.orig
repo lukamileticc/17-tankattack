@@ -5,12 +5,15 @@
         <file>tank_background_2.png</file>
         <file>bckg.jpg</file>
         <file>rsz_tank_background_2.png</file>
+<<<<<<< HEAD
         <file>health1_resize.png</file>
         <file>superpower.jpg</file>
         <file>speed.png</file>
+=======
         <file>input_names_bg.jpg</file>
         <file>input_names_bg_2.jpg</file>
         <file>input.png</file>
+>>>>>>> feature/interfejs_runde
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>
