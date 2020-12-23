@@ -1,3 +1,4 @@
+ 0 - 0 
 eq 0 - 3 eqw
 eq 0 - 2 eqw
 eq 0 - 2 eqw
@@ -7,4 +8,3 @@ coece 0 - 1 ids
 AAA 0 - 2 IDEMOOO
 AAA 0 - 1 IDEMOOO
  1 - 2 
- 0 - 2 

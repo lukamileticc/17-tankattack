@@ -13,7 +13,7 @@ public:
 
     Tank(int id,QColor color, float x, float y, Input *input);
 
-    ~Tank()  = default;
+    ~Tank();
 
     int type() const override;
 

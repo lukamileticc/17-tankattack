@@ -114,7 +114,10 @@ void Rocket::move()
             //1 je id elementa Tank
             if (item->type() == 1 && !first){
                 Tank *t = qgraphicsitem_cast<Tank*>(item);
-                t->destroy();
+                t->decrease_health(this->m_rocket_power);
+                if(t->get_current_health() <= 0)
+                    t->destroy();
+                //ovaj return je potreban jer ce doci do seg-faulta jer dole opet pristupamo raketi
                 delete this;
                 return;
             }
@@ -242,6 +245,8 @@ void Rocket::move()
     m_y -= m_pravac_y;
     setPos(m_x, m_y);
 
+
+    //unistavmo raketu posle izvesnog vremena otprilike oko 5 sekundi
     m_life_time++;
     if(m_life_time > 150)
     {

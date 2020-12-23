@@ -39,6 +39,10 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     rocket_sound->setVolume(10);
 
 }
+Tank::~Tank()
+{
+    delete rocket_sound;
+}
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -374,7 +378,7 @@ void Tank::advance()
 
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
         //cetvrti argument r_power
-        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, Rocket_type::High_power, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, m_tank_rocket_type, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
