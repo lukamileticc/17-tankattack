@@ -69,10 +69,8 @@ public:
     void rotate(float angle);
 
 public slots:
+
     void advance();
-    //void keyPressEvent(QKeyEvent *event) override;
-    //void keyReleaseEvent(QKeyEvent *event) override;
-    //---
 
 private:
     //zvuk rakete

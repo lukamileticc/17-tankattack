@@ -5,12 +5,12 @@
 #include <string.h>
 #include <QDebug>
 #include <QRandomGenerator>
-SuperPower::SuperPower(char *type,float x,float y,float size)
+SuperPower::SuperPower(QString type,float x,float y,float size)
     : m_type(type),m_x(x),m_y(y),m_size(size)
 {
     setPos(m_x, m_y);
 }
-char * SuperPower::getType() const
+QString SuperPower::getType() const
 {
     return m_type;
 }
@@ -45,19 +45,19 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    if(strcmp(m_type,"health")==0){
+    if(m_type == QString("health")){
         QPixmap pixmap=QPixmap(":/resources/images/health1_resize.png");
         pixmap.scaled(m_size,m_size);
         painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
     }
-    else if (strcmp(m_type,"superpower")==0){
+    else if (m_type == QString("superpower")){
         QPixmap pixmap=QPixmap(":/resources/images/superpower.jpg");
         pixmap.scaled(m_size,m_size);
         painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
     }
-    else if (strcmp(m_type,"speed")==0){
+    else if (m_type == QString("speed")){
         QPixmap pixmap=QPixmap(":/resources/images/speed.png");
         pixmap.scaled(m_size,m_size);
         painter->setBrush(pixmap);

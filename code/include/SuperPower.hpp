@@ -9,25 +9,25 @@ class SuperPower : public QGraphicsItem {
 public:
 
     SuperPower() = default;
-    SuperPower(char * type,float x,float y,float size);
+    SuperPower(QString type,float x,float y,float size);
     ~SuperPower()  = default;
-    char * getType() const;
+
+    QString getType() const;
     float getSize() const;
     void setSize(float size);
 
     void setType(char * type);
     int type() const;
 
+    // QGraphicsItem interface
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 private:
-    char * m_type;
+    QString m_type;
     float m_x;
     float m_y;
     float m_size;
-
-    // QGraphicsItem interface
-public:
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif // SUPERPOWER_HPP

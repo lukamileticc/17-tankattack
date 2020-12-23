@@ -1,4 +1,4 @@
-#include "../include/Tank.hpp"
+﻿#include "../include/Tank.hpp"
 #include "../include/Rocket.hpp"
 #include <QGraphicsItem>
 #include <QPainter>
@@ -101,16 +101,16 @@ void Tank::move_forward() {
         for(auto item : col_list) {
             if (item->type() == 4 ) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(strcmp(sp->getType(),"speed")==0){
+               if(sp->getType() == QString("speed")){
                    this->SetSpeed(1);
                    timer0=0.1;
                }
-               else if(strcmp(sp->getType(),"superpower")==0){
+               else if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
                }
-               else if(strcmp(sp->getType(),"health")==0){
+               else if(sp->getType() == QString("health")){
                    this->increase_health(100);
                }
                scene()->removeItem(item);
@@ -138,16 +138,16 @@ void Tank::move_backward() {
         for(auto item : col_list) {
             if (item->type() == 4 ) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(strcmp(sp->getType(),"speed")==0){
+               if(sp->getType() == QString("speed")){
                    this->SetSpeed(1);
                    timer0=0.1;
                }
-               else if(strcmp(sp->getType(),"superpower")==0){
+               else if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
                }
-               else if(strcmp(sp->getType(),"health")==0){
+               else if(sp->getType() == QString("health")){
                    this->increase_health(100);
                }
                scene()->removeItem(item);
@@ -174,18 +174,19 @@ void Tank::rotate(float angle) {
 
             if (item->type() == 4) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(strcmp(sp->getType(),"speed")==0){
+               if(sp->getType() == QString("speed")){
                    this->SetSpeed(1);
                    timer0=0.1;
                }
-               else if(strcmp(sp->getType(),"superpower")==0){
+               else if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
                }
-               else if(strcmp(sp->getType(),"health")==0){
+               else if(sp->getType() == QString("health")){
                    this->increase_health(100);
                }
+
                scene()->removeItem(item);
                delete item;
             }
@@ -222,7 +223,7 @@ bool Tank::is_pause(){
 void Tank::advance()
 {
     m_pause = m_input->pause;
-    qDebug() << "Pause: " << m_pause;
+//    qDebug() << "Pause: " << m_pause;
 
     if(m_pause)
         return;
@@ -234,16 +235,17 @@ void Tank::advance()
         qDebug() << rand;
         qDebug() << "SuperPower";
         if(rand == 0){
-            SuperPower *sp1 = new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+
+            SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
             scene()->addItem(sp1);
         }
         else if(rand == 1){
-            SuperPower *sp2 = new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+            SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
             scene()->addItem(sp2);
         }
         else if(rand == 2){
-            SuperPower *sp3 = new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-            scene()->addItem(sp3);
+            SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+                scene()->addItem(sp3);
         }
     }
     if(timer0 > 10){
