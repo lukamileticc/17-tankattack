@@ -83,15 +83,14 @@ World::World(QObject *parent)
 
 World::~World(){
     delete music;
-    delete line2;
-    delete line1;
     delete t2;
     delete t1;
     delete info_pause;
     delete info_t2;
     delete info_t1;
-    delete scene;
-    delete view;
+    delete input;
+//  delete line2;
+//  delete line1;
 }
 
 void World::show(){
@@ -283,7 +282,7 @@ void World::start(){
     view->setFixedSize(1271, 813);
 
 
-    Input *input = new Input();
+    input = new Input();
 
     this->t1 = new Tank(0,Qt::red, 200, 400, input);
     this->t2 = new Tank(1,Qt::blue, 1200, 400, input);
@@ -644,6 +643,8 @@ void World::change_name_of_second_tank()
 
 void World::quit()
 {
-      QApplication::exit(); //mislim da je ovo pravilnije
-//    QApplication::closeAllWindows();
+    //brisemo ceo world
+      delete this;
+    //ova funkcija brise scene i view tako da oni ne smeju da se nadju u ~world();
+      QApplication::exit();
 }

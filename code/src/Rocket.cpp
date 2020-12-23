@@ -40,11 +40,15 @@ Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, 
     else throw "Nepodrzana jacina metka";
 
 
-    //dodat nezavisan timer za pomeranje rakete-to Moze!
-    QTimer *timer = new QTimer();
+    //dodat nezavisan timer za pomeranje rakete-
+    timer = new QTimer();
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
     timer->start(30); //move se poziva na svakih 30ms
 
+}
+Rocket::~Rocket()
+{
+    delete timer;
 }
 void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

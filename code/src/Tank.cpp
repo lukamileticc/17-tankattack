@@ -245,7 +245,7 @@ void Tank::advance()
         }
         else if(rand == 2){
             SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-                scene()->addItem(sp3);
+            scene()->addItem(sp3);
         }
     }
     if(timer0 > 10){

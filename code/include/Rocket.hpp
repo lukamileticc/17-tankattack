@@ -22,7 +22,7 @@ public:
     static int rakete_tenka_1;
 //    Rocket(float x,float y,float r ,int rocket_power,Input* input,int id, int x_v, int y_v, qreal rot, Tank *t);
     Rocket(float x,float y,float r ,const Rocket_type,int id, int x_v, int y_v, qreal rot,Tank *t);
-    ~Rocket() = default;
+    ~Rocket();
 
     // QGraphicsItem interface
     QRectF boundingRect() const override;
@@ -49,9 +49,10 @@ private:
     float m_life_time = 0;
     //boja rakete ce se menjati u zavisnosti od jacine koju tenk poseduje
     QColor m_boja;
-
     Tank *m_t;
     int m_rocket_power;
+
+    QTimer *timer = nullptr;
 
     bool first = true;
     QPointF center;

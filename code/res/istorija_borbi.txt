@@ -1,10 +1,10 @@
-LUka 0 - 1 Miletic
-OOOO 1 - 0 Sila
-dsa 0 - 1 sss
-Nikola 1 - 1 Luka
-Nikola 1 - 0 Luka
-dsadsa 0 - 1 wwww
-Nikola 1 - 0 Dzoni
-dsa 0 - 1 ss
+Sou 0 - 1 Program
+Hhaha 0 - 1 Caca
+ZIma 1 - 2 Jesen
+ZIma 1 - 1 Jesen
+ZIma 1 - 0 Jesen
+Dankec 1 - 2 Dankizio
+Dankec 1 - 1 Dankizio
+Dankec 1 - 0 Dankizio
  1 - 0 
-dsadsa 1 - 1 aa
+ 0 - 2 

@@ -34,6 +34,7 @@ public:
     QLineEdit* line1 = nullptr;
     QLineEdit* line2 = nullptr;
     QMediaPlayer *music = nullptr;
+    Input *input = nullptr;
 
     static bool world_pause;
 

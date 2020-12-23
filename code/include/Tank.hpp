@@ -6,10 +6,9 @@
 #include <QMediaPlayer>
 //#include "Rocket.hpp"
 
-class Tank : public QObject, public Input{
+class Tank : public QObject, public QGraphicsItem{
     Q_OBJECT
 public:
-//    Tank(int x,int y,int speed,std::vector<Rocket> rockets);
 
     Tank(int id,QColor color, float x, float y, Input *input);
 
