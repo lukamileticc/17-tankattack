@@ -82,7 +82,14 @@ World::World(QObject *parent)
 }
 
 World::~World(){
-    //treba editovati destrkutor posto imamo gomilu pokazivaca u klasi!
+    delete music;
+    delete line2;
+    delete line1;
+    delete t2;
+    delete t1;
+    delete info_pause;
+    delete info_t2;
+    delete info_t1;
     delete scene;
     delete view;
 }
@@ -190,13 +197,15 @@ void World::show_battles(){
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
 
     //citamo prethodne borbe iz funkcije
-     QVector<QString> *previous_battles;
+    QVector<QString> *previous_battles = nullptr;
     try{
         previous_battles = read_previous_battles(":/resources/files/istorija_borbi.txt");
     }
-    catch(QString e)
+    catch(const QString &e)
     {
+
        qDebug() << e;
+       delete previous_battles;
        exit(EXIT_FAILURE);
     }
 
@@ -218,6 +227,9 @@ void World::show_battles(){
     text->setDefaultTextColor(QColor("white"));
     text_list->setDefaultTextColor(QColor("white"));
 
+
+    //brisemo pokazivac na vektor
+    delete previous_battles;
 
 }
 QVector<QString>* World::read_previous_battles(const char *file)
@@ -340,6 +352,11 @@ void World::load_map(){
 
     for(auto w: walls)
         scene->addItem(w);
+
+
+    //mapa nam vise nije potrebna
+    //brisemo je da ne bi doslo do curenja memorije
+    delete m1;
 }
 void World::rounds(){
     if(m_ended_round)
@@ -410,8 +427,11 @@ void World::pause(){
 }
 void World::show_tank_info(){
     if (m_showed_info){
+        //ovde mora da se brisu ovi objekti da ne bi doslo do curenja memorije
         scene->removeItem(info_t1);
+        delete info_t1;
         scene->removeItem(info_t2);
+        delete info_t2;
     }
     m_showed_info = true;
     QFont font;
@@ -513,13 +533,14 @@ void World::end_of_round(QString message){
 void World::write_the_last_battle(const char *file)
 {
     //citamo prethodne borbe iz funkcije
-     QVector<QString> *previous_battles;
+     QVector<QString> *previous_battles = nullptr;
     try{
         previous_battles = read_previous_battles(file);
     }
     catch(QString e)
     {
        qDebug() << e;
+       delete previous_battles;
        exit(EXIT_FAILURE);
     }
 

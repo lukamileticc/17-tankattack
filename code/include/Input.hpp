@@ -22,7 +22,7 @@ enum class Rocket_type{
 class Input : public QGraphicsItem{
 public:
     Input();
-    virtual ~Input() = default;
+    ~Input();
 
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
@@ -30,7 +30,7 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QTimer *timer;
+    QTimer *timer = nullptr;
 
 //protected:
     unsigned int key_tank1;

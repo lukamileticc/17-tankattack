@@ -13,6 +13,10 @@ Input::Input(){
     pause = false;
     escape = false;
 }
+Input::~Input()
+{
+    delete timer;
+}
 
 void Input::keyPressEvent(QKeyEvent *event){
 
