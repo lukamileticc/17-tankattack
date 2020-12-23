@@ -1,10 +1,10 @@
+eq 0 - 3 eqw
+eq 0 - 2 eqw
+eq 0 - 2 eqw
+eq 0 - 1 eqw
+Idemo 0 - 1 Ljudski
+coece 0 - 1 ids
 AAA 0 - 2 IDEMOOO
 AAA 0 - 1 IDEMOOO
  1 - 2 
  0 - 2 
- 0 - 1 
- 0 - 0 
- 2 - 1 
- 1 - 1 
- 1 - 0 
- 0 - 1 

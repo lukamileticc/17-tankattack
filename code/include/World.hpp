@@ -57,6 +57,7 @@ public slots:
     void change_name_of_second_tank();
     void load_map();
     void button_clicked();
+    void set_volume();
 
 private:
     int m_in_game=0;
@@ -71,6 +72,8 @@ private:
     int m_last_map = -1; // number of last map
     int m_left_round_time = 0; // timer povecava ovaj brojac kako bi proslo odredjeno vreme nakon
                                //unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)
+    //polje koje sluzi da menja sliku dugmeta za pojacavanje tona muzike
+    QPushButton* bvolumen = nullptr;
 };
 
 #endif // WORLD_HPP

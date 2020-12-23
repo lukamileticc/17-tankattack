@@ -77,7 +77,7 @@ World::World(QObject *parent)
     //inicijalizujem pozadinsku muziku
     music = new QMediaPlayer();
     music->setMedia(QUrl("qrc:/resources/sounds/game_song.mp3"));
-    music->setVolume(20);
+    music->setVolume(30);
     music->play();
 }
 
@@ -99,13 +99,28 @@ void World::main_menu(){
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
 
-    //QPushButton *bstart = new QPushButton(QString(" START GAME   "));
+
+    //button za pojacavanje i smanjivanje volumena
+    bvolumen = make_button("VOLUMEN");
+    bvolumen->move(100,100);
+    QPixmap pixmap(":/resources/images/volumen_100.png");
+    bvolumen->setIcon(QIcon(pixmap));
+    bvolumen->setIconSize(QSize(100,100));
+    bvolumen->setCheckable(true);
+    //ako pravimo bvolumen onda necemo standardni styleSheet
+    bvolumen->setStyleSheet(QString("height:100px;"
+                                  "width: 100px;"
+                                  "background-color: rgba(255,255,255,0);"
+                                  "border: 0px;"));
+    bvolumen->setText(QString(""));
+    QObject::connect(bvolumen, SIGNAL (released()), this, SLOT (set_volume()), Qt::QueuedConnection);
 
     QPushButton *bstart = make_button("START GAME");
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
     bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
     QObject::connect(bstart, SIGNAL (released()), this, SLOT (input_players_names()), Qt::QueuedConnection);
+
 
    
     if (m_started==1){
@@ -135,7 +150,33 @@ void World::main_menu(){
 
 
 }
-
+void World::set_volume()
+{
+    if(music->volume() == 0)
+    {
+        QPixmap pixmap(":/resources/images/volumen_100.png");
+        bvolumen->setIcon(QIcon(pixmap));
+        music->setVolume(30);
+    }
+    else if(music->volume() == 10)
+    {
+        QPixmap pixmap(":/resources/images/volumen_0.png");
+        bvolumen->setIcon(QIcon(pixmap));
+        music->setVolume(0);
+    }
+    else if(music->volume() == 20)
+    {
+        QPixmap pixmap(":/resources/images/volumen_33.png");
+        bvolumen->setIcon(QIcon(pixmap));
+        music->setVolume(10);
+    }
+    else if(music->volume() == 30)
+    {
+        QPixmap pixmap(":/resources/images/volumen_66.png");
+        bvolumen->setIcon(QIcon(pixmap));
+        music->setVolume(20);
+    }
+}
 
 void World::show_battles(){
     scene->clear();

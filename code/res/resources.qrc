@@ -11,6 +11,10 @@
         <file>input_names_bg.jpg</file>
         <file>input_names_bg_2.jpg</file>
         <file>input.png</file>
+        <file>volumen_0.png</file>
+        <file>volumen_33.png</file>
+        <file>volumen_66.png</file>
+        <file>volumen_100.png</file>
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>
