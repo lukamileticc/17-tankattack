@@ -11,9 +11,16 @@ class Server : public QTcpServer
 {
     Q_OBJECT
     Q_DISABLE_COPY(Server)
+
 public:
     explicit Server(QObject *parent = nullptr);
     ~Server();
+    float x_new;
+    float y_new;
+
+    static float getX();
+    static float getY();
+
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 private:
@@ -29,8 +36,6 @@ private slots:
 public slots:
     void stopServer();
 private:
-    void jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &doc);
-    void jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &doc);
     void sendJson(ServerWorker *destination, const QJsonObject &message);
 signals:
     void logMessage(const QString &msg);

@@ -21,12 +21,10 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
 
-
+    //na ovoj strani je crveni igrac
     if(m_color != Qt::blue){
     m_Client = new Client();
     m_Client->connectToServer(QHostAddress::LocalHost, 1967);
-
-    m_Client->login("Sloba");
     }
 
 }
@@ -51,11 +49,12 @@ QRectF Tank::boundingRect() const
 void Tank::advance(){
 
     if(m_color == Qt::blue){
-        if(Client::getX_Primljeno() == 0 && Client::getY_Primljeno() == 0)
+        if(Client::getX_Primljeno() == 0 && Client::getY_Primljeno() == 0)//za pocetnu poziciju da ne stoji u uglu na pocetku
             setPos(1200,400);
         else
             setPos(Client::getX_Primljeno(), Client::getY_Primljeno());
        // qDebug() << Client::getX_Primljeno() << Client::getY_Primljeno() << "primljeno";
+        //return
     }
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;

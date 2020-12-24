@@ -26,8 +26,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    code/ClientWindow.cpp \
-    code/ServerWindow.cpp \
     code/src/Client.cpp \
     code/src/Input.cpp \
     code/src/Rocket.cpp \
@@ -40,8 +38,6 @@ SOURCES += \
     code/src/Wall.cpp
 
 HEADERS += \
-    code/ClientWindow.hpp \
-    code/ServerWindow.hpp \
     code/include/Client.hpp \
     code/include/Input.hpp \
     code/include/Server.hpp \
@@ -53,9 +49,7 @@ HEADERS += \
     code/include/Tank.hpp \
     code/include/Wall.hpp
 
-FORMS += \
-    code/ClientWindow.ui \
-    code/ServerWindow.ui
+FORMS +=
 
 RESOURCES += \
     code/res/resources.qrc

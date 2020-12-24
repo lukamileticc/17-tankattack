@@ -15,24 +15,13 @@
 #include "code/include/Tank.hpp"
 #include "code/include/World.hpp"
 #include "code/include/Server.hpp"
-#include "../ServerWindow.hpp"
-#include "code/ClientWindow.hpp"
+
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
 
-
-//    ClientWindow cw;
-//    cw.show();
-
     World *world = new World();
-
-
-
-    //ServerWindow sw;
-    //sw.show();
-
 
     world->show();
 
