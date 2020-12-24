@@ -8,6 +8,9 @@
 #include <QJsonValue>
 #include <QHostAddress>
 
+float x1;
+float y1;
+
 Client::Client(QObject *parent)
     : QObject(parent)
     , m_clientSocket(new QTcpSocket(this))
@@ -50,7 +53,7 @@ void Client::sendMessage(const QString &text)
       {"x", m_pozicija_tenka_x},
       {"y", m_pozicija_tenka_y}
     };
-    qDebug() << getPozicija_TenkaX();
+
 
 
     clientStream << QJsonDocument(message).toJson();
@@ -64,11 +67,14 @@ void Client::disconnectFromHost()
 
 void Client::jsonReceived(const QJsonObject &docObj)
 {
-//    QJsonValue xs = *docObj.find("x");
-//    QJsonValue ys = *docObj.find("y");
-//    qDebug() << xs << ys << "mrk";
-    const QJsonValue textVal = *docObj.find("ps");
-    qDebug() << textVal << "mrk";
+    QJsonValue xs = *docObj.find("x");
+    QJsonValue ys = *docObj.find("y");
+
+    Client::x_Primljeno = xs.toDouble();
+    Client::y_Primljeno = ys.toDouble();
+
+    x1 = x_Primljeno;
+    y1 = y_Primljeno;
     const QJsonValue typeVal = docObj.value(QLatin1String("type"));
     if (typeVal.isNull() || !typeVal.isString())
         return;
@@ -158,5 +164,14 @@ float Client::getPozicija_TenkaX()
 float Client::getPozicija_TenkaY()
 {
     return m_pozicija_tenka_y;
+}
+
+float Client::getX_Primljeno()
+{
+    return x1;
+}
+float Client::getY_Primljeno()
+{
+    return y1;
 }
 

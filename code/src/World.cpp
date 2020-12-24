@@ -176,15 +176,14 @@ void World::start(){
     Input *input = new Input();
 
     Tank *t1 = new Tank(0,Qt::red, 200, 400, input);
-   // Client c;
-   // c.setPozicija_TenkaX(t1->);
-    //Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
+
+    Tank *t2 = new Tank(1,Qt::blue, 1200, 400, input);
 
 
 
 
     scene->addItem(t1);
-    //scene->addItem(t2);
+    scene->addItem(t2);
     scene->addItem(input);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -199,7 +198,7 @@ void World::start(){
         scene->addItem(w);
 
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
-    //QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
+    QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
     input->timer->start(33);
 
     std::cout << "helloooo" << std::endl;

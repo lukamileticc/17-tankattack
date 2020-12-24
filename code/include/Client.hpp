@@ -17,6 +17,12 @@ public:
 
     float getPozicija_TenkaY();
     float getPozicija_TenkaX();
+
+    float x_Primljeno;
+    float y_Primljeno;
+
+    static float getX_Primljeno();
+    static float getY_Primljeno();
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
     void login(const QString &userName);

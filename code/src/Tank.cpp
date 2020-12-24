@@ -21,10 +21,14 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     setTransformOriginPoint(TANK_W / 2, TANK_H / 2);
     setPos(m_x, m_y);
 
+
+    if(m_color != Qt::blue){
     m_Client = new Client();
     m_Client->connectToServer(QHostAddress::LocalHost, 1967);
 
     m_Client->login("Sloba");
+    }
+
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -45,6 +49,14 @@ QRectF Tank::boundingRect() const
 }
 
 void Tank::advance(){
+
+    if(m_color == Qt::blue){
+        if(Client::getX_Primljeno() == 0 && Client::getY_Primljeno() == 0)
+            setPos(1200,400);
+        else
+            setPos(Client::getX_Primljeno(), Client::getY_Primljeno());
+       // qDebug() << Client::getX_Primljeno() << Client::getY_Primljeno() << "primljeno";
+    }
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
         if((commands & key_up) == key_up){
@@ -112,6 +124,9 @@ void Tank::advance(){
             setPos(m_x, m_y);
 //            return;
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
     else if (right && up) {
         setRotation(rotation() + ANGLE);
@@ -126,6 +141,9 @@ void Tank::advance(){
             setPos(m_x, m_y);
 //            return;
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
     else if (up) {
@@ -138,11 +156,10 @@ void Tank::advance(){
             m_y += y_v;
             setPos(m_x, m_y);
         }
+
         m_Client->setPozicija_TenkaX(m_x, m_y);
         m_Client->setPozicija_TenkaY(m_y);
-
-
-        //qDebug() << m_Client.getPozicija_TenkaX();
+        m_Client->sendMessage("Proba");
     }
 
 //potrebno je jos dodati if-ove za (down && left) i (down && right)
@@ -158,6 +175,9 @@ void Tank::advance(){
             m_y -= y_v;
             setPos(m_x,m_y);
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
     else if (right && down){
@@ -172,6 +192,9 @@ void Tank::advance(){
             m_y -= y_v;
             setPos(m_x,m_y);
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
     else if (left) {
@@ -182,6 +205,9 @@ void Tank::advance(){
             std::cout << scene()->collidingItems(this).size() << std::endl;
 //            return;
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
     else if (right) {
@@ -192,6 +218,9 @@ void Tank::advance(){
             std::cout << scene()->collidingItems(this).size() << std::endl;
 //            return;
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
     else if (down) {
@@ -204,11 +233,12 @@ void Tank::advance(){
             m_y -= y_v;
             setPos(m_x, m_y);
         }
+        m_Client->setPozicija_TenkaX(m_x, m_y);
+        m_Client->setPozicija_TenkaY(m_y);
+        m_Client->sendMessage("Proba");
     }
 
-    m_Client->setPozicija_TenkaX(m_x, m_y);
-    m_Client->setPozicija_TenkaY(m_y);
-    m_Client->sendMessage("Proba");
+
 }
 
 //void Tank::keyPressEvent(QKeyEvent *event) {
