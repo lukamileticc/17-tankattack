@@ -99,6 +99,10 @@ void Rocket::move()
         //}
     }
 */
+    if(World::world_pause){
+        return;
+    }
+
     if (!scene()->collidingItems(this).isEmpty()) {
 
         int wall_collision_count = 0;
