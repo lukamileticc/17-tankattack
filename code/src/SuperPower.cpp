@@ -65,15 +65,16 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 
     //ovo parce koda dovodi do greske kad raketa ima koliziju sa objektom ove klase
-    while (!scene()->collidingItems(this).isEmpty()) {
-
-                m_x=QRandomGenerator::global()->bounded(1240);
-                m_y=QRandomGenerator::global()->bounded(600);
-                qDebug()<<"uso ovdeee";
-                setPos(m_x,m_y);
-
-
+    if(!m_is_positined){
+        while(!scene()->collidingItems(this).isEmpty()){
+            m_x=QRandomGenerator::global()->bounded(1240);
+            m_y=QRandomGenerator::global()->bounded(600);
+            qDebug()<<"uso ovdeee";
+            setPos(m_x,m_y);
+        }
+        m_is_positined = true;
     }
+
 }
 
 //void SuperPower::advance()

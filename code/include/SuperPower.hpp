@@ -28,6 +28,8 @@ private:
     float m_x;
     float m_y;
     float m_size;
+    bool m_is_positined = false;
+
 };
 
 #endif // SUPERPOWER_HPP

@@ -106,14 +106,14 @@ void Rocket::move()
         QList<QGraphicsItem *> items = scene()->collidingItems(this);
 //        bool bounced_once = false;
         for (auto item : items) {
-            if (item->type()==4){
-                delete this;
-                scene()->removeItem(this);
-                if(m_id == 0)
-                    rakete_tenka_0 -= 1;
-                else
-                    rakete_tenka_1 -= 1;
-            }
+//            if (item->type()==4){
+//                delete this;
+//                scene()->removeItem(this);
+//                if(m_id == 0)
+//                    rakete_tenka_0 -= 1;
+//                else
+//                    rakete_tenka_1 -= 1;
+//            }
             //0 je id elementa Wall
             if (item->type() == 0) {
                 wall_collision_count++;
