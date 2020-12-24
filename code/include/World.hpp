@@ -29,6 +29,7 @@ public:
     QGraphicsTextItem *info_t1 = nullptr;
     QGraphicsTextItem *info_t2 = nullptr;
     QGraphicsTextItem *info_pause = nullptr;
+    QGraphicsTextItem *warning_name_length = nullptr;
     Tank *t1 = nullptr;
     Tank *t2 = nullptr;
     QLineEdit* line1 = nullptr;
@@ -68,6 +69,7 @@ private:
     bool m_ended_round = false;
     bool m_showed_info = false;
     bool m_showed_pause = false;
+    bool m_showed_warning = false;
     QString ime_prvog_tenka;
     QString ime_drugog_tenka;
     int m_last_map = -1; // number of last map

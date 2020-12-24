@@ -264,6 +264,7 @@ void World::start(){
     music->pause();
     m_ended_round = false;
     m_showed_info = false;
+    m_showed_warning = false;
     World::world_pause = false;
     Rocket::rakete_tenka_0 = 0;
     Rocket::rakete_tenka_1 = 0;
@@ -435,7 +436,7 @@ void World::show_tank_info(){
     m_showed_info = true;
     QFont font;
     font.setBold(true);
-    font.setPointSize(12);
+    font.setPointSize(11);
 
     QString info_string_t1,info_string_t2;
     info_string_t1.reserve(50);
@@ -598,13 +599,13 @@ void World::input_players_names()
     //labeli za unos imena igraca
     QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
     text1->setDefaultTextColor(Qt::red);
-    text1->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
+    text1->setFont(QFont("Times", 20, QFont::Bold));
     text1->setPos(250,250);
     scene->addItem(text1);
 
     QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
     text2->setDefaultTextColor(Qt::blue);
-    text2->setFont(QFont("Comic Sans MS", 20, QFont::Bold));
+    text2->setFont(QFont("Times", 20, QFont::Bold));
     text2->setPos(250,350);
     scene->addItem(text2);
 
@@ -634,11 +635,46 @@ void World::input_players_names()
 }
 void World::change_name_of_first_tank()
 {
-    this->ime_prvog_tenka = line1->text();
+
+    qDebug() << "Duzina prvog imena: " << line1->text().length();
+    if(line1->text().length() > 10){
+        if(!m_showed_warning){
+            QString info;
+            info.reserve(30);
+            info.append("The length of the name can't be longer than 10 letters");
+            QFont font2;
+            font2.setBold(true);
+            font2.setPointSize(12);
+            m_showed_warning = true;
+            warning_name_length = scene->addText(info,font2);
+            warning_name_length->setPos(597,310);
+            warning_name_length->setDefaultTextColor(QColor("red"));
+        }
+    }
+    else
+        this->ime_prvog_tenka = line1->text();
 }
 void World::change_name_of_second_tank()
 {
-   this->ime_drugog_tenka = line2->text();
+
+    qDebug() << "Duzina drugog imena: " << line2->text().length();
+
+    if(line2->text().length() > 10){
+        if(!m_showed_warning){
+            QString info;
+            info.reserve(30);
+            info.append("The length of the name can't be longer than 10 letters");
+            QFont font2;
+            font2.setBold(true);
+            font2.setPointSize(12);
+            m_showed_warning = true;
+            warning_name_length = scene->addText(info,font2);
+            warning_name_length->setPos(597,310);
+            warning_name_length->setDefaultTextColor(QColor("red"));
+        }
+    }
+    else
+        this->ime_drugog_tenka = line2->text();
 }
 
 void World::quit()
