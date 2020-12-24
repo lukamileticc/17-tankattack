@@ -288,18 +288,18 @@ void World::start(){
     this->t2 = new Tank(1,Qt::blue, 1200, 400, input);
     t1->set_name(this->ime_prvog_tenka);
     t2->set_name(this->ime_drugog_tenka);
-    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-    SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-    SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//    SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//    SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
     
     qDebug()<<"ovdeded";
 
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(input);
-    scene->addItem(sp);
-    scene->addItem(sp1);
-    scene->addItem(sp2);
+//    scene->addItem(sp);
+//    scene->addItem(sp1);
+//    scene->addItem(sp2);
 
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();

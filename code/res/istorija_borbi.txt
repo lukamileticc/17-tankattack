@@ -1,10 +1,10 @@
-Sou 0 - 1 Program
-Hhaha 0 - 1 Caca
-ZIma 1 - 2 Jesen
-ZIma 1 - 1 Jesen
-ZIma 1 - 0 Jesen
-Dankec 1 - 2 Dankizio
-Dankec 1 - 1 Dankizio
-Dankec 1 - 0 Dankizio
+ 2 - 1 
+ 2 - 0 
  1 - 0 
- 0 - 2 
+ 3 - 2 
+ 3 - 1 
+ 2 - 1 
+ 1 - 1 
+ 0 - 1 
+ 1 - 0 
+MIKAC 1 - 0 MAJA

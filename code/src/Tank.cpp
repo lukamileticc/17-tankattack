@@ -86,8 +86,9 @@ QPainterPath Tank::shape() const {
 
 void Tank::destroy() {
     this->destroyed = true;
-    scene()->removeItem(this);
-    //delete this;
+    //scene()->removeItem(this);
+    delete this;
+   // return;
     //end_of_round();
 }
 
@@ -230,12 +231,13 @@ void Tank::advance()
 
 
     timer2 += 1;
-    if(timer2 % 1000 == 0){
+    if(m_end_of_round==0){
+    if(timer2 % 700 == 0){
         int rand = QRandomGenerator::global()->bounded(3);
         qDebug() << rand;
         qDebug() << "SuperPower";
-        if(rand == 0){
 
+        if(rand == 0){
             SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
             scene()->addItem(sp1);
         }
@@ -247,6 +249,7 @@ void Tank::advance()
             SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
             scene()->addItem(sp3);
         }
+    }
     }
     if(timer0 > 10){
         m_speed = 0;

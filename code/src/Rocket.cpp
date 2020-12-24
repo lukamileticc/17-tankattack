@@ -105,9 +105,15 @@ void Rocket::move()
         std::vector<Wall *> wall_colided;
         QList<QGraphicsItem *> items = scene()->collidingItems(this);
 //        bool bounced_once = false;
-
         for (auto item : items) {
-
+            if (item->type()==4){
+                delete this;
+                scene()->removeItem(this);
+                if(m_id == 0)
+                    rakete_tenka_0 -= 1;
+                else
+                    rakete_tenka_1 -= 1;
+            }
             //0 je id elementa Wall
             if (item->type() == 0) {
                 wall_collision_count++;
@@ -117,11 +123,17 @@ void Rocket::move()
 
             //1 je id elementa Tank
             if (item->type() == 1 && !first){
+                if(m_id == 0)
+                    rakete_tenka_0 -= 1;
+                else
+                    rakete_tenka_1 -= 1;
                 Tank *t = qgraphicsitem_cast<Tank*>(item);
                 t->decrease_health(this->m_rocket_power);
                 if(t->get_current_health() <= 0)
                     t->destroy();
+
                 //ovaj return je potreban jer ce doci do seg-faulta jer dole opet pristupamo raketi
+                scene()->removeItem(this);
                 delete this;
                 return;
             }
