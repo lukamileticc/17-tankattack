@@ -101,6 +101,7 @@ void World::show(){
 }
 
 void World::main_menu(){
+    m_showed_warning = false;
     m_in_game=0;
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
