@@ -80,7 +80,7 @@ private:
     //~~~~~~~~~~~~~
 
 
-    Client m_Client;
+    Client *m_Client;
 
 
 };

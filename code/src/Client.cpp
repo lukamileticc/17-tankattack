@@ -14,6 +14,8 @@ Client::Client(QObject *parent)
     , m_loggedIn(false)
 {
 
+    m_pozicija_tenka_x = 200;
+    m_pozicija_tenka_y = 400;
     connect(m_clientSocket, &QTcpSocket::connected, this, &Client::connected);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
@@ -25,14 +27,14 @@ Client::Client(QObject *parent)
 
 void Client::login(const QString &userName)
 {
-    m_pozicija_tenka_x = 0;
-    m_pozicija_tenka_y = 0;
+
     if (m_clientSocket->state() == QAbstractSocket::ConnectedState) { // if the client is connected
         QDataStream clientStream(m_clientSocket);
         clientStream.setVersion(QDataStream::Qt_5_7);
         QJsonObject message;
         message[QStringLiteral("type")] = QStringLiteral("login");
         message[QStringLiteral("username")] = userName;
+        qDebug() << userName;
         clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
     }
 }
@@ -50,8 +52,7 @@ void Client::sendMessage(const QString &text)
     };
     qDebug() << getPozicija_TenkaX();
 
-    //message[QStringLiteral("type")] = QStringLiteral("message");
-    //message[QStringLiteral("text")] = text;
+
     clientStream << QJsonDocument(message).toJson();
 
 }
@@ -63,6 +64,11 @@ void Client::disconnectFromHost()
 
 void Client::jsonReceived(const QJsonObject &docObj)
 {
+//    QJsonValue xs = *docObj.find("x");
+//    QJsonValue ys = *docObj.find("y");
+//    qDebug() << xs << ys << "mrk";
+    const QJsonValue textVal = *docObj.find("ps");
+    qDebug() << textVal << "mrk";
     const QJsonValue typeVal = docObj.value(QLatin1String("type"));
     if (typeVal.isNull() || !typeVal.isString())
         return;
@@ -120,8 +126,9 @@ void Client::onReadyRead()
             QJsonParseError parseError;
             const QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
             if (parseError.error == QJsonParseError::NoError) {
-                if (jsonDoc.isObject())
+                if (jsonDoc.isObject()){
                     jsonReceived(jsonDoc.object());
+                }
             }
         } else {
 
