@@ -48,7 +48,7 @@ public:
     void IncreaseNumOfLife();
     void shoot();
     void IncreaseScore(int score);
-
+    void SetHealth(float health);
     QString get_name() const;
     void set_name(const QString &name);
     //---

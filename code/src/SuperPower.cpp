@@ -57,12 +57,6 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
     }
-    else if (m_type == QString("speed")){
-        QPixmap pixmap=QPixmap(":/resources/images/speed.png");
-        pixmap.scaled(m_size,m_size);
-        painter->setBrush(pixmap);
-        painter->drawRect(0, 0, m_size, m_size);
-    }
 
     //ovo parce koda dovodi do greske kad raketa ima koliziju sa objektom ove klase
     if(!m_is_positined){

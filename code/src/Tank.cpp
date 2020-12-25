@@ -18,8 +18,6 @@
 #define PIPE_W 6
 #define ROCKET_RADIUS 4
 #define MAX_ROCKET 5
-
-float timer0 = 0.1;
 float timer1 = 0.1;
 int r_power = 0;
 int timer2 = 0;
@@ -109,17 +107,14 @@ void Tank::move_forward() {
         for(auto item : col_list) {
             if (item->type() == 4 ) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(sp->getType() == QString("speed")){
-                   this->SetSpeed(1);
-                   timer0=0.1;
-               }
-               else if(sp->getType() == QString("superpower")){
+               if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
+                   m_tank_rocket_type=Rocket_type::Medium_power;
                }
                else if(sp->getType() == QString("health")){
-                   this->increase_health(100);
+                   this->SetHealth(100);
                }
                scene()->removeItem(item);
                delete item;
@@ -146,17 +141,14 @@ void Tank::move_backward() {
         for(auto item : col_list) {
             if (item->type() == 4 ) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(sp->getType() == QString("speed")){
-                   this->SetSpeed(1);
-                   timer0=0.1;
-               }
-               else if(sp->getType() == QString("superpower")){
+               if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
+                   m_tank_rocket_type=Rocket_type::Medium_power;
                }
                else if(sp->getType() == QString("health")){
-                   this->increase_health(100);
+                   this->SetHealth(100);
                }
                scene()->removeItem(item);
                delete item;
@@ -182,17 +174,14 @@ void Tank::rotate(float angle) {
 
             if (item->type() == 4) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
-               if(sp->getType() == QString("speed")){
-                   this->SetSpeed(1);
-                   timer0=0.1;
-               }
-               else if(sp->getType() == QString("superpower")){
+               if(sp->getType() == QString("superpower")){
                    m_power=1;
                    timer1=0.1;
                    r_power=1;
+                   m_tank_rocket_type=Rocket_type::Medium_power;
                }
                else if(sp->getType() == QString("health")){
-                   this->increase_health(100);
+                   this->SetHealth(100);
                }
 
                scene()->removeItem(item);
@@ -239,8 +228,8 @@ void Tank::advance()
 
     timer2 += 1;
     if(m_end_of_round==0){
-    if(timer2 % 700 == 0){
-        int rand = QRandomGenerator::global()->bounded(3);
+    if(timer2 % 500 == 0){
+        int rand = QRandomGenerator::global()->bounded(2);
         qDebug() << rand;
         qDebug() << "SuperPower";
 
@@ -258,13 +247,11 @@ void Tank::advance()
         }
     }
     }
-    if(timer0 > 10){
-        m_speed = 0;
-    }
 
     if(timer1 > 10){
         r_power = 0;
         m_power = 0;
+        m_tank_rocket_type=Rocket_type::Low_power;
     }
 
     if(m_id == 0){/*
@@ -332,17 +319,9 @@ void Tank::advance()
 //        return;
 //    }
 
-    if(m_speed == 1){
-        timer0+=0.1;
-        x_v*=1.8;
-        y_v*=1.8;
-        r_speed_x*=1.8;
-        r_speed_y*=1.8;
-    }
     if(m_power == 1){
         timer1+=0.1;
-        r_speed_x*=1.8;
-        r_speed_y*=1.8;
+        m_tank_rocket_type=Rocket_type::Medium_power;
     }
 
 ///////////////////////////////////////////////////////////////////
@@ -549,4 +528,9 @@ void Tank::shoot() {
 //}
 void Tank::IncreaseScore(int score){
     m_score+=score;
+}
+
+void Tank::SetHealth(float health)
+{
+    m_health=health;
 }
