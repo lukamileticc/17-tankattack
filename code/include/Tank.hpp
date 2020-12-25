@@ -27,6 +27,7 @@ public:
 
     void show_tank_info();
 
+    QMediaPlayer *get_explosion_sound() const;
     int get_current_health() const;
     bool IsDead() const;
     int GetCurrentNumsOfLife () const;
@@ -74,6 +75,7 @@ public slots:
 private:
     //zvuk rakete
     QMediaPlayer *rocket_sound = nullptr;
+    QMediaPlayer *tank_hit = nullptr;
     int m_id;
     QColor m_color;
     float m_x;// x koordinata polozaja

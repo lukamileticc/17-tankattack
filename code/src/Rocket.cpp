@@ -134,6 +134,9 @@ void Rocket::move()
                     rakete_tenka_1 -= 1;
                 Tank *t = qgraphicsitem_cast<Tank*>(item);
                 t->decrease_health(this->m_rocket_power);
+                //ovaj zvuk moze i kad se tenk unisti a moze i svaki put kad ga pogodi raketa
+                //svejejdno dogovoricemo se
+                t->get_explosion_sound()->play();
                 if(t->get_current_health() <= 0)
                     t->destroy();
 

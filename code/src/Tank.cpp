@@ -36,10 +36,15 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     rocket_sound = new QMediaPlayer();
     rocket_sound->setMedia(QUrl("qrc:/resources/sounds/rocket_sound.wav"));
     rocket_sound->setVolume(10);
+    tank_hit = new QMediaPlayer();
+    tank_hit->setMedia(QUrl("qrc:/resources/sounds/explosion.wav"));
+    tank_hit->setVolume(15);
+
 }
 
 Tank::~Tank()
 {
+    delete tank_hit;
     delete rocket_sound;
    //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
 }
@@ -537,4 +542,8 @@ void Tank::IncreaseScore(int score){
 void Tank::SetHealth(float health)
 {
     m_health=health;
+}
+QMediaPlayer* Tank::get_explosion_sound() const
+{
+    return tank_hit;
 }
