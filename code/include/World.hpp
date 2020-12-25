@@ -33,9 +33,10 @@ public:
     QGraphicsTextItem *warning_name_length = nullptr;
     Tank *t1 = nullptr;
     Tank *t2 = nullptr;
-    QLineEdit* line1 = nullptr;
-    QLineEdit* line2 = nullptr;
+    QLineEdit *line1 = nullptr;
+    QLineEdit *line2 = nullptr;
     QMediaPlayer *music = nullptr;
+    QMediaPlayer *button_sound = nullptr;
     Input *input = nullptr;
 
     static bool world_pause;

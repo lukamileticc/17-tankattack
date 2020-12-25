@@ -45,15 +45,10 @@ QPushButton* World::make_button(QString name)
     button->setStyleSheet(style_for_buttons);
     scene->addWidget(button);
 
-    QObject::connect(button, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
-
     return button;
 }
 void World::button_clicked()
 {
-    QMediaPlayer *button_sound = new QMediaPlayer();
-    button_sound->setMedia(QUrl("qrc:/resources/sounds/button_click.wav"));
-    button_sound->setVolume(20);
     button_sound->play();
 }
 
@@ -78,19 +73,41 @@ World::World(QObject *parent)
     music = new QMediaPlayer();
     music->setMedia(QUrl("qrc:/resources/sounds/game_song.mp3"));
     music->setVolume(30);
-    music->play();
+
+    button_sound = new QMediaPlayer();
+    button_sound->setMedia(QUrl("qrc:/resources/sounds/button_click.wav"));
+    button_sound->setVolume(20);
+
 }
 
 World::~World(){
+    //UNISTEN TENK SE SAM UNISTAVA , s tim sto na kraju svake runde treba unisti oba tenka
+    //jer se u sledece pozivu next_round ona oba opet inicijalizuju
+    //TENKOVI SE PRAVILNO OSLOBADJAJU!
+    //I input se pravilno oslobadja!
+
+    //muzika se pravilno oslobadja
     delete music;
-    delete t2;
-    delete t1;
+    //i button sound se ispravno deiicijalizuje
+    delete  button_sound;
+
+
+    //info_pause i info_t2 i info_t1 i game_score se pravilno oslobadjaja
     delete info_pause;
     delete info_t2;
     delete info_t1;
-    delete input;
-//  delete line2;
-//  delete line1;
+    delete game_score;
+
+//OVO DOLE NE ZNAM DA OSLOBODIM
+    //Ove lajnove ne znam da oslobdim u pm
+//    delete line2;
+//    delete line1;
+//    delete warning_name_length;
+
+
+    //bvolumen nije potrebno oslobadjati ,to za nas radi qt-vrvtno
+//  delete bvolumen;
+
 }
 
 void World::show(){
@@ -101,6 +118,8 @@ void World::show(){
 }
 
 void World::main_menu(){
+
+    music->play();
     m_showed_warning = false;
     m_in_game=0;
     scene->clear();
@@ -121,13 +140,15 @@ void World::main_menu(){
                                   "border: 0px;"));
     bvolumen->setText(QString(""));
     QObject::connect(bvolumen, SIGNAL (released()), this, SLOT (set_volume()), Qt::QueuedConnection);
+    QObject::connect(bvolumen, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
 
     QPushButton *bstart = make_button("START GAME");
     bstart->setFixedWidth(300);
     bstart->setFixedHeight(100);
     bstart->move(scene->width()/2 - bstart->rect().width()/2,250);
     QObject::connect(bstart, SIGNAL (released()), this, SLOT (input_players_names()), Qt::QueuedConnection);
-
+    QObject::connect(bstart, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
    
     if (m_started==1){
@@ -137,6 +158,7 @@ void World::main_menu(){
         bcontinue->setFixedHeight(100);
         bcontinue->move(scene->width()/2 - bstart->rect().width()/2,625);
         QObject::connect(bcontinue, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
+        QObject::connect(bcontinue, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
     }
 
     //Button za prikaz prethodnih scoreova
@@ -145,7 +167,7 @@ void World::main_menu(){
     bbattle->setFixedHeight(100);
     bbattle->move(scene->width()/2 - bbattle->rect().width()/2,375);
     QObject::connect(bbattle, SIGNAL (released()), this, SLOT (show_battles()), Qt::QueuedConnection);
-
+    QObject::connect(bbattle, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
 
     //Button za izlaz
@@ -154,6 +176,7 @@ void World::main_menu(){
     bquit->setFixedHeight(100);
     bquit->move(scene->width()/2 - bquit->rect().width()/2, 500);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()));
+    QObject::connect(bquit, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
 
 }
@@ -195,6 +218,7 @@ void World::show_battles(){
     bback->setFixedHeight(66);
     bback->move(980, 600);
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
+    QObject::connect(bback, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
     //citamo prethodne borbe iz funkcije
     QVector<QString> *previous_battles = nullptr;
@@ -262,6 +286,7 @@ QVector<QString>* World::read_previous_battles(const char *file)
 }
 
 void World::start(){
+
     music->pause();
     m_ended_round = false;
     m_showed_info = false;
@@ -321,6 +346,7 @@ void World::start(){
 }
 int rand_int(int nMin, int nMax)
 {
+    //ovde imamo potencijalni owerflow - ispraviti ako moze
     return nMin + (int)((double)rand() / (RAND_MAX+1) * (nMax-nMin+1));
 }
 void World::load_map(){
@@ -377,6 +403,7 @@ void World::rounds(){
     if(t1->is_destroyed() && t2->is_destroyed()){
         // nobody win
         end_of_round("Nobody");
+        return;
     }
     else if (t1->is_destroyed()){
 
@@ -392,6 +419,8 @@ void World::rounds(){
         }
         // t2 win
         //end of round
+
+        return;
     }
     else if(t2->is_destroyed()){
         m_left_round_time += 1;
@@ -406,12 +435,15 @@ void World::rounds(){
         }
         // t1 win
         // end of round
+        return;
     }
 
 }
 void World::pause(){
     if(m_showed_pause){
         scene->removeItem(info_pause);
+        //da ne bi curela memorija
+        delete info_pause;
     }
     m_showed_pause = true;
     QFont font;
@@ -421,6 +453,8 @@ void World::pause(){
     pause_string.reserve(50);
     pause_string.append("Pause! Press P to continue");
 
+    //ovde se inicijalizuje info_pause ,znaci ako se vise puta pozove pause() ,ovde ce da curi
+    //zato je potrebno gore delete info_pause
     info_pause = scene->addText(pause_string,font);
     int x_position = 640 - info_pause->boundingRect().width()/2;
     info_pause->setPos(x_position, 300);
@@ -524,6 +558,8 @@ void World::end_of_round(QString message){
     bnext->setFixedHeight(66);
     bnext->move(980,600);
     QObject::connect(bnext, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
+    QObject::connect(bnext, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
 
 
     //Button za quit_game
@@ -532,12 +568,22 @@ void World::end_of_round(QString message){
     bquit->setFixedHeight(66);
     bquit->move(100, 600);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()),Qt::QueuedConnection);
+    QObject::connect(bquit, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
 
+
+    //moramo osloboditi oba tenka jer ce u sledecoj rundi da budu opet inicijalizovani
+    //tek ovde Brisemo tenkove
+    delete t1;
+    delete t2;
+    //Ovde se brise i input jer ce se kao i tenkovi opet inicijalizovati u sledecoj rundi
+    delete input;
 
 
     //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
     write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
+
+    return;
 
 }
 void World::write_the_last_battle(const char *file)
@@ -586,6 +632,8 @@ void World::write_the_last_battle(const char *file)
 }
 void World::input_players_names()
 {
+    //svaki put kad opet udjemo u ovaj_menu treba da brisemo pokazivace da ne bi curela memorija
+
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
@@ -597,7 +645,7 @@ void World::input_players_names()
     bbattle->setFixedHeight(66);
     bbattle->move(980,600);
     QObject::connect(bbattle,SIGNAL(released()),this,SLOT(start()),Qt::QueuedConnection);
-
+    QObject::connect(bbattle, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
     //Button za back
     QPushButton *bback =make_button("Back");
@@ -605,6 +653,7 @@ void World::input_players_names()
     bback->setFixedHeight(66);
     bback->move(100, 600);
     QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
+    QObject::connect(bback, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
     //labeli za unos imena igraca
     QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));

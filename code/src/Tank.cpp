@@ -1,4 +1,5 @@
-﻿#include "../include/Tank.hpp"
+﻿
+#include "../include/Tank.hpp"
 #include "../include/Rocket.hpp"
 #include <QGraphicsItem>
 #include <QPainter>
@@ -40,6 +41,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
 Tank::~Tank()
 {
     delete rocket_sound;
+   //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -91,8 +93,10 @@ QPainterPath Tank::shape() const {
 
 void Tank::destroy() {
     this->destroyed = true;
-    //scene()->removeItem(this);
-    delete this;
+    //ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
+    // da li je tenk unisten!
+    scene()->removeItem(this);
+//    delete this;
    // return;
     //end_of_round();
 }
@@ -226,33 +230,33 @@ void Tank::advance()
         return;
 
 
-    timer2 += 1;
-    if(m_end_of_round==0){
-    if(timer2 % 500 == 0){
-        int rand = QRandomGenerator::global()->bounded(2);
-        qDebug() << rand;
-        qDebug() << "SuperPower";
+//    timer2 += 1;
+//    if(m_end_of_round==0){
+//    if(timer2 % 500 == 0){
+//        int rand = QRandomGenerator::global()->bounded(2);
+//        qDebug() << rand;
+//        qDebug() << "SuperPower";
 
-        if(rand == 0){
-            SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-            scene()->addItem(sp1);
-        }
-        else if(rand == 1){
-            SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-            scene()->addItem(sp2);
-        }
-        else if(rand == 2){
-            SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-            scene()->addItem(sp3);
-        }
-    }
-    }
+//        if(rand == 0){
+//            SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//            scene()->addItem(sp1);
+//        }
+//        else if(rand == 1){
+//            SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//            scene()->addItem(sp2);
+//        }
+//        else if(rand == 2){
+//            SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+//            scene()->addItem(sp3);
+//        }
+//    }
+//    }
 
-    if(timer1 > 10){
-        r_power = 0;
-        m_power = 0;
-        m_tank_rocket_type=Rocket_type::Low_power;
-    }
+//    if(timer1 > 10){
+//        r_power = 0;
+//        m_power = 0;
+//        m_tank_rocket_type=Rocket_type::Low_power;
+//    }
 
     if(m_id == 0){/*
         unsigned int commands = m_input->key_tank1;
