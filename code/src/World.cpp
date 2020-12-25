@@ -65,7 +65,7 @@ World::World(QObject *parent)
     // Inicijalizacija scene i pogleda
 
     scene = new QGraphicsScene();
-    scene->setSceneRect(0,0,1280,720);
+    scene->setSceneRect(0, 0, 1150, 768);
 
     view = new QGraphicsView();
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -96,7 +96,7 @@ World::~World(){
 void World::show(){
 
     view->setWindowTitle("Tank Attack");
-    view->setFixedSize(1280, 720);
+    view->setFixedSize(1150, 768);
     view->show();
 }
 
@@ -279,15 +279,15 @@ void World::start(){
 
     scene->clear();
 
-    view->setBackgroundBrush(Qt::black);
+    view->setBackgroundBrush(QPixmap(":/resources/images/map_1_background.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
-    view->setFixedSize(1271, 813);
+    view->setFixedSize(1150, 768);
 
 
     input = new Input();
 
-    this->t1 = new Tank(0,Qt::red, 200, 400, input);
-    this->t2 = new Tank(1,Qt::blue, 1200, 400, input);
+    this->t1 = new Tank(0,Qt::red, 80, 500, input);
+    this->t2 = new Tank(1,Qt::blue, 1045, 500, input);
     t1->set_name(this->ime_prvog_tenka);
     t2->set_name(this->ime_drugog_tenka);
 //    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
@@ -433,33 +433,42 @@ void World::show_tank_info(){
         delete info_t1;
         scene->removeItem(info_t2);
         delete info_t2;
+        scene->removeItem(game_score);
+        delete game_score;
     }
     m_showed_info = true;
     QFont font;
     font.setBold(true);
-    font.setPointSize(11);
+    font.setPointSize(24);
 
-    QString info_string_t1,info_string_t2;
+    QString info_string_t1, info_string_t2, game_score_string;
     info_string_t1.reserve(50);
     info_string_t2.reserve(50);
+    game_score_string.reserve(50);
 
-    info_string_t1.append(ime_prvog_tenka).append("\nScore: ").append(QString::number(m_score_t1))
-                  .append("\nHealth: ").append(QString::number(t1->get_current_health()));
-
-    info_t1 = scene->addText(info_string_t1,font);
-    info_t1->setPos(8,-35);
-    info_t1->setDefaultTextColor("red");
+//    info_string_t1.append(ime_prvog_tenka).append("\nScore: ").append(QString::number(m_score_t1))
+//                  .append("\nHealth: ").append(QString::number(t1->get_current_health()));
+    info_string_t1.append(ime_prvog_tenka).append("   ").append(QString::number(t1->get_current_health()));
+    info_t1 = scene->addText(info_string_t1, font);
+    info_t1->setPos(40, 704);
+    info_t1->setDefaultTextColor("white");
    // info_t1->setPlainText(info_string_t1);
 
-    info_string_t2.append(ime_drugog_tenka).append("\nScore: ").append(QString::number(m_score_t2))
-                  .append("\nHealth: ").append(QString::number(t2->get_current_health()));
+//    info_string_t2.append(ime_drugog_tenka).append("\nScore: ").append(QString::number(m_score_t2))
+//                  .append("\nHealth: ").append(QString::number(t2->get_current_health()));
 
-    info_t2 = scene->addText(info_string_t2,font);
-    info_t2->setPos(1168,-35);
-    info_t2->setDefaultTextColor("blue");
+    info_string_t2.append(QString::number(t2->get_current_health())).append("   ").append(ime_drugog_tenka);
+    info_t2 = scene->addText(info_string_t2, font);
+    info_t2->setPos(1000, 704);
+    info_t2->setDefaultTextColor("white");
     //info_t2->setPlainText(info_string_t2);
 
+    game_score_string.append(QString::number(m_score_t1)).append(":").append(QString::number(m_score_t2));
+    game_score = scene->addText(game_score_string, font);
+    game_score->setPos(548, 704);
+    game_score->setDefaultTextColor("white");
 }
+
 void World::end_of_round(QString message){
     //show_tank_info();
     //std::cout << message << std::endl;

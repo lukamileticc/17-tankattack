@@ -25,8 +25,8 @@ void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(Qt::white);
-
+    painter->setBrush(QColor(180, 165, 208));
+    painter->setPen(Qt::NoPen);
     painter->drawRect(0, 0, m_width, m_height);
 }
 

@@ -28,6 +28,7 @@ public:
     QGraphicsView  *view  = nullptr;
     QGraphicsTextItem *info_t1 = nullptr;
     QGraphicsTextItem *info_t2 = nullptr;
+    QGraphicsTextItem *game_score = nullptr;
     QGraphicsTextItem *info_pause = nullptr;
     QGraphicsTextItem *warning_name_length = nullptr;
     Tank *t1 = nullptr;

@@ -26,11 +26,11 @@ Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, 
 
 
     if(m_rocket_type == Rocket_type::Low_power) {
-        m_boja = Qt::red;
+        m_boja = QColor(242, 208, 63);
         m_rocket_power = 25;
     }
     else if(m_rocket_type == Rocket_type::Medium_power){
-        m_boja = Qt::yellow;
+        m_boja = Qt::red;
         m_rocket_power = 50;
     }
     else if(m_rocket_type == Rocket_type::High_power){
@@ -43,7 +43,7 @@ Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, 
     //dodat nezavisan timer za pomeranje rakete-
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()),this,SLOT(move()));
-    timer->start(30); //move se poziva na svakih 30ms
+    timer->start(33); //move se poziva na svakih 30ms
 
 }
 Rocket::~Rocket()
@@ -59,19 +59,20 @@ void Rocket::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
 //    painter->drawEllipse(m_x,m_y,m_r,m_r);
 
     painter->setBrush(m_boja);
-    painter->drawEllipse(0, 0, m_r, m_r);
+    painter->setPen(Qt::NoPen);
+    painter->drawEllipse(0, 0, 2 * m_r, 2 * m_r);
 }
 
 QRectF Rocket::boundingRect() const
 {
-    return QRectF(-0.5, -0.5, m_r + 1, m_r + 1);
+    return QRectF(0, 0, 2 * m_r,  2 * m_r);
 }
 
 QPainterPath Rocket::shape() const
 {
     QPainterPath OuterPath;
     OuterPath.setFillRule(Qt::WindingFill);
-    OuterPath.addEllipse(-0.5, -0.5, m_r + 1, m_r + 1);
+    OuterPath.addEllipse(0, 0, 2 * m_r, 2 * m_r);
 
     return OuterPath;
 }
@@ -126,7 +127,7 @@ void Rocket::move()
             }
 
             //1 je id elementa Tank
-            if (item->type() == 1 && !first){
+            if (item->type() == 1){
                 if(m_id == 0)
                     rakete_tenka_0 -= 1;
                 else
@@ -147,51 +148,42 @@ void Rocket::move()
             Wall *w  = wall_colided.front();
 
             if (first) {
-                center = mapToScene(m_r / 2, m_r / 2);
-                center.rx() += m_pravac_x;
-                center.ry() += m_pravac_y;
+//                center = mapToScene(m_r, m_r);
+//                center.rx() += m_pravac_x;
+//                center.ry() += m_pravac_y;
 
                 m_pravac_x = -m_pravac_x / 2;
                 m_pravac_y = -m_pravac_y / 2;
             }
             else {
                 if(w->isVertical()) {
-
-                    if ((center.y() + (m_r / 2)) < w->getY() || (center.y() - (m_r / 2)) > w->getY() + w->getHeight()) {
-                        auto new_x = m_pravac_x;
-                        auto new_y = -m_pravac_y;
-
-                        m_pravac_x = new_x;
-                        m_pravac_y = new_y;
+                    if ((center.y() + m_r) < w->getY() || (center.y() - m_r) > w->getY() + w->getHeight()) {
+//                        m_pravac_x = m_pravac_x;
+                        m_pravac_y = -m_pravac_y;
                     }
-                    else if(((center.y() - (m_r / 2)) < w->getY() && (center.y() + (m_r / 2)) > w->getY()) || ((center.y() - (m_r / 2)) < w->getY() + w->getHeight() && (center.y() + (m_r / 2)) > w->getY() + w->getHeight())) {
+                    else if ((center.x() + m_r) < w->getX() || (center.x() - m_r) > w->getX() + w->getWidth()) {
+                        m_pravac_x = -m_pravac_x;
+//                        m_pravac_y = m_pravac_y;
+                    }
+//                    else if(((center.y() - m_r) < w->getY() && (center.y() + m_r) > w->getY()) || ((center.y() - m_r) < w->getY() + w->getHeight() && (center.y() + m_r) > w->getY() + w->getHeight())) {
+                    else {
                         m_pravac_x = -m_pravac_x;
                         m_pravac_y = -m_pravac_y;
                     }
-                    else {
-                        auto new_x = -m_pravac_x;
-                        auto new_y = m_pravac_y;
-
-                        m_pravac_x = new_x;
-                        m_pravac_y = new_y;
-                    }
                 }
                 else {
-                    if ((center.x() + (m_r / 2)) < w->getX() || (center.x() - (m_r / 2)) > w->getX() + w->getWidth()) {
-                        auto new_x = -m_pravac_x;
-                        auto new_y = m_pravac_y;
-
-                        m_pravac_x = new_x;
-                        m_pravac_y = new_y;
+                    if ((center.x() + m_r) < w->getX() || (center.x() - m_r) > w->getX() + w->getWidth()) {
+                        m_pravac_x = -m_pravac_x;
+//                        m_pravac_y = m_pravac_y;
                     }
-
+                    else if ((center.y() + m_r) < w->getY() || (center.y() - m_r) > w->getY() + w->getHeight()) {
+//                        m_pravac_x = m_pravac_x;
+                        m_pravac_y = -m_pravac_y;
+                    }
+//                    else if(((center.y() - m_r) < w->getY() && (center.y() + m_r) > w->getY()) || ((center.y() - m_r) < w->getY() + w->getHeight() && (center.y() + m_r) > w->getY() + w->getHeight())) {
                     else {
-                        auto new_x = m_pravac_x;
-                        auto new_y = -m_pravac_y;
-
-                        m_pravac_x = new_x;
-                        m_pravac_y = new_y;
-
+                        m_pravac_x = -m_pravac_x;
+                        m_pravac_y = -m_pravac_y;
                     }
                 }
             }
@@ -201,47 +193,46 @@ void Rocket::move()
             Wall *w2  = wall_colided.at(1);
 
             if (first) {
-                center = mapToScene(m_r / 2, m_r / 2);
-                center.rx() += m_pravac_x;
-                center.ry() += m_pravac_y;
+//                center = mapToScene(m_r / 2, m_r / 2);
+//                center.rx() += m_pravac_x;
+//                center.ry() += m_pravac_y;
 
                 m_pravac_x = -m_pravac_x / 2;
                 m_pravac_y = -m_pravac_y / 2;
             }
             else {
-                if ((center.y() < w1->getY() && center.y() < w2->getY()) || (center.y() > (w1->getY() + w1->getHeight()) && center.y() > (w2->getY() + w2->getHeight()))) {
+                bool first_expression = center.y() < w1->getY() && center.y() < w2->getY();
+                bool second_expression = center.y() > (w1->getY() + w1->getHeight()) && center.y() > (w2->getY() + w2->getHeight());
+                bool third_expression = center.x() < w1->getX() && center.x() < w2->getX();
+                bool fourth_expression = center.x() > (w1->getX() + w1->getWidth()) && center.x() > (w2->getX() + w2->getWidth());
+
+                if (first_expression || second_expression || third_expression || fourth_expression) {
                     if(w1->isVertical()) {
-                        if ((center.y() + (m_r / 2)) < w1->getY() || (center.y() - (m_r / 2)) > w1->getY() + w1->getHeight()) {
-                            auto new_x = m_pravac_x;
-                            auto new_y = -m_pravac_y;
-
-                            m_pravac_x = new_x;
-                            m_pravac_y = new_y;
+                        if ((center.y() + m_r) < w1->getY() || (center.y() - m_r) > w1->getY() + w1->getHeight()) {
+    //                        m_pravac_x = m_pravac_x;
+                            m_pravac_y = -m_pravac_y;
                         }
+//                        else if(((center.y() - m_r) < w1->getY() && (center.y() + m_r) > w1->getY()) || ((center.y() - m_r) < w1->getY() + w1->getHeight() && (center.y() + m_r) > w1->getY() + w1->getHeight())) {
+//                            m_pravac_x = -m_pravac_x;
+//                            m_pravac_y = -m_pravac_y;
+//                        }
                         else {
-                            auto new_x = -m_pravac_x;
-                            auto new_y = m_pravac_y;
-
-                            m_pravac_x = new_x;
-                            m_pravac_y = new_y;
+                            m_pravac_x = -m_pravac_x;
+    //                        m_pravac_y = m_pravac_y;
                         }
                     }
                     else {
-                        if ((center.x() + (m_r / 2)) < w1->getX() || (center.x() - (m_r / 2)) > w1->getX() + w1->getWidth()) {
-                            auto new_x = -m_pravac_x;
-                            auto new_y = m_pravac_y;
-
-                            m_pravac_x = new_x;
-                            m_pravac_y = new_y;
+                        if ((center.x() + m_r) < w1->getX() || (center.x() - m_r) > w1->getX() + w1->getWidth()) {
+                            m_pravac_x = -m_pravac_x;
+    //                        m_pravac_y = m_pravac_y;
                         }
-
+//                        else if(((center.y() - m_r) < w1->getY() && (center.y() + m_r) > w1->getY()) || ((center.y() - m_r) < w1->getY() + w1->getHeight() && (center.y() + m_r) > w1->getY() + w1->getHeight())) {
+//                            m_pravac_x = -m_pravac_x;
+//                            m_pravac_y = -m_pravac_y;
+//                        }
                         else {
-                            auto new_x = m_pravac_x;
-                            auto new_y = -m_pravac_y;
-
-                            m_pravac_x = new_x;
-                            m_pravac_y = new_y;
-
+//                            m_pravac_x = m_pravac_x;
+                            m_pravac_y = -m_pravac_y;
                         }
                     }
                 }
@@ -253,7 +244,7 @@ void Rocket::move()
         }
     }
 
-    center = mapToScene(m_r / 2, m_r / 2);
+    center = mapToScene(m_r, m_r);
 
     if(first) {
         first = false;

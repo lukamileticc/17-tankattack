@@ -14,7 +14,7 @@
 #define ANGLE 9
 #define TANK_W 26
 #define TANK_H 30
-#define PIPE_H 20
+#define PIPE_H 10
 #define PIPE_W 6
 #define ROCKET_RADIUS 4
 #define MAX_ROCKET 5
@@ -27,7 +27,7 @@ int timer2 = 0;
 Tank::Tank(int id,QColor color, float x, float y, Input *input)
     :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
 {
-    setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 4);
+    setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 2);
     setPos(m_x, m_y);
     m_health = 100;
     m_num_of_rockets = 0;
@@ -37,8 +37,8 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     rocket_sound = new QMediaPlayer();
     rocket_sound->setMedia(QUrl("qrc:/resources/sounds/rocket_sound.wav"));
     rocket_sound->setVolume(10);
-
 }
+
 Tank::~Tank()
 {
     delete rocket_sound;
@@ -49,20 +49,27 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(m_color);
-    painter->drawRect(0, PIPE_H / 4, TANK_W, TANK_H);
+    QPixmap tank_pixmap;
 
-    painter->setBrush(Qt::white);
+    if (m_id == 0) {
+        tank_pixmap = QPixmap(":/resources/images/red_tank.png");
+    }
+    else {
+        tank_pixmap = QPixmap(":/resources/images/blue_tank.png");
+    }
+
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(tank_pixmap);
+    painter->drawRect(0, PIPE_H / 2, TANK_W, TANK_H);
+
+    painter->setBrush(QPixmap(":/resources/images/tank_pipe.png"));
     painter->drawRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H);
-
-    painter->setBrush(Qt::white);
-    painter->drawEllipse(5, 12, 16, 16);
 }
 
 QRectF Tank::boundingRect() const
 {
 //    return QRectF(0, 0, 30, 30);
-    return QRectF(-0.5, -0.5, TANK_W + 1, TANK_H + (PIPE_H / 4) + 1);
+    return QRectF(-0.5, -0.5, TANK_W + 1, TANK_H + (PIPE_H / 2) + 1);
 }
 float Tank::getXposition() const
 {
@@ -78,8 +85,8 @@ int Tank::type() const{
 QPainterPath Tank::shape() const {
     QPainterPath OuterPath;
     OuterPath.setFillRule(Qt::WindingFill);
-    OuterPath.addRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H / 4);
-    OuterPath.addRect(0, PIPE_H / 4, TANK_W, TANK_H);
+    OuterPath.addRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H / 2);
+    OuterPath.addRect(0, PIPE_H / 2, TANK_W, TANK_H);
 
     return OuterPath;
 }
@@ -381,9 +388,9 @@ void Tank::advance()
 //        float tank_x_position = this->x() - 10*x_v;
 //        float tank_y_position = this->y() - 10*y_v;
 
-        QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS);
+        QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS - 0.1);
         //cetvrti argument r_power
-        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), 2 * ROCKET_RADIUS, m_tank_rocket_type, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), ROCKET_RADIUS, m_tank_rocket_type, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
