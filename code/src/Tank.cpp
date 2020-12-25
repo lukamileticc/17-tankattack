@@ -39,6 +39,16 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     tank_hit = new QMediaPlayer();
     tank_hit->setMedia(QUrl("qrc:/resources/sounds/explosion.wav"));
     tank_hit->setVolume(15);
+    m_health_bar_tank=new HealthBar(50,10);
+    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
+    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
+
+    if(m_id==0){
+            m_healt_bar=new HealthBar(40,704,350,50);
+    }
+    else{
+            m_healt_bar=new HealthBar(770,704,350,50);
+    }
 
 }
 
@@ -69,6 +79,10 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     painter->setBrush(QPixmap(":/resources/images/tank_pipe.png"));
     painter->drawRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H);
+    scene()->addItem(m_healt_bar->barFrame);
+    scene()->addItem(m_healt_bar->bar);
+    scene()->addItem(m_health_bar_tank->barFrame);
+    scene()->addItem(m_health_bar_tank->bar);
 }
 
 QRectF Tank::boundingRect() const
@@ -100,6 +114,8 @@ void Tank::destroy() {
     this->destroyed = true;
     //ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
     // da li je tenk unisten!
+    delete m_health_bar_tank->bar;
+    delete m_health_bar_tank->barFrame;
     scene()->removeItem(this);
 //    delete this;
    // return;
@@ -110,6 +126,8 @@ void Tank::move_forward() {
     m_x -= x_v;
     m_y -= y_v;
     setPos(m_x, m_y);
+    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
+    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
 
     if(!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
@@ -133,6 +151,8 @@ void Tank::move_forward() {
                     m_x += x_v / 5;
                     m_y += y_v / 5;
                     setPos(m_x, m_y);
+                    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
+                    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
                 }
             }
             col_list = scene()->collidingItems(this);
@@ -144,6 +164,8 @@ void Tank::move_backward() {
     m_x += x_v / 5 * 2;
     m_y += y_v / 5 * 2;
     setPos(m_x, m_y);
+    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
+    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
 
     if(!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
@@ -167,6 +189,8 @@ void Tank::move_backward() {
                     m_x -= x_v / 5;
                     m_y -= y_v / 5;
                     setPos(m_x, m_y);
+                    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
+                    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
                 }
             }
             col_list = scene()->collidingItems(this);
@@ -484,6 +508,21 @@ void Tank::set_score(int score){
 
 void Tank::decrease_health(int health) {
     m_health -= health;
+    delete m_health_bar_tank->bar;
+    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
+    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
+    m_health_bar_tank->bar->setBrush(Qt::green);
+    if(getId()==0){
+        delete m_healt_bar->bar;
+        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
+        m_healt_bar->bar->setBrush(Qt::green);
+        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
+    }
+    else{
+    delete m_healt_bar->bar;
+    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
+    m_healt_bar->bar->setBrush(Qt::green);
+    }
 }
 
 void Tank::increase_health(int health) {
@@ -542,6 +581,25 @@ void Tank::IncreaseScore(int score){
 void Tank::SetHealth(float health)
 {
     m_health=health;
+    delete m_health_bar_tank->bar;
+    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
+    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
+    m_health_bar_tank->bar->setBrush(Qt::green);
+    if(getId()==0){
+        delete m_healt_bar->bar;
+        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
+        m_healt_bar->bar->setBrush(Qt::green);
+        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
+    }
+    else{
+    delete m_healt_bar->bar;
+    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
+    m_healt_bar->bar->setBrush(Qt::green);
+    }
+}
+int Tank::getId()
+{
+    return m_id;
 }
 QMediaPlayer* Tank::get_explosion_sound() const
 {

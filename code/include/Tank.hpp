@@ -2,6 +2,7 @@
 #define TANK_HPP
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
+#include "HealthBar.hpp"
 #include <vector>
 #include <QMediaPlayer>
 //#include "Rocket.hpp"
@@ -17,7 +18,8 @@ public:
     int type() const override;
 
     // QGraphicsItem interface
-
+    HealthBar* m_healt_bar;
+    HealthBar* m_health_bar_tank;
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     bool IsAbleToShoot() const;
@@ -41,6 +43,7 @@ public:
 //    const std::vector<Rocket> &getRockets() const;
 
 //    void setRockets(const std::vector<Rocket> &mRockets);
+    int getId();
     void SetX(float x);
     void SetY(float y);
     void SetSpeed(float speed);

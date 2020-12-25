@@ -1,10 +1,10 @@
+ 0 - 1 
+ 0 - 1 
+ 0 - 1 
+ 0 - 1 
+ 0 - 1 
+ 1 - 2 
+ 1 - 1 
+ 0 - 1 
  1 - 0 
 dsa 1 - 0 www
-sadladas 1 - 2 dsadsadad
-sadladas 0 - 2 dsadsadad
-sadladas 0 - 1 dsadsadad
-pecindraia 1 - 1 adsada
-pecindraia 1 - 0 adsada
-sdad 0 - 2 dwa
-sdad 0 - 1 dwa
-dsad 1 - 1 sss
