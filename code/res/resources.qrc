@@ -19,10 +19,14 @@
         <file>blue_tank.png</file>
         <file>red_tank.png</file>
         <file>tank_pipe.png</file>
+        <file>map_2_background.png</file>
+        <file>map_3_background.png</file>
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>
         <file>istorija_borbi.txt</file>
+        <file>mapa2.txt</file>
+        <file>mapa3.txt</file>
     </qresource>
     <qresource prefix="/resources/sounds">
         <file>game_song.mp3</file>
