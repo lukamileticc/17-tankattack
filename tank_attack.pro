@@ -28,9 +28,12 @@ QMAKE_CXXFLAGS += -Wno-overloaded-virtual
 
 
 SOURCES += \
+    code/src/Client.cpp \
     code/src/HealthBar.cpp \
     code/src/Input.cpp \
     code/src/Rocket.cpp \
+    code/src/Server.cpp \
+    code/src/ServerWorker.cpp \
     code/src/SuperPower.cpp \
     code/src/World.cpp \
     code/src/main.cpp \
@@ -39,8 +42,11 @@ SOURCES += \
     code/src/Wall.cpp
 
 HEADERS += \
+    code/include/Client.hpp \
     code/include/HealthBar.hpp \
     code/include/Input.hpp \
+    code/include/Server.hpp \
+    code/include/ServerWorker.hpp \
     code/include/SuperPower.hpp \
     code/include/World.hpp \
     code/include/Board.hpp \

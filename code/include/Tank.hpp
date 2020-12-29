@@ -3,6 +3,7 @@
 #include <QGraphicsItem>
 #include "code/include/Input.hpp"
 #include "HealthBar.hpp"
+#include "Client.hpp"
 #include <vector>
 #include <QMediaPlayer>
 //#include "Rocket.hpp"
@@ -113,6 +114,13 @@ private:
     float y_v = 1;
 
     float rotation_angle = 0.5;
+    //~~~~~~~~~~~~~
+
+
+    //Deo koji se odnosi na rad mreze
+    //~~~~~~~~~~~~~
+    bool isMultiPlayer = true;
+    Client *m_Client;
     //~~~~~~~~~~~~~
 };
 #endif //TANK_HPP
