@@ -8,6 +8,7 @@
 #include <QJsonValue>
 #include <QHostAddress>
 bool tmp_Shoot = false;
+bool start_the_game = false;
 //float x1;
 //float y1;
 
@@ -25,8 +26,6 @@ Client::Client(QObject *parent)
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
     connect(m_clientSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::error);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
-   // connect(m_clientSocket, SIGNAL(), this, SLOT(sendMessage(QString)));
-   // connect(ui->sendButton, &QPushButton::clicked, this, &ClientWindow::sendMessage);
 }
 
 void Client::login(const QString &userName)
@@ -66,6 +65,7 @@ void Client::sendMessage(const QString &text)
     {
         movement = "up";
         movementId = 1;
+        qDebug() << "up 1";
     }
     else if(text == "down")
     {
@@ -128,6 +128,10 @@ void Client::jsonReceived(const QJsonObject &docObj)
     {
         tmp_Shoot = true;
     }
+//    if(*docObj.find("Start") != *docObj.end())
+//    {
+//        start_the_game = true;
+//    }
      QJsonValue movements = *docObj.begin();
      movement = movements.toInt();
 
@@ -136,9 +140,11 @@ void Client::jsonReceived(const QJsonObject &docObj)
 void Client::connectToServer(const QHostAddress &address, quint16 port)
 {
     m_clientSocket->connectToHost(QHostAddress::LocalHost, 1967);
+
 }
 void Client::onReadyRead()
 {
+    qDebug() << "NISTA";
     QByteArray jsonData;
     QDataStream socketStream(m_clientSocket);
     socketStream.setVersion(QDataStream::Qt_5_7);
@@ -161,45 +167,14 @@ void Client::onReadyRead()
     }
 }
 
-//void Client::setPozicija_TenkaX(float pozicija_tenka_x)
-//{
-//    m_pozicija_tenka_x = pozicija_tenka_x;
-//}
-//void Client::setPozicija_TenkaY(float pozicija_tenka_y)
-//{
-//    m_pozicija_tenka_y = pozicija_tenka_y;
-//}
-
-//float Client::getPozicija_TenkaX()
-//{
-//    return m_pozicija_tenka_x;
-//}
-
-//float Client::getPozicija_TenkaY()
-//{
-//    return m_pozicija_tenka_y;
-//}
-
-//float Client::getX_Primljeno()
-//{
-//    return x1;
-//}
-//float Client::getY_Primljeno()
-//{
-//    return y1;
-//}
-
 bool Client::isOrderedToShoot()
 {
     return tmp_Shoot;
 }
-
 void Client::setCantShoot()
 {
     tmp_Shoot = false;
 }
-
-
 qint16 Client::getMovement()
 {
     return movement;
@@ -208,4 +183,6 @@ void Client::nullifyMovement()
 {
     movement = 0;
 }
+
+
 

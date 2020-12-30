@@ -40,7 +40,7 @@ public:
     Input *input = nullptr;
 
     static bool world_pause;
-
+    static bool isHosting;
     QPushButton* make_button(QString name);
     void end_of_round(QString message);
     void show_tank_info();
@@ -62,6 +62,9 @@ public slots:
     void load_map();
     void button_clicked();
     void set_volume();
+    void multiplayer_menu();
+    void start_server();
+    void find_game();
 
 private:
     int m_in_game=0;
@@ -79,6 +82,9 @@ private:
                                //unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)
     //polje koje sluzi da menja sliku dugmeta za pojacavanje tona muzike
     QPushButton* bvolumen = nullptr;
+
+    //
+    bool isMultiplayer = false;
 };
 
 #endif // WORLD_HPP

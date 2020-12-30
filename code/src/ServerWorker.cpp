@@ -25,7 +25,6 @@ void ServerWorker::sendJson(const QJsonObject &json)
 
     const QByteArray jsonData = QJsonDocument(json).toJson();
 
-    //qDebug() << QString::fromUtf8(jsonData) << "mrk";
     emit logMessage(QLatin1String("Sending to ") + userName() + QLatin1String(" - ") + QString::fromUtf8(jsonData));
     QDataStream socketStream(m_serverSocket);
     socketStream.setVersion(QDataStream::Qt_5_7);

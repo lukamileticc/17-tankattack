@@ -1,5 +1,4 @@
-﻿
-#include "../include/Tank.hpp"
+﻿#include "../include/Tank.hpp"
 #include "../include/Rocket.hpp"
 #include <QGraphicsItem>
 #include <QPainter>
@@ -23,8 +22,8 @@ float timer1 = 0.1;
 int r_power = 0;
 int timer2 = 0;
 
-Tank::Tank(int id,QColor color, float x, float y, Input *input)
-    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input)
+Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client)
+    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client)
 {
     setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 2);
     setPos(m_x, m_y);
@@ -49,18 +48,13 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input)
     else{
             m_healt_bar=new HealthBar(770,704,350,50);
     }
-
-    //Bolji indikator za ovo mora da se uradi
-    //Na ovoj strani igra crveni tenk
     if(isMultiPlayer)
     {
-//        if(m_color == Qt::blue)
-//            m_input = nullptr;
-
-        if(m_color != Qt::blue)
+        if(m_color != m_ClientColor)
         {
             m_Client = new Client();
             m_Client->connectToServer(QHostAddress::LocalHost, 1967);
+
 
         }
 
@@ -378,7 +372,7 @@ void Tank::advance()
         timer1+=0.1;
         m_tank_rocket_type=Rocket_type::Medium_power;
     }
-    if(isMultiPlayer && m_color == Qt::blue){
+    if(isMultiPlayer && m_color == m_ClientColor){
     switch (Client::getMovement()) {
     case 1:
         up = true;
@@ -429,10 +423,8 @@ void Tank::advance()
         move_forward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("left && up");
         }
     }
@@ -440,10 +432,8 @@ void Tank::advance()
         move_forward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("right && up");
         }
     }
@@ -452,10 +442,8 @@ void Tank::advance()
         move_backward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("left && down");
         }
     }
@@ -464,32 +452,26 @@ void Tank::advance()
         move_backward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("right && down");
         }
     }
 
     else if (up) {
         move_forward();
-
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->sendMessage("up");
+              m_Client->sendMessage("up");
         }
+        qDebug() << "ovde";
     }
 
     else if (left) {
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("left");
         }
     }
@@ -497,10 +479,8 @@ void Tank::advance()
     else if (right) {
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("right");
         }
     }
@@ -508,15 +488,13 @@ void Tank::advance()
     else if (down) {
         move_backward();
 
-        if(isMultiPlayer && m_color != Qt::blue)
+        if(isMultiPlayer && m_color != m_ClientColor)
         {
-//            m_Client->setPozicija_TenkaX(m_x);
-//            m_Client->setPozicija_TenkaY(m_y);
             m_Client->sendMessage("down");
         }
     }
 
-    if(isMultiPlayer && m_color == Qt::blue && Client::isOrderedToShoot()){
+    if(isMultiPlayer && m_color == m_ClientColor && Client::isOrderedToShoot()){
         launch = true;
         qDebug() << "Pucaj!";
         Client::setCantShoot();
@@ -531,7 +509,7 @@ void Tank::advance()
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS - 0.1);
         //cetvrti argument r_power
         Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), ROCKET_RADIUS, m_tank_rocket_type, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
-        if(isMultiPlayer && m_color == Qt::red)
+        if(isMultiPlayer && m_color == m_HostColor)
             m_Client->sendMessage("Space");
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
                qDebug() << "Raketa 0 je napravljena";
@@ -733,4 +711,10 @@ int Tank::getId()
 QMediaPlayer* Tank::get_explosion_sound() const
 {
     return tank_hit;
+}
+
+void Tank::setColors()
+{
+    m_ClientColor = Qt::blue;
+    m_HostColor = Qt::red;
 }

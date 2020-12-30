@@ -23,14 +23,14 @@ int main(int argc, char *argv[])
 
     World *world = new World();
 
-    Server *server = new Server();
-    if (!server->listen(QHostAddress::Any, 1967)) {
-        qDebug() << "Server hasn't started!";
-    }
-    else
-        qDebug() << "Server has started";
+//    Server *server = new Server();
+//    if (!server->listen(QHostAddress::Any, 1967)) {
+//        qDebug() << "Server hasn't started!";
+//    }
+//    else
+//        qDebug() << "Server has started";
 
-    qDebug() << "mrk";
+//    qDebug() << "mrk";
 
     world->show();
 

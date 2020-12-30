@@ -12,6 +12,8 @@
 float x_tmp;
 float y_tmp;
 bool  orderedToShoot_tmp;
+int numOfClients = 0;
+bool isStart = false;
 Server::Server(QObject *parent)
     : QTcpServer(parent)
     , m_idealThreadCount(qMax(QThread::idealThreadCount(), 1))
@@ -35,7 +37,7 @@ void Server::incomingConnection(qintptr socketDescriptor)
         return;
     }
     int threadIdx = m_availableThreads.size();
-    if (threadIdx < m_idealThreadCount) { //we can add a new thread
+    if (threadIdx < m_idealThreadCount) {
         m_availableThreads.append(new QThread(this));
         m_threadsLoad.append(1);
         m_availableThreads.last()->start();
@@ -50,6 +52,15 @@ void Server::incomingConnection(qintptr socketDescriptor)
     connect(worker, &ServerWorker::jsonReceived, this, std::bind(&Server::jsonReceived, this, worker, std::placeholders::_1));
     connect(this, &Server::stopAllClients, worker, &ServerWorker::disconnectFromClient);
     m_clients.append(worker);
+
+    if(m_clients.size() == 2)
+    {
+        QJsonObject message = {
+            {"Start", 1}
+        };
+
+        broadcast(message, nullptr);
+    }
     emit logMessage(QStringLiteral("New client Connected"));
 }
 void Server::sendJson(ServerWorker *destination, const QJsonObject &message)
@@ -75,8 +86,6 @@ void Server::jsonReceived(ServerWorker *sender, const QJsonObject &json)
 {
     Q_ASSERT(sender);
     emit logMessage(QLatin1String("JSON received ") + QString::fromUtf8(QJsonDocument(json).toJson()));
-    //QString accepted_Coordinates =  QString::fromUtf8(QJsonDocument(json).toJson());
-
 
     QJsonObject message;
     if(*json.find("Space") != *json.end())
@@ -90,45 +99,12 @@ void Server::jsonReceived(ServerWorker *sender, const QJsonObject &json)
         message = json;
 
     broadcast(message, sender);
-
-//    else {
-//    QJsonValue xs = *json.find("x");
-//    QJsonValue ys = *json.find("y");
-
-//     Server::x_new = xs.toDouble();
-//     Server::y_new = ys.toDouble();
-
-//     x_tmp = Server::x_new;
-//     y_tmp = Server::y_new;
-
-//       message = {
-//          {"x", Server::getX()},
-//          {"y", Server::getY()},
-//      };
-//    }
-      //qDebug() << x << y;
-//    broadcast(message, sender);
-//    if (sender->userName().isEmpty()){
-//        qDebug() << "Nema ga";
-//        return jsonFromLoggedOut(sender, json);
-//   }
-//    qDebug() << "Ima ga";
-//    jsonFromLoggedIn(sender, json);
 }
 
 void Server::userDisconnected(ServerWorker *sender, int threadIdx)
 {
     --m_threadsLoad[threadIdx];
     m_clients.removeAll(sender);
-//    const QString userName = sender->userName();
-//    if (!userName.isEmpty()) {
-//        QJsonObject disconnectedMessage;
-//        disconnectedMessage[QStringLiteral("type")] = QStringLiteral("userdisconnected");
-//        disconnectedMessage[QStringLiteral("username")] = userName;
-//        qDebug() << userName;
-//        broadcast(disconnectedMessage, nullptr);
-//        emit logMessage(userName + QLatin1String(" disconnected"));
-//    }
     sender->deleteLater();
 }
 
@@ -136,7 +112,6 @@ void Server::userError(ServerWorker *sender)
 {
     Q_UNUSED(sender)
     emit logMessage(QLatin1String("Error from "));
-            //+ sender->userName());
 }
 
 void Server::stopServer()
@@ -155,20 +130,9 @@ float Server::getY()
     return y_tmp;
 }
 
-//float Server::getX_ZaSlanje()
-//{
-//    return x_ZaSlanje;
-//}
-//float Server::getY_ZaSlanje()
-//{
-//    return Server::y_ZaSlanje;
-//}
+int Server::getNumOfClients()
+{
+    return m_clients.size();
+}
 
-//float Server::setX_ZaSlanje(float x)
-//{
-//    Server::x_ZaSlanje = x;
-//}
-//float Server::setY_ZaSlanje(float y)
-//{
-//    Server::y_ZaSlanje = y;
-//}
+

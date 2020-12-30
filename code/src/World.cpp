@@ -5,6 +5,7 @@
 #include "code/include/Map.hpp"
 #include "code/include/Rocket.hpp"
 #include "code/include/SuperPower.hpp"
+#include "code/include/Server.hpp"
 #include <QRandomGenerator>
 #include <iostream>
 #include <QPushButton>
@@ -22,6 +23,7 @@
 #include <random>
 
 bool World::world_pause;
+bool World::isHosting = false;
 
 QPushButton* World::make_button(QString name)
 {
@@ -165,7 +167,7 @@ void World::main_menu(){
     QPushButton *bbattle = make_button("BATTLES");
     bbattle->setFixedWidth(300);
     bbattle->setFixedHeight(100);
-    bbattle->move(scene->width()/2 - bbattle->rect().width()/2,375);
+    bbattle->move(scene->width()/2 - bbattle->rect().width()/2, 500);
     QObject::connect(bbattle, SIGNAL (released()), this, SLOT (show_battles()), Qt::QueuedConnection);
     QObject::connect(bbattle, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
@@ -174,11 +176,17 @@ void World::main_menu(){
     QPushButton *bquit = make_button("  QUIT   GAME");
     bquit->setFixedWidth(300);
     bquit->setFixedHeight(100);
-    bquit->move(scene->width()/2 - bquit->rect().width()/2, 500);
+    bquit->move(scene->width()/2 - bquit->rect().width()/2, 625);
     QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()));
     QObject::connect(bquit, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
-
+    //Multiplayer
+    QPushButton *bmultiplayer = make_button("Multiplayer");
+    bmultiplayer->setFixedWidth(300);
+    bmultiplayer->setFixedHeight(100);
+    bmultiplayer->move(scene->width()/2 - bmultiplayer->rect().width()/2, 375);
+    QObject::connect(bmultiplayer, SIGNAL(released()), this, SLOT (multiplayer_menu()), Qt::QueuedConnection);
+    QObject::connect(bmultiplayer, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 }
 void World::set_volume()
 {
@@ -208,6 +216,53 @@ void World::set_volume()
     }
 }
 
+void World::multiplayer_menu()
+{
+
+      isMultiplayer = true;
+      scene->clear();
+      view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
+      QPushButton *bhost = make_button("Host game");
+      bhost->setFixedWidth(300);
+      bhost->setFixedHeight(100);
+      bhost->move(scene->width()/2 - bhost->rect().width()/2,250);
+      QObject::connect(bhost, SIGNAL (released()), this, SLOT (start_server()),Qt::QueuedConnection);
+      QObject::connect(bhost, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
+
+
+    QPushButton *bfind = make_button("Find game");
+    bfind->setFixedWidth(300);
+    bfind->setFixedHeight(100);
+    bfind->move(scene->width()/2 - bfind->rect().width()/2,375);
+    QObject::connect(bfind, SIGNAL (released()), this, SLOT (find_game()),Qt::QueuedConnection);
+    QObject::connect(bfind, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+}
+
+void World::start_server()
+{
+    qDebug() << "mrk1";
+    Server *server = new Server();
+    if (!server->listen(QHostAddress::Any, 1967)) {
+        qDebug() << "Server hasn't started!";
+    }
+    else
+        qDebug() << "Server has started";
+
+
+    //server->waitForClients();
+
+    isHosting = true;
+
+    start();
+    qDebug() << "mrk";
+}
+
+void World::find_game()
+{
+
+    start();
+}
 void World::show_battles(){
     scene->clear();
 
@@ -287,6 +342,7 @@ QVector<QString>* World::read_previous_battles(const char *file)
 
 void World::start(){
 
+
     music->pause();
     m_ended_round = false;
     m_showed_info = false;
@@ -310,15 +366,27 @@ void World::start(){
 
 
     input = new Input();
+    QColor host = Qt::blue;
+    QColor client = Qt::red;
 
-    this->t1 = new Tank(0,Qt::red, 80, 500, input);
-    this->t2 = new Tank(1,Qt::blue, 1045, 500, input);
+    if(isHosting)
+    {
+        host = Qt::red;
+        client = Qt::blue;
+    }
+
+    this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client);
+    this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client);
     t1->set_name(this->ime_prvog_tenka);
     t2->set_name(this->ime_drugog_tenka);
 //    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 //    SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 //    SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-    
+//    if(isHosting){
+//        t1->setColors();
+//        t2->setColors();
+//        qDebug() << "adasd";
+//    }
     qDebug()<<"ovdeded";
 
     scene->addItem(t1);
@@ -327,7 +395,6 @@ void World::start(){
 //    scene->addItem(sp);
 //    scene->addItem(sp1);
 //    scene->addItem(sp2);
-
     input->setFlag(QGraphicsItem::ItemIsFocusable);
     input->setFocus();
 
@@ -399,7 +466,7 @@ void World::rounds(){
         //Da se ne bi ispisivalo cant remove from the scene
         //ovde se treba proveriti da li je info_pause na sceni
         //ako jeste onda ga brisi! a ako nije da uopste ne ulazi ovde!
-        scene->removeItem(info_pause);
+        //scene->removeItem(info_pause);
     }
 
     show_tank_info();

@@ -25,6 +25,9 @@ public:
     static float getY();
     static bool isOrderedToShoot();
 
+    int getNumOfClients();
+
+    void waitForClients();
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 private:

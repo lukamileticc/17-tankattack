@@ -12,7 +12,7 @@ class Tank : public QObject, public QGraphicsItem{
     Q_OBJECT
 public:
 
-    Tank(int id,QColor color, float x, float y, Input *input);
+    Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client);
 
     ~Tank();
 
@@ -72,6 +72,7 @@ public:
     void move_backward();
     void rotate(float angle);
 
+    void setColors();
 public slots:
 
     void advance();
@@ -121,6 +122,8 @@ private:
     //~~~~~~~~~~~~~
     bool isMultiPlayer = true;
     Client *m_Client;
+    QColor m_HostColor = Qt::blue;
+    QColor m_ClientColor = Qt::red;
     //~~~~~~~~~~~~~
 };
 #endif //TANK_HPP
