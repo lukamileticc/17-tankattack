@@ -268,11 +268,16 @@ void Tank::advance()
     if(m_pause)
         return;
 
-//    if(isMultiPlayer && m_color == Qt::blue)
-//    {
-//        setPos(Client::getX_Primljeno(), Client::getY_Primljeno());
-//       // return;
-//    }
+    if(isMultiPlayer && m_color == m_ClientColor)
+    {
+        setPos(Client::getX_Primljeno(), Client::getY_Primljeno());
+        rotate(Client::getAngle_Primljeno());
+//        Client::nullifyX();
+//        Client::nullifyY();
+        Client::nullifyAngle();
+        qDebug() << Client::getAngle_Primljeno() << "ANGLE PRIMLJENO";
+       //return;
+    }
 
 
 //    timer2 += 1;
@@ -372,51 +377,51 @@ void Tank::advance()
         timer1+=0.1;
         m_tank_rocket_type=Rocket_type::Medium_power;
     }
-    if(isMultiPlayer && m_color == m_ClientColor){
-    switch (Client::getMovement()) {
-    case 1:
-        up = true;
-        qDebug() << "gore";
-        Client::nullifyMovement();
-        break;
-    case 2:
-        down = true;
-        qDebug() << "dole";
-        Client::nullifyMovement();
-        break;
-    case 3:
-        left = true;
-        Client::nullifyMovement();
-        break;
-    case 4:
-        right = true;
-        qDebug() << "desno";
-        Client::nullifyMovement();
-        break;
-    case 5:
-        left = true;
-        up = true;
-        Client::nullifyMovement();
-        break;
-    case 6:
-        right = true;
-        up = true;
-        Client::nullifyMovement();
-        break;
-    case 7:
-        left = true;
-        down = true;
-        Client::nullifyMovement();
-        break;
-    case 8:
-        right = true;
-        down = true;
-        Client::nullifyMovement();
-        break;
-    default:
-        break;
-    }
-    }
+//    if(isMultiPlayer && m_color == m_ClientColor){
+//    switch (Client::getMovement()) {
+//    case 1:
+//        up = true;
+//        qDebug() << "gore";
+//        Client::nullifyMovement();
+//        break;
+//    case 2:
+//        down = true;
+//        qDebug() << "dole";
+//        Client::nullifyMovement();
+//        break;
+//    case 3:
+//        left = true;
+//        Client::nullifyMovement();
+//        break;
+//    case 4:
+//        right = true;
+//        qDebug() << "desno";
+//        Client::nullifyMovement();
+//        break;
+//    case 5:
+//        left = true;
+//        up = true;
+//        Client::nullifyMovement();
+//        break;
+//    case 6:
+//        right = true;
+//        up = true;
+//        Client::nullifyMovement();
+//        break;
+//    case 7:
+//        left = true;
+//        down = true;
+//        Client::nullifyMovement();
+//        break;
+//    case 8:
+//        right = true;
+//        down = true;
+//        Client::nullifyMovement();
+//        break;
+//    default:
+//        break;
+//    }
+//    }
 
 ///////////////////////////////////////////////////////////////////
     if (left && up) {
@@ -425,7 +430,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("left && up");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(-ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
     else if (right && up) {
@@ -434,7 +442,11 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("right && up");
+                m_Client->setPozicija_TenkaX(m_x);
+                m_Client->setPozicija_TenkaY(m_y);
+                m_Client->setAngle_Tenka(ANGLE);
+                m_Client->sendMessage("Proba");
+
         }
     }
 
@@ -444,7 +456,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("left && down");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
 
@@ -454,7 +469,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("right && down");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(-ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
 
@@ -462,7 +480,10 @@ void Tank::advance()
         move_forward();
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-              m_Client->sendMessage("up");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(0);
+            m_Client->sendMessage("Proba");
         }
         qDebug() << "ovde";
     }
@@ -472,7 +493,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("left");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(-ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
 
@@ -481,7 +505,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("right");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
 
@@ -490,7 +517,10 @@ void Tank::advance()
 
         if(isMultiPlayer && m_color != m_ClientColor)
         {
-            m_Client->sendMessage("down");
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(0);
+            m_Client->sendMessage("Proba");
         }
     }
 

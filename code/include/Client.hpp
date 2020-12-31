@@ -13,25 +13,33 @@ class Client : public QObject
 public:
     explicit Client(QObject *parent = nullptr);
 
-//    void setPozicija_TenkaX(float pozicija_tenka_x);
-//    void setPozicija_TenkaY(float pozicija_tenka_y);
+    void setPozicija_TenkaX(float pozicija_tenka_x);
+    void setPozicija_TenkaY(float pozicija_tenka_y);
+    void setAngle_Tenka(float angle);
 
-//    float getPozicija_TenkaY();
-//    float getPozicija_TenkaX();
+    float getPozicija_TenkaY();
+    float getPozicija_TenkaX();
 
 
     float x_Primljeno;
     float y_Primljeno;
+    float angle_Primljeno;
+
     bool orderedToShoot;
 
-//    static float getX_Primljeno();
-//    static float getY_Primljeno();
+    static float getX_Primljeno();
+    static float getY_Primljeno();
+    static float getAngle_Primljeno();
 
     static bool isOrderedToShoot();
     static void setCantShoot();
 
     static qint16 getMovement();
     static void nullifyMovement();
+
+    static void nullifyX();
+    static void nullifyY();
+    static void nullifyAngle();
 
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
@@ -56,5 +64,6 @@ private:
     void jsonReceived(const QJsonObject &doc);
     float m_pozicija_tenka_x;
     float m_pozicija_tenka_y;
+    float m_angle;
 };
 #endif // CLIENT_HPP

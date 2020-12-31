@@ -9,9 +9,9 @@
 #include <QHostAddress>
 bool tmp_Shoot = false;
 bool start_the_game = false;
-//float x1;
-//float y1;
-
+float x1;
+float y1;
+float angle1;
 qint16 movement;
 Client::Client(QObject *parent)
     : QObject(parent)
@@ -19,8 +19,7 @@ Client::Client(QObject *parent)
     , m_loggedIn(false)
 {
 
-    m_pozicija_tenka_x = 200;
-    m_pozicija_tenka_y = 400;
+
     connect(m_clientSocket, &QTcpSocket::connected, this, &Client::connected);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
@@ -52,65 +51,27 @@ void Client::sendMessage(const QString &text)
     QJsonObject message;
     QString movement;
     qint16 movementId;
-//    if(text != "Space")
-//    {
-//         message = {
-//          {"x", m_pozicija_tenka_x},
-//          {"y", m_pozicija_tenka_y},
-//          {"id", 1}
-//        };
+    if(text != "Space")
+    {
+         message = {
+          {"x", m_pozicija_tenka_x},
+          {"y", m_pozicija_tenka_y},
+          {"angle", m_angle}
+        };
 
-//    }
-    if(text == "up")
-    {
-        movement = "up";
-        movementId = 1;
-        qDebug() << "up 1";
     }
-    else if(text == "down")
-    {
-        movement = "down";
-        movementId = 2;
-    }
-    else if(text == "left")
-    {
-        movement = "left";
-        movementId = 3;
-    }
-    else if(text == "right")
-    {
-        movement = "right";
-        movementId = 4;
-    }
-    else if(text == "left && up")
-    {
-        movement = "left && up";
-        movementId = 5;
-    }
-    else if(text == "right && up")
-    {
-        movement = "right && up";
-        movementId = 6;
-    }
-    else if(text == "left && down")
-    {
-        movement = "left && down";
-        movementId = 7;
-    }
-    else if(text == "righ && down")
-    {
-        movement = "right && down";
-        movementId = 8;
-    }
+
     else if(text == "Space")
     {
         movement = "Space";
         movementId = 9;
+
+        message = {
+            {movement, movementId}
+        };
     }
 
-    message = {
-        {movement, movementId}
-    };
+
     qDebug() << message;
 
     clientStream << QJsonDocument(message).toJson();
@@ -128,13 +89,22 @@ void Client::jsonReceived(const QJsonObject &docObj)
     {
         tmp_Shoot = true;
     }
-//    if(*docObj.find("Start") != *docObj.end())
-//    {
-//        start_the_game = true;
-//    }
-     QJsonValue movements = *docObj.begin();
-     movement = movements.toInt();
 
+     else {
+        QJsonValue xs = *docObj.find("x");
+        QJsonValue ys = *docObj.find("y");
+        QJsonValue angles = *docObj.find("angle");
+
+        Client::x_Primljeno = xs.toDouble();
+        Client::y_Primljeno = ys.toDouble();
+        Client::angle_Primljeno = angles.toDouble();
+
+        x1 = x_Primljeno;
+        y1 = y_Primljeno;
+        angle1 = angle_Primljeno;
+
+        qDebug() << angle1 << "ANGLE";
+    }
 }
 
 void Client::connectToServer(const QHostAddress &address, quint16 port)
@@ -175,14 +145,58 @@ void Client::setCantShoot()
 {
     tmp_Shoot = false;
 }
-qint16 Client::getMovement()
+
+void Client::nullifyX()
 {
-    return movement;
-}
-void Client::nullifyMovement()
-{
-    movement = 0;
+    x1 = 0;
 }
 
+void Client::nullifyY()
+{
+    y1 = 0;
+}
+
+void Client::nullifyAngle()
+{
+    angle1 = 0;
+}
+void Client::setAngle_Tenka(float angle)
+{
+   m_angle = angle;
+}
+
+void Client::setPozicija_TenkaX(float pozicija_tenka_x)
+{
+    m_pozicija_tenka_x = pozicija_tenka_x;
+}
+
+void Client::setPozicija_TenkaY(float pozicija_tenka_y)
+{
+    m_pozicija_tenka_y = pozicija_tenka_y;
+}
+
+float Client::getPozicija_TenkaX()
+{
+    return m_pozicija_tenka_x;
+}
+
+float Client::getPozicija_TenkaY()
+{
+    return m_pozicija_tenka_y;
+}
+
+float Client::getX_Primljeno()
+{
+    return x1;
+}
+float Client::getY_Primljeno()
+{
+    return y1;
+}
+
+float Client::getAngle_Primljeno()
+{
+    return angle1;
+}
 
 
