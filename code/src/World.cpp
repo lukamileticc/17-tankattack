@@ -377,8 +377,8 @@ void World::start(){
 
     this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client);
     this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client);
-    t1->set_name(this->ime_prvog_tenka);
-    t2->set_name(this->ime_drugog_tenka);
+    t1->set_name(this->first_tank_name);
+    t2->set_name(this->second_tank_name);
 //    SuperPower *sp= new SuperPower("superpower",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 //    SuperPower *sp1= new SuperPower("health",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
 //    SuperPower *sp2= new SuperPower("speed",QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
@@ -530,9 +530,9 @@ void World::pause(){
     info_pause->setPos(x_position, 300);
     info_pause->setDefaultTextColor(QColor("white"));
 }
-void World::show_tank_info(){
-    if (m_showed_info){
-        //ovde mora da se brisu ovi objekti da ne bi doslo do curenja memorije
+void World::show_tank_info() {
+
+    if (m_showed_info) {
         scene->removeItem(info_t1);
         delete info_t1;
         scene->removeItem(info_t2);
@@ -540,36 +540,33 @@ void World::show_tank_info(){
         scene->removeItem(game_score);
         delete game_score;
     }
+
     m_showed_info = true;
-    QFont font;
-    font.setBold(true);
-    font.setPointSize(24);
+
+    QFont font1 = QFont("Helvetica", 20, QFont::Bold);
+
+    QFont font2 = QFont("Helvetica", 20, QFont::Bold);
 
     QString info_string_t1, info_string_t2, game_score_string;
     info_string_t1.reserve(50);
     info_string_t2.reserve(50);
     game_score_string.reserve(50);
 
-//    info_string_t1.append(ime_prvog_tenka).append("\nScore: ").append(QString::number(m_score_t1))
-//                  .append("\nHealth: ").append(QString::number(t1->get_current_health()));
-    info_string_t1.append(ime_prvog_tenka).append("   ").append(QString::number(t1->get_current_health()));
-    info_t1 = scene->addText(info_string_t1, font);
-    info_t1->setPos(40, 704);
+    info_string_t1.append(first_tank_name);
+    info_t1 = scene->addText(info_string_t1, font1);
+    info_t1->setPos(38, 702);
     info_t1->setDefaultTextColor("white");
    // info_t1->setPlainText(info_string_t1);
 
-//    info_string_t2.append(ime_drugog_tenka).append("\nScore: ").append(QString::number(m_score_t2))
-//                  .append("\nHealth: ").append(QString::number(t2->get_current_health()));
-
-    info_string_t2.append(QString::number(t2->get_current_health())).append("   ").append(ime_drugog_tenka);
-    info_t2 = scene->addText(info_string_t2, font);
-    info_t2->setPos(1000, 704);
+    info_string_t2.append(second_tank_name);
+    info_t2 = scene->addText(info_string_t2, font1);
+    info_t2->setPos(763, 702);
     info_t2->setDefaultTextColor("white");
     //info_t2->setPlainText(info_string_t2);
 
     game_score_string.append(QString::number(m_score_t1)).append(":").append(QString::number(m_score_t2));
-    game_score = scene->addText(game_score_string, font);
-    game_score->setPos(548, 704);
+    game_score = scene->addText(game_score_string, font2);
+    game_score->setPos(550, 702);
     game_score->setDefaultTextColor("white");
 }
 
@@ -611,13 +608,13 @@ void World::end_of_round(QString message){
     score4->setPos(x_pos1,y_pos1);
     score4->setDefaultTextColor(QColor("white"));
     //ime prvog -- ispis
-    QGraphicsTextItem *name1 = scene->addText(ime_prvog_tenka,font);
+    QGraphicsTextItem *name1 = scene->addText(first_tank_name,font);
     int x = 640 - score4->boundingRect().width()/2 - name1->boundingRect().width() - 5;
     int y = 400;
     name1->setPos(x,y);
     name1->setDefaultTextColor(QColor("white"));
     //ime drugog -- ispis
-    QGraphicsTextItem *name2 = scene->addText(ime_drugog_tenka,font);
+    QGraphicsTextItem *name2 = scene->addText(second_tank_name,font);
     name2->setPos(640 + score4->boundingRect().width()/2 + 5,y);
     name2->setDefaultTextColor(QColor("white"));
 
@@ -675,11 +672,11 @@ void World::write_the_last_battle(const char *file)
         previous_battles->pop_back();
     //ubacam na pocetak poslednju borbu koja se desila
     QString last_battle;
-    last_battle.append(ime_prvog_tenka).append(" ")
+    last_battle.append(first_tank_name).append(" ")
                .append(QString::number(m_score_t1)).append(" ")
                .append("- ")
                .append(QString::number(m_score_t2)).append(" ")
-               .append(ime_drugog_tenka).append("\n");
+               .append(second_tank_name).append("\n");
 
     //ovde moze da se doda sa leve i desne strane recimo crvena i plava kockica da ne pise redtank
     //i blue tank --- predlog kad budemo dodavali teksture
@@ -758,58 +755,57 @@ void World::input_players_names()
 
     QObject::connect(line1,SIGNAL(textChanged(QString)),this,SLOT(change_name_of_first_tank()),Qt::QueuedConnection);
     QObject::connect(line2,SIGNAL(textChanged(QString)),this,SLOT(change_name_of_second_tank()),Qt::QueuedConnection);
-//    this->ime_prvog_tenka = line1->text();
-//    this->ime_drugog_tenka = line2->text();
+//    this->first_tank_name = line1->text();
+//    this->second_tank_name = line2->text();
 
 }
-void World::change_name_of_first_tank()
-{
-
-    qDebug() << "Duzina prvog imena: " << line1->text().length();
-    if(line1->text().length() > 10){
+void World::change_name_of_first_tank() {
+    if(line1->text().length() > 8){
         if(!m_showed_warning){
+
+            m_showed_warning = true;
+
             QString info;
             info.reserve(30);
-            info.append("The length of the name can't be longer than 10 letters");
-            QFont font2;
-            font2.setBold(true);
-            font2.setPointSize(12);
-            m_showed_warning = true;
-            warning_name_length = scene->addText(info,font2);
+            info.append("The length of the name can't be longer than 8 letters");
+
+            QFont font = QFont("Times", 12, QFont::Bold);
+
+            warning_name_length = scene->addText(info, font);
             warning_name_length->setPos(597,310);
-            warning_name_length->setDefaultTextColor(QColor("red"));
+            warning_name_length->setDefaultTextColor(Qt::red);
         }
     }
-    else
-        this->ime_prvog_tenka = line1->text();
+    else {
+        this->first_tank_name = line1->text();
+    }
 }
-void World::change_name_of_second_tank()
-{
 
-    qDebug() << "Duzina drugog imena: " << line2->text().length();
-
-    if(line2->text().length() > 10){
+void World::change_name_of_second_tank() {
+    if(line1->text().length() > 8){
         if(!m_showed_warning){
+
+            m_showed_warning = true;
+
             QString info;
             info.reserve(30);
-            info.append("The length of the name can't be longer than 10 letters");
-            QFont font2;
-            font2.setBold(true);
-            font2.setPointSize(12);
-            m_showed_warning = true;
-            warning_name_length = scene->addText(info,font2);
+            info.append("The length of the name can't be longer than 8 letters");
+
+            QFont font = QFont("Times", 12, QFont::Bold);
+
+            warning_name_length = scene->addText(info, font);
             warning_name_length->setPos(597,310);
-            warning_name_length->setDefaultTextColor(QColor("red"));
+            warning_name_length->setDefaultTextColor(Qt::red);
         }
     }
-    else
-        this->ime_drugog_tenka = line2->text();
+    else {
+        this->second_tank_name = line2->text();
+    }
 }
 
-void World::quit()
-{
-    //brisemo ceo world
+void World::quit() {
+      //brisemo ceo world
       delete this;
-    //ova funkcija brise scene i view tako da oni ne smeju da se nadju u ~world();
+      //ova funkcija brise scene i view tako da oni ne smeju da se nadju u ~world();
       QApplication::exit();
 }

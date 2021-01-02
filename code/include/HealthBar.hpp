@@ -6,19 +6,19 @@
 
 class HealthBar : public QObject, public QGraphicsRectItem
 {
-        Q_OBJECT
-    public:
-        HealthBar(float x,float y,int width, int height);
-        HealthBar(int width,int height);
-        ~HealthBar();
+Q_OBJECT
+public:
+    HealthBar(float x, float y, int width, int height);
+    HealthBar(int width, int height);
+    ~HealthBar();
 
-        QGraphicsRectItem* barFrame;
-        QGraphicsRectItem* bar;
+    QGraphicsRectItem* bar_frame;
+    QGraphicsRectItem* bar;
 
-        int width;
-        int height;
-        float m_x;
-        float m_y;
+    int width;
+    int height;
+    float m_x;
+    float m_y;
 };
 
 #endif // HEALTHBAR_HPP

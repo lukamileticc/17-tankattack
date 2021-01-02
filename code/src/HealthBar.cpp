@@ -1,31 +1,28 @@
 #include "../include/HealthBar.hpp"
-
 #include <QPainter>
 #include <iostream>
 
 HealthBar::HealthBar(float x,float y,int width, int height)
     : width(width), height(height),m_x(x),m_y(y)
 {
-    barFrame = new QGraphicsRectItem;
-    barFrame->setRect(x,y, width, height);
-    barFrame->setBrush(Qt::gray);
+    bar_frame = new QGraphicsRectItem;
+    bar_frame->setRect(x,y, width, height);
+    bar_frame->setBrush(Qt::gray);
 
     bar = new QGraphicsRectItem(x,y, width, height);
-    bar->setBrush(Qt::green);
+    bar->setBrush(Qt::red);
 }
 
-HealthBar::HealthBar(int width, int height)
-{
-    barFrame = new QGraphicsRectItem;
-    barFrame->setRect(x(),y(), width, height);
-    barFrame->setBrush(Qt::gray);
+//HealthBar::HealthBar(int width, int height) {
+//    bar_frame = new QGraphicsRectItem;
+//    bar_frame->setRect(x(),y(), width, height);
+//    bar_frame->setBrush(Qt::gray);
 
-    bar = new QGraphicsRectItem(x(),y(), width, height);
-    bar->setBrush(Qt::green);
-}
+//    bar = new QGraphicsRectItem(x(),y(), width, height);
+//    bar->setBrush(Qt::red);
+//}
 
-HealthBar::~HealthBar()
-{
+HealthBar::~HealthBar() {
     delete this->bar;
-    delete this->barFrame;
+    delete this->bar_frame;
 }

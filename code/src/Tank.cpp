@@ -1,15 +1,15 @@
 ﻿#include "../include/Tank.hpp"
 #include "../include/Rocket.hpp"
+#include <code/include/SuperPower.hpp>
+#include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QPainter>
-#include <QStyleOption>
 #include <QKeyEvent>
-#include <QGraphicsScene>
+#include <QStyleOption>
+#include <QRandomGenerator>
 #include <cmath>
 #include <iostream>
 #include <QDebug>
-#include <code/include/SuperPower.hpp>
-#include <QRandomGenerator>
 
 #define ANGLE 9
 #define TANK_W 26
@@ -18,6 +18,10 @@
 #define PIPE_W 6
 #define ROCKET_RADIUS 4
 #define MAX_ROCKET 5
+#define TANK_FRWD_SPEED 5
+#define TANK_BCKWD_SPEED 2
+#define ROCKET_SPEED 8
+
 float timer1 = 0.1;
 int r_power = 0;
 int timer2 = 0;
@@ -35,42 +39,37 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
     rocket_sound = new QMediaPlayer();
     rocket_sound->setMedia(QUrl("qrc:/resources/sounds/rocket_sound.wav"));
     rocket_sound->setVolume(10);
+
     tank_hit = new QMediaPlayer();
     tank_hit->setMedia(QUrl("qrc:/resources/sounds/explosion.wav"));
-    tank_hit->setVolume(15);
-    m_health_bar_tank=new HealthBar(50,10);
-    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
-    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
+    tank_hit->setVolume(10);
 
-    if(m_id==0){
-            m_healt_bar=new HealthBar(40,704,350,50);
+//    m_health_bar_tank = new HealthBar(50, 10);
+//    m_health_bar_tank->bar_frame->setPos(m_x - 10, m_y - 30);
+//    m_health_bar_tank->bar->setPos(m_x - 10, m_y - 30);
+
+    if(m_id == 0) {
+            m_healt_bar = new HealthBar(200, 709, 180, 35);
     }
-    else{
-            m_healt_bar=new HealthBar(770,704,350,50);
+    else {
+            m_healt_bar = new HealthBar(925, 709, 180, 35);
     }
-    if(isMultiPlayer)
-    {
-        if(m_color != m_ClientColor)
-        {
+
+    if(isMultiPlayer) {
+        if(m_color != m_ClientColor) {
             m_Client = new Client();
             m_Client->connectToServer(QHostAddress::LocalHost, 1967);
-
-
         }
-
     }
-
 }
 
-Tank::~Tank()
-{
+Tank::~Tank() {
     delete tank_hit;
     delete rocket_sound;
    //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
 }
 
-void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
+void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
@@ -89,28 +88,17 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
     painter->setBrush(QPixmap(":/resources/images/tank_pipe.png"));
     painter->drawRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H);
-    scene()->addItem(m_healt_bar->barFrame);
+
+    scene()->addItem(m_healt_bar->bar_frame);
     scene()->addItem(m_healt_bar->bar);
-    scene()->addItem(m_health_bar_tank->barFrame);
-    scene()->addItem(m_health_bar_tank->bar);
+//    scene()->addItem(m_health_bar_tank->barFrame);
+//    scene()->addItem(m_health_bar_tank->bar);
 }
 
-QRectF Tank::boundingRect() const
-{
-//    return QRectF(0, 0, 30, 30);
+QRectF Tank::boundingRect() const {
     return QRectF(-0.5, -0.5, TANK_W + 1, TANK_H + (PIPE_H / 2) + 1);
 }
-float Tank::getXposition() const
-{
-    return m_x;
-}
-float Tank::getYposition() const
-{
-    return m_y;
-}
-int Tank::type() const{
-    return 1;
-}
+
 QPainterPath Tank::shape() const {
     QPainterPath OuterPath;
     OuterPath.setFillRule(Qt::WindingFill);
@@ -120,29 +108,19 @@ QPainterPath Tank::shape() const {
     return OuterPath;
 }
 
-void Tank::destroy() {
-    this->destroyed = true;
-    //ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
-    // da li je tenk unisten!
-    delete m_health_bar_tank->bar;
-    delete m_health_bar_tank->barFrame;
-    scene()->removeItem(this);
-//    delete this;
-   // return;
-    //end_of_round();
+int Tank::type() const {
+    return 1;
 }
 
 void Tank::move_forward() {
     m_x -= x_v;
     m_y -= y_v;
     setPos(m_x, m_y);
-    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
-    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
 
     if(!scene()->collidingItems(this).isEmpty()) {
-        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
-        for(auto item : col_list) {
-            if (item->type() == 4 ) {
+        QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
+        for(auto item : coll_list) {
+            if (item->type() == 4) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
                    m_power=1;
@@ -158,29 +136,24 @@ void Tank::move_forward() {
             }
             else {
                 while(this->collidesWithItem(item) && item->type() != 3) {
-                    m_x += x_v / 5;
-                    m_y += y_v / 5;
+                    m_x += x_v / TANK_FRWD_SPEED;
+                    m_y += y_v / TANK_FRWD_SPEED;
                     setPos(m_x, m_y);
-                    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
-                    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
                 }
             }
-            col_list = scene()->collidingItems(this);
+            coll_list = scene()->collidingItems(this);
         }
     }
 }
 
 void Tank::move_backward() {
-    m_x += x_v / 5 * 2;
-    m_y += y_v / 5 * 2;
+    m_x += (x_v / TANK_FRWD_SPEED) * TANK_BCKWD_SPEED;
+    m_y += (x_v / TANK_FRWD_SPEED) * TANK_BCKWD_SPEED;
     setPos(m_x, m_y);
-    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
-    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
-
     if(!scene()->collidingItems(this).isEmpty()) {
-        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
-        for(auto item : col_list) {
-            if (item->type() == 4 ) {
+        QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
+        for(auto item : coll_list) {
+            if (item->type() == 4) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
                    m_power=1;
@@ -196,14 +169,12 @@ void Tank::move_backward() {
             }
             else {
                 while(this->collidesWithItem(item) && item->type() != 3) {
-                    m_x -= x_v / 5;
-                    m_y -= y_v / 5;
+                    m_x += x_v / TANK_FRWD_SPEED;
+                    m_y += y_v / TANK_FRWD_SPEED;
                     setPos(m_x, m_y);
-                    m_health_bar_tank->barFrame->setPos(m_x-10,m_y-30);
-                    m_health_bar_tank->bar->setPos(m_x-10,m_y-30);
                 }
             }
-            col_list = scene()->collidingItems(this);
+            coll_list = scene()->collidingItems(this);
         }
     }
 }
@@ -212,9 +183,8 @@ void Tank::rotate(float angle) {
     setRotation(rotation() + angle);
 
     if (!scene()->collidingItems(this).isEmpty()) {
-        QList<QGraphicsItem *> col_list = scene()->collidingItems(this);
-        for(auto item : col_list) {
-
+        QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
+        for(auto item : coll_list) {
             if (item->type() == 4) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
@@ -237,33 +207,10 @@ void Tank::rotate(float angle) {
         }
     }
 }
-bool Tank::is_destroyed(){
-    return this->destroyed;
-}
-
-void Tank::set_end_of_round(){
-    m_end_of_round = true;
-}
-
-QString Tank::get_name() const{
-    return m_name;
-}
-void Tank::set_name(const QString &name){
-    m_name = name;
-}
-
-int Tank::get_current_health() const{
-    return m_health;
-}
-
-bool Tank::is_pause(){
-    return m_pause;
-}
 
 void Tank::advance()
 {
     m_pause = m_input->pause;
-//    qDebug() << "Pause: " << m_pause;
 
     if(m_pause)
         return;
@@ -347,9 +294,7 @@ void Tank::advance()
     }
 
     if (this->is_destroyed()){
-       //this->destroy();
         return;
-        // ovde bi trebala neka animacija eksplozije da se napravi
     }
 
     QPointF pos_vector_x = mapToScene(0, 0);
@@ -365,8 +310,8 @@ void Tank::advance()
     float r_speed_x = x_v;
     float r_speed_y = y_v;
 
-    x_v *= 5.0;
-    y_v *= 5.0;
+    x_v *= TANK_FRWD_SPEED;
+    y_v *= TANK_FRWD_SPEED;
 
 //kombinacije tastera u narednoj if naredbi nisu semanticki ispravne, nema ih smisla kombinovati
 //    if ((left && right) || (up && down && (left || right))) {
@@ -428,8 +373,7 @@ void Tank::advance()
         move_forward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(-ANGLE);
@@ -440,13 +384,11 @@ void Tank::advance()
         move_forward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
-                m_Client->setPozicija_TenkaX(m_x);
-                m_Client->setPozicija_TenkaY(m_y);
-                m_Client->setAngle_Tenka(ANGLE);
-                m_Client->sendMessage("Proba");
-
+        if(isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setPozicija_TenkaX(m_x);
+            m_Client->setPozicija_TenkaY(m_y);
+            m_Client->setAngle_Tenka(ANGLE);
+            m_Client->sendMessage("Proba");
         }
     }
 
@@ -454,8 +396,7 @@ void Tank::advance()
         move_backward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(ANGLE);
@@ -467,8 +408,7 @@ void Tank::advance()
         move_backward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(-ANGLE);
@@ -478,21 +418,18 @@ void Tank::advance()
 
     else if (up) {
         move_forward();
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(0);
             m_Client->sendMessage("Proba");
         }
-        qDebug() << "ovde";
     }
 
     else if (left) {
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(-ANGLE);
@@ -503,8 +440,7 @@ void Tank::advance()
     else if (right) {
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(ANGLE);
@@ -515,8 +451,7 @@ void Tank::advance()
     else if (down) {
         move_backward();
 
-        if(isMultiPlayer && m_color != m_ClientColor)
-        {
+        if(isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setPozicija_TenkaX(m_x);
             m_Client->setPozicija_TenkaY(m_y);
             m_Client->setAngle_Tenka(0);
@@ -529,25 +464,18 @@ void Tank::advance()
         qDebug() << "Pucaj!";
         Client::setCantShoot();
     }
-///////////////////////////////////////////////////////////////////
-    //ako je pritisnut space or enter pravi se raketa
-    if(launch){
-        //trebaju nam koordinate tenk da bismo napravili raketu
-//        float tank_x_position = this->x() - 10*x_v;
-//        float tank_y_position = this->y() - 10*y_v;
 
+    if(launch) {
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS - 0.1);
-        //cetvrti argument r_power
-        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), ROCKET_RADIUS, m_tank_rocket_type, m_id, 8 * r_speed_x , 8 * r_speed_y, rotation(), this);
+
+        Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), ROCKET_RADIUS, m_tank_rocket_type, m_id, ROCKET_SPEED * r_speed_x , ROCKET_SPEED * r_speed_y, rotation(), this);
         if(isMultiPlayer && m_color == m_HostColor)
             m_Client->sendMessage("Space");
-        if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET){
-               qDebug() << "Raketa 0 je napravljena";
+
+        if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET) {
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
-//               update();
                rocket->move();
-//               rocket->setPos(rocket->x(),rocket->y());
 
                //zvuk rakete se pusta ukoliko je moguce napraviti raketu
                if(rocket_sound->state() == QMediaPlayer::PlayingState)
@@ -556,12 +484,9 @@ void Tank::advance()
                    rocket_sound->play();
         }
         else if(m_id == 1 && rocket->rakete_tenka_1 <= MAX_ROCKET){
-               qDebug() << "Raketa 1 je napravljena";
                scene()->addItem(rocket);
                rocket->setParentItem(nullptr); //osiguravamo da rocket nema roditelja
-//               update();
                rocket->move();
-//               rocket->setPos(rocket->x(),rocket->y());
 
                //zvuk rakete se pusta ukoliko je moguce napraviti raketu
                if(rocket_sound->state() == QMediaPlayer::PlayingState)
@@ -581,84 +506,91 @@ void Tank::advance()
         if (m_id == 1)
             m_input->k_enter = false;
     }
-
 }
 
-//void Tank::keyPressEvent(QKeyEvent *event) {
-
-////komentar je potrebno ukloniti ukoliko zelimo da eliminisemo auto-repeat tastera
-////    if (event->isAutoRepeat()) {
-////            return;
-////    }
-///
-///
-///
-///
-
-//    if (event->key() == Qt::Key_W) up = true;
-//    if (event->key() == Qt::Key_S) down = true;
-//    if (event->key() == Qt::Key_A) left = true;
-//    if (event->key() == Qt::Key_D) right = true;
-//    advance(0);
-//}
-
-//void Tank::keyReleaseEvent(QKeyEvent *event) {
-//    if (event->key() == Qt::Key_W) up = false;
-//    if (event->key() == Qt::Key_S) down = false;
-//    if (event->key() == Qt::Key_A) left = false;
-//    if (event->key() == Qt::Key_D) right = false;
-//    advance(0);
-//}
-
-
-bool Tank::IsAbleToShoot() const {
-    return m_can_shoot;
+void Tank::destroy() {
+    this->destroyed = true;
+    //ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
+    // da li je tenk unisten!
+//    delete m_health_bar_tank->bar;
+//    delete m_health_bar_tank->barFrame;
+    scene()->removeItem(this);
+//    delete this;
+   // return;
+    //end_of_round();
 }
 
-int Tank::GetCurrentNumsOfLife () const{
-    return m_num_of_lives;
+bool Tank::is_destroyed() {
+    return this->destroyed;
 }
 
-float Tank::GetX() const{
+bool Tank::is_pause() {
+    return m_pause;
+}
+
+void Tank::set_end_of_round() {
+    m_end_of_round = true;
+}
+
+void Tank::set_name(const QString &name) {
+    m_name = name;
+}
+
+QString Tank::get_name() const {
+    return m_name;
+}
+
+int Tank::get_current_health() const {
+    return m_health;
+}
+
+float Tank::getXposition() const {
     return m_x;
 }
 
-float Tank:: GetY() const{
+float Tank::getYposition() const {
     return m_y;
 }
 
-float Tank::GetSpeed() const{
-    return m_speed;
+float Tank::GetX() const {
+    return m_x;
 }
 
-int Tank::GetCurrentNumsOfRockets() const{
-    return m_num_of_rockets;
-
-}
-int Tank::get_score() const{
-    return m_score;
+float Tank:: GetY() const {
+    return m_y;
 }
 
-void Tank::set_score(int score){
-    m_score = score;
+void Tank::SetHealth(float health) {
+//    m_health=health;
+//    delete m_health_bar_tank->bar;
+//    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
+//    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
+//    m_health_bar_tank->bar->setBrush(Qt::green);
+//    if(getId()==0){
+//        delete m_healt_bar->bar;
+//        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
+//        m_healt_bar->bar->setBrush(Qt::green);
+//        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
+//    }
+//    else{
+//    delete m_healt_bar->bar;
+//    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
+//    m_healt_bar->bar->setBrush(Qt::green);
+//    }
 }
 
 void Tank::decrease_health(int health) {
     m_health -= health;
-    delete m_health_bar_tank->bar;
-    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
-    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
-    m_health_bar_tank->bar->setBrush(Qt::green);
-    if(getId()==0){
+
+    if(getId() == 0) {
         delete m_healt_bar->bar;
-        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
-        m_healt_bar->bar->setBrush(Qt::green);
-        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
+        m_healt_bar->bar= new QGraphicsRectItem(200, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setBrush(Qt::red);
     }
-    else{
-    delete m_healt_bar->bar;
-    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
-    m_healt_bar->bar->setBrush(Qt::green);
+    else {
+        delete m_healt_bar->bar;
+        m_healt_bar->bar= new QGraphicsRectItem(925, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setBrush(Qt::red);
     }
 }
 
@@ -666,9 +598,46 @@ void Tank::increase_health(int health) {
     m_health += health;
 }
 
-bool Tank::IsDead() const {
-    return m_num_of_lives==0;
+void Tank::set_score(int score) {
+    m_score = score;
 }
+
+int Tank::get_score() const {
+    return m_score;
+}
+
+int Tank::getId() {
+    return m_id;
+}
+
+QMediaPlayer* Tank::get_explosion_sound() const {
+    return tank_hit;
+}
+
+void Tank::setColors() {
+    m_ClientColor = Qt::blue;
+    m_HostColor = Qt::red;
+}
+
+///////////////////////////////////////////
+
+bool Tank::IsAbleToShoot() const {
+    return m_can_shoot;
+}
+
+int Tank::GetCurrentNumsOfLife () const {
+    return m_num_of_lives;
+}
+
+int Tank::GetCurrentNumsOfRockets() const{
+    return m_num_of_rockets;
+
+}
+
+bool Tank::IsDead() const {
+    return m_num_of_lives == 0;
+}
+
 void Tank::SetX(float x){
     m_x=x;
 }
@@ -677,74 +646,37 @@ void Tank::SetY(float y){
     m_y=y;
 }
 
-void Tank::SetSpeed(float speed){
-    m_speed=speed;
+void Tank::SetSpeed(float speed) {
+    m_speed = speed;
 }
 
-void Tank::SetCanShot(){
-    if (m_can_shoot==0){
-        m_can_shoot= false;
+float Tank::GetSpeed() const {
+    return m_speed;
+}
+
+void Tank::SetCanShot() {
+    if (m_can_shoot == 0) {
+        m_can_shoot = false;
     }
-    else{
-        m_can_shoot=true;
+    else {
+        m_can_shoot = true;
     }
 }
 
-void Tank::DecreaseNumOfLife(){
-    if (m_health<=0){
-        m_num_of_lives-=1;
+void Tank::DecreaseNumOfLife() {
+    if (m_health <= 0) {
+        m_num_of_lives -= 1;
     }
 }
 
 void Tank::IncreaseNumOfLife(){
-    m_num_of_lives+=1;
+    m_num_of_lives += 1;
 }
 
 void Tank::shoot() {
-    m_num_of_rockets-=1;
+    m_num_of_rockets -= 1;
 }
 
-//const std::vector<Rocket> &Tank::getRockets() const {
-//    return m_rockets;
-//}
-
-//void Tank::setRockets(const std::vector<Rocket> &mRocket) {
-//    m_rockets = mRocket;
-//}
 void Tank::IncreaseScore(int score){
     m_score+=score;
-}
-
-void Tank::SetHealth(float health)
-{
-    m_health=health;
-    delete m_health_bar_tank->bar;
-    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
-    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
-    m_health_bar_tank->bar->setBrush(Qt::green);
-    if(getId()==0){
-        delete m_healt_bar->bar;
-        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
-        m_healt_bar->bar->setBrush(Qt::green);
-        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
-    }
-    else{
-    delete m_healt_bar->bar;
-    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
-    m_healt_bar->bar->setBrush(Qt::green);
-    }
-}
-int Tank::getId()
-{
-    return m_id;
-}
-QMediaPlayer* Tank::get_explosion_sound() const
-{
-    return tank_hit;
-}
-
-void Tank::setColors()
-{
-    m_ClientColor = Qt::blue;
-    m_HostColor = Qt::red;
 }

@@ -9,7 +9,7 @@
 enum class Rocket_type{
     Low_power,
     Medium_power,
-    High_power
+//    High_power
 };
 
 #define key_up  1
@@ -18,8 +18,7 @@ enum class Rocket_type{
 #define key_left  8
 #define key_rocket_launch 16
 
-
-class Input : public QGraphicsItem{
+class Input : public QGraphicsItem {
 public:
     Input();
     ~Input();
@@ -32,16 +31,12 @@ public:
 
     QTimer *timer = nullptr;
 
-//protected:
     unsigned int key_tank1;
     unsigned int key_tank2;
     bool k_w,k_s,k_d,k_a,k_space;
     bool k_up,k_down,k_right,k_left,k_enter;
     bool pause;
     bool escape;
-
-
 };
-
 
 #endif // INPUT_HPP
