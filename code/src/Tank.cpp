@@ -18,9 +18,9 @@
 #define PIPE_W 6
 #define ROCKET_RADIUS 4
 #define MAX_ROCKET 5
-#define TANK_FRWD_SPEED 5
-#define TANK_BCKWD_SPEED 2
-#define ROCKET_SPEED 8
+#define TANK_FRWD_SPEED 5.0
+#define TANK_BCKWD_SPEED 2.0
+#define ROCKET_SPEED 8.0
 
 float timer1 = 0.1;
 int r_power = 0;
@@ -148,8 +148,9 @@ void Tank::move_forward() {
 
 void Tank::move_backward() {
     m_x += (x_v / TANK_FRWD_SPEED) * TANK_BCKWD_SPEED;
-    m_y += (x_v / TANK_FRWD_SPEED) * TANK_BCKWD_SPEED;
+    m_y += (y_v / TANK_FRWD_SPEED) * TANK_BCKWD_SPEED;
     setPos(m_x, m_y);
+
     if(!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
         for(auto item : coll_list) {
@@ -169,8 +170,8 @@ void Tank::move_backward() {
             }
             else {
                 while(this->collidesWithItem(item) && item->type() != 3) {
-                    m_x += x_v / TANK_FRWD_SPEED;
-                    m_y += y_v / TANK_FRWD_SPEED;
+                    m_x -= x_v / TANK_FRWD_SPEED;
+                    m_y -= y_v / TANK_FRWD_SPEED;
                     setPos(m_x, m_y);
                 }
             }

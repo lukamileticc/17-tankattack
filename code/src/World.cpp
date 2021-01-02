@@ -51,7 +51,7 @@ World::World(QObject *parent)
     button_sound->setVolume(20);
 }
 
-World::~World(){
+World::~World() {
     //UNISTEN TENK SE SAM UNISTAVA , s tim sto na kraju svake runde treba unisti oba tenka
     //jer se u sledece pozivu next_round ona oba opet inicijalizuju
     //TENKOVI SE PRAVILNO OSLOBADJAJU!
@@ -86,7 +86,7 @@ void World::show(){
     view->show();
 }
 
-void World::main_menu(){
+void World::main_menu() {
     music->play();
     m_showed_warning = false;
     m_in_game = 0;
@@ -155,7 +155,7 @@ void World::main_menu(){
     QObject::connect(bquit, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 }
 
-void World::start(){
+void World::start() {
     music->pause();
     m_ended_round = false;
     m_showed_info = false;
@@ -245,31 +245,6 @@ void World::multiplayer_menu() {
     QObject::connect(bback, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 }
 
-void World::start_server()
-{
-    qDebug() << "mrk1";
-    Server *server = new Server();
-    if (!server->listen(QHostAddress::Any, 1967)) {
-        qDebug() << "Server hasn't started!";
-    }
-    else
-        qDebug() << "Server has started";
-
-
-    //server->waitForClients();
-
-    isHosting = true;
-
-    start();
-    qDebug() << "mrk";
-}
-
-void World::find_game()
-{
-
-    start();
-}
-
 void World::show_battles() {
     scene->clear();
 
@@ -285,11 +260,11 @@ void World::show_battles() {
 
     //citamo prethodne borbe iz funkcije
     QVector<QString> *previous_battles = nullptr;
-    try{
+
+    try {
         previous_battles = read_previous_battles(":/resources/files/istorija_borbi.txt");
     }
-    catch(const QString &e)
-    {
+    catch(const QString &e) {
        qDebug() << e;
        delete previous_battles;
        exit(EXIT_FAILURE);
@@ -320,50 +295,62 @@ void World::show_battles() {
     delete previous_battles;
 }
 
-int rand_int(int nMin, int nMax)
-{
-    //ovde imamo potencijalni owerflow - ispraviti ako moze
-    return nMin + (int)((double)rand() / (RAND_MAX+1) * (nMax-nMin+1));
+void World::start_server() {
+    qDebug() << "mrk1";
+    Server *server = new Server();
+    if (!server->listen(QHostAddress::Any, 1967)) {
+        qDebug() << "Server hasn't started!";
+    }
+    else
+        qDebug() << "Server has started";
+
+
+    //server->waitForClients();
+
+    isHosting = true;
+
+    start();
+    qDebug() << "mrk";
 }
 
-void World::load_map(){
+void World::find_game() {
+    start();
+}
 
-    //Mapa otvara odgovarajuci fajl
-    //Pravi zidove i vraca te zidove kako bi ih postavili na scenu
-    char mapa[] = ":/resources/files/mapa_.txt";
+int rand_int(unsigned num_of_maps) {
+    srand(time(NULL));
+    return (rand() % num_of_maps) + 1;
+}
 
-    // u zavisnosti od odabrane mape char mapa[] "../mapa_.txt"
-    // se menja u "../mapax.txt" gde je x random broj dobijen funkcijom RandU
+void World::load_map() {
+    char map[] = ":/resources/files/mapa?.txt";
+    char map_texture[] = ":/resources/images/map_?_background.png";
 
-    int random_integer = rand_int(1,1);
-    /* PROVERA DA LI JE NOVA MAPA RAZLICITA OD PRETHODNE, NEMA SMISLA SAD JER IMAMO SAMO JEDNU MAPU
+    int random_integer = rand_int(3);
+
     while(random_integer == m_last_map){
-        random_integer = rand_int(1,1);
-        qDebug() << random_integer;
+        random_integer = rand_int(3);
     }
-    */
 
     m_last_map = random_integer;
 
     char number_of_map[2];
     std::sprintf(number_of_map, "%d", random_integer);
-    mapa[22] = number_of_map[0];
-    qDebug() << mapa;
+    map[22] = number_of_map[0];
+    map_texture[23] = number_of_map[0];
 
-    Map *m1 = new Map(mapa);
-    std::vector<Wall *> walls = m1->getWalls();
+    view->setBackgroundBrush(QPixmap(map_texture));
 
+    Map *m = new Map(map);
+    std::vector<Wall *> walls = m->getWalls();
 
     for(auto w: walls)
         scene->addItem(w);
 
-
-    //mapa nam vise nije potrebna
-    //brisemo je da ne bi doslo do curenja memorije
-    delete m1;
+    delete m;
 }
 
-void World::rounds(){
+void World::rounds() {
     if(m_ended_round)
         return;
 
@@ -421,7 +408,7 @@ void World::rounds(){
 
 }
 
-void World::end_of_round(QString message){
+void World::end_of_round(QString message) {
     //show_tank_info();
     //std::cout << message << std::endl;
     m_ended_round = true;
@@ -505,7 +492,7 @@ void World::end_of_round(QString message){
 
 }
 
-void World::pause(){
+void World::pause() {
     if(m_showed_pause){
         scene->removeItem(info_pause);
         //da ne bi curela memorija
@@ -567,8 +554,7 @@ void World::show_tank_info() {
     game_score->setDefaultTextColor("white");
 }
 
-QVector<QString>* World::read_previous_battles(const char *file)
-{
+QVector<QString>* World::read_previous_battles(const char *file) {
     //citam poslednjih 10 rundi iz file-a istorija brobi i smestam ih u vektor
 
     QFile input_file(file);
@@ -596,8 +582,7 @@ QVector<QString>* World::read_previous_battles(const char *file)
     return battle_history;
 }
 
-void World::write_the_last_battle(const char *file)
-{
+void World::write_the_last_battle(const char *file) {
     //citamo prethodne borbe iz funkcije
      QVector<QString> *previous_battles = nullptr;
     try{
@@ -641,8 +626,7 @@ void World::write_the_last_battle(const char *file)
     delete previous_battles;
 }
 
-void World::input_players_names()
-{
+void World::input_players_names() {
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
