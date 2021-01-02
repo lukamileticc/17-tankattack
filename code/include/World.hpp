@@ -1,6 +1,7 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include "code/include/Tank.hpp"
 #include <QGraphicsScene>
 #include <QGraphicsWidget>
 #include <QGraphicsView>
@@ -10,12 +11,10 @@
 #include <QLineEdit>
 #include <QMediaPlayer>
 #include <QPushButton>
-#include "code/include/Tank.hpp"
 
 
-class World : public QObject
-{
-    Q_OBJECT
+class World : public QObject {
+Q_OBJECT
 
 public:
     World(QObject *parent = nullptr);
@@ -83,7 +82,6 @@ private:
     //polje koje sluzi da menja sliku dugmeta za pojacavanje tona muzike
     QPushButton* bvolumen = nullptr;
 
-    //
     bool isMultiplayer = false;
 };
 
