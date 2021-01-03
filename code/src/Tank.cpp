@@ -567,6 +567,7 @@ float Tank:: GetY() const {
 }
 
 void Tank::SetHealth(float health) {
+    Q_UNUSED(health);
 //    m_health=health;
 //    delete m_health_bar_tank->bar;
 //    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
@@ -644,11 +645,11 @@ bool Tank::IsDead() const {
     return m_num_of_lives == 0;
 }
 
-void Tank::SetX(float x){
+void Tank::SetX(float x) {
     m_x=x;
 }
 
-void Tank::SetY(float y){
+void Tank::SetY(float y) {
     m_y=y;
 }
 

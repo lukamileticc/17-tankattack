@@ -90,22 +90,25 @@ void World::main_menu() {
     music->play();
     m_showed_warning = false;
     m_in_game = 0;
+    m_score_t1 = 0;
+    m_score_t2 = 0;
+
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/main_menu.png"));
 
 
     //button za pojacavanje i smanjivanje volumena
-    bvolumen = make_button("VOLUMEN");
+    bvolumen = make_button("VOLUME");
     bvolumen->move(scene->width() - 100, scene->height() - 100);
-    QPixmap pixmap(":/resources/images/volumen_100.png");
+    QPixmap pixmap(":/resources/images/volume_3.png");
     bvolumen->setIcon(QIcon(pixmap));
     bvolumen->setIconSize(QSize(100,100));
     bvolumen->setCheckable(true);
     //ako pravimo bvolumen onda necemo standardni styleSheet
     bvolumen->setStyleSheet(QString("height:100px;"
-                                  "width: 100px;"
-                                  "background-color: rgba(255,255,255,0);"
-                                  "border: 0px;"));
+                                    "width: 100px;"
+                                    "background-color: rgba(255,255,255,0);"
+                                    "border: 0px;"));
     bvolumen->setText(QString(""));
     QObject::connect(bvolumen, SIGNAL (released()), this, SLOT (set_volume()), Qt::QueuedConnection);
     QObject::connect(bvolumen, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
@@ -168,8 +171,6 @@ void World::start() {
     m_in_game = 1;
 
     scene->clear();
-
-    view->setBackgroundBrush(QPixmap(":/resources/images/map_1_background.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
     view->setFixedSize(1150, 768);
 
@@ -220,24 +221,23 @@ void World::multiplayer_menu() {
     isMultiplayer = true;
     scene->clear();
 
-    view->setBackgroundBrush(QPixmap(":/resources/images/rsz_tank_background_2.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/mp_menu.png"));
 
     QPushButton *bhost = make_button("Host game");
     bhost->setFixedWidth(300);
     bhost->setFixedHeight(100);
-    bhost->move(scene->width() / 2 - bhost->rect().width() / 2, scene->height() / 2 - 125);
+    bhost->move(scene->width() / 2 - bhost->rect().width() / 2, scene->height() / 2 - 120);
     QObject::connect(bhost, SIGNAL (released()), this, SLOT (start_server()),Qt::QueuedConnection);
     QObject::connect(bhost, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
-
 
     QPushButton *bfind = make_button("Find game");
     bfind->setFixedWidth(300);
     bfind->setFixedHeight(100);
-    bfind->move(scene->width() / 2 - bfind->rect().width() / 2, scene->height() / 2);
+    bfind->move(scene->width() / 2 - bfind->rect().width() / 2, scene->height() / 2 + 5);
     QObject::connect(bfind, SIGNAL (released()), this, SLOT (find_game()),Qt::QueuedConnection);
     QObject::connect(bfind, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
 
-    QPushButton *bback =make_button("Back");
+    QPushButton *bback = make_button("Back");
     bback->setFixedWidth(200);
     bback->setFixedHeight(66);
     bback->move(25 , scene->height() - bback->rect().height() - 25);
@@ -248,7 +248,7 @@ void World::multiplayer_menu() {
 void World::show_battles() {
     scene->clear();
 
-    view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/battles_log.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     QPushButton *bback = make_button("Back");
@@ -412,9 +412,38 @@ void World::end_of_round(QString message) {
     //show_tank_info();
     //std::cout << message << std::endl;
     m_ended_round = true;
-    QFont font;
-    font.setBold(true);
-    font.setPointSize(50);
+
+    show_tank_info();
+
+    if (m_score_t1 == 3 || m_score_t2 == 3) {
+        end_game_screen(message);
+        write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
+    }
+    else {
+        QFont font("Helvetica", 50, QFont::Bold);
+
+        QGraphicsTextItem *text = scene->addText(message + " won round!", font);
+        int x_position = scene->width() / 2 - text->boundingRect().width() / 2;
+        text->setPos(x_position, 200);
+        text->setDefaultTextColor(QColor("white"));
+        //Button za next battle
+        QPushButton *bnext = make_button("Next Round");
+        bnext->setFixedWidth(200);
+        bnext->setFixedHeight(66);
+        bnext->move(scene->width() / 2 - bnext->rect().width() / 2, scene->height() / 2 - 45);
+        QObject::connect(bnext, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
+        QObject::connect(bnext, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
+
+        //Button za main menu
+        QPushButton *bm_menu = make_button("Main Menu");
+        bm_menu->setFixedWidth(200);
+        bm_menu->setFixedHeight(66);
+        bm_menu->move(scene->width() / 2 - bm_menu->rect().width() / 2, scene->height() / 2 + 30);
+        QObject::connect(bm_menu, SIGNAL (released()), this, SLOT (main_menu()), Qt::QueuedConnection);
+        QObject::connect(bm_menu, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+    }
+//    {
 //    scene->clear();
 //    view->setBackgroundBrush(Qt::black);
 //    view->setDragMode(QGraphicsView::ScrollHandDrag);
@@ -424,58 +453,39 @@ void World::end_of_round(QString message) {
 //    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 //    label->setText(message);
 //    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-    QGraphicsTextItem *text = scene->addText(message + " won!", font);
-    int x_position = 640 - text->boundingRect().width()/2;
-    text->setPos(x_position, 100);
-    text->setDefaultTextColor(QColor("white"));
 
-    //"Score" ispis
-    QString score1("Score:");
-    QGraphicsTextItem *score2 = scene->addText(score1,font);
-    int x_pos = 640 - score2->boundingRect().width()/2;
-    int y_pos = 300;
-    score2->setPos(x_pos,y_pos);
-    score2->setDefaultTextColor(QColor("white"));
-    //"1:0" rezultat ispis
-    QString score3;
-    score3.reserve(100);
-    score3.append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2));
-    QGraphicsTextItem *score4 = scene->addText(score3,font);
-    int x_pos1 = 640 - score4->boundingRect().width()/2;
-    int y_pos1 = 400;
-    score4->setPos(x_pos1,y_pos1);
-    score4->setDefaultTextColor(QColor("white"));
-    //ime prvog -- ispis
-    QGraphicsTextItem *name1 = scene->addText(first_tank_name,font);
-    int x = 640 - score4->boundingRect().width()/2 - name1->boundingRect().width() - 5;
-    int y = 400;
-    name1->setPos(x,y);
-    name1->setDefaultTextColor(QColor("white"));
-    //ime drugog -- ispis
-    QGraphicsTextItem *name2 = scene->addText(second_tank_name,font);
-    name2->setPos(640 + score4->boundingRect().width()/2 + 5,y);
-    name2->setDefaultTextColor(QColor("white"));
+//    QGraphicsTextItem *text = scene->addText(message + " won!", font);
+//    int x_position = 640 - text->boundingRect().width()/2;
+//    text->setPos(x_position, 100);
+//    text->setDefaultTextColor(QColor("white"));
 
-
-    //Button za next battle
-    QPushButton *bnext = make_button("Next Battle");
-    bnext->setFixedWidth(200);
-    bnext->setFixedHeight(66);
-    bnext->move(980,600);
-    QObject::connect(bnext, SIGNAL (released()), this, SLOT (start()), Qt::QueuedConnection);
-    QObject::connect(bnext, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
-
-
-
-    //Button za quit_game
-    QPushButton *bquit =make_button("Quit Game");
-    bquit->setFixedWidth(200);
-    bquit->setFixedHeight(66);
-    bquit->move(100, 600);
-    QObject::connect(bquit, SIGNAL (released()), this, SLOT (quit()),Qt::QueuedConnection);
-    QObject::connect(bquit, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
-
-
+//    //"Score" ispis
+//    QString score1("Score:");
+//    QGraphicsTextItem *score2 = scene->addText(score1,font);
+//    int x_pos = 640 - score2->boundingRect().width()/2;
+//    int y_pos = 300;
+//    score2->setPos(x_pos,y_pos);
+//    score2->setDefaultTextColor(QColor("white"));
+//    //"1:0" rezultat ispis
+//    QString score3;
+//    score3.reserve(100);
+//    score3.append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2));
+//    QGraphicsTextItem *score4 = scene->addText(score3,font);
+//    int x_pos1 = 640 - score4->boundingRect().width()/2;
+//    int y_pos1 = 400;
+//    score4->setPos(x_pos1,y_pos1);
+//    score4->setDefaultTextColor(QColor("white"));
+//    //ime prvog -- ispis
+//    QGraphicsTextItem *name1 = scene->addText(first_tank_name,font);
+//    int x = 640 - score4->boundingRect().width()/2 - name1->boundingRect().width() - 5;
+//    int y = 400;
+//    name1->setPos(x,y);
+//    name1->setDefaultTextColor(QColor("white"));
+//    //ime drugog -- ispis
+//    QGraphicsTextItem *name2 = scene->addText(second_tank_name,font);
+//    name2->setPos(640 + score4->boundingRect().width()/2 + 5,y);
+//    name2->setDefaultTextColor(QColor("white"));
+//}
 
     //moramo osloboditi oba tenka jer ce u sledecoj rundi da budu opet inicijalizovani
     //tek ovde Brisemo tenkove
@@ -484,34 +494,48 @@ void World::end_of_round(QString message) {
     //Ovde se brise i input jer ce se kao i tenkovi opet inicijalizovati u sledecoj rundi
     delete input;
 
-
-    //kada se zavrsi poslednja runda poziiva se ova funksija da bi azurirala istoriju borbi
-    write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
-
     return;
-
 }
 
 void World::pause() {
-    if(m_showed_pause){
+    if(m_showed_pause) {
         scene->removeItem(info_pause);
         //da ne bi curela memorija
         delete info_pause;
     }
+
     m_showed_pause = true;
-    QFont font;
-    font.setBold(true);
-    font.setPointSize(40);
+    QFont font("Helvetica", 50, QFont::Bold);
     QString pause_string;
     pause_string.reserve(50);
     pause_string.append("Pause! Press P to continue");
 
     //ovde se inicijalizuje info_pause ,znaci ako se vise puta pozove pause() ,ovde ce da curi
     //zato je potrebno gore delete info_pause
-    info_pause = scene->addText(pause_string,font);
-    int x_position = 640 - info_pause->boundingRect().width()/2;
+    info_pause = scene->addText(pause_string, font);
+    int x_position = scene->width() / 2 - info_pause->boundingRect().width() / 2;
     info_pause->setPos(x_position, 300);
     info_pause->setDefaultTextColor(QColor("white"));
+}
+
+void World::end_game_screen(QString message) {
+
+    QFont font("Helvetica", 50, QFont::Bold);
+
+    QGraphicsTextItem *text = scene->addText(message + " won match!", font);
+    int x_position = scene->width() / 2 - text->boundingRect().width() / 2;
+    text->setPos(x_position, 200);
+    text->setDefaultTextColor(QColor("white"));
+
+    //Button za main menu
+    QPushButton *bm_menu = make_button("Main Menu");
+    bm_menu->setFixedWidth(200);
+    bm_menu->setFixedHeight(66);
+    bm_menu->move(scene->width() / 2 - bm_menu->rect().width() / 2, scene->height() / 2 - 50);
+    QObject::connect(bm_menu, SIGNAL (released()), this, SLOT (main_menu()), Qt::QueuedConnection);
+    QObject::connect(bm_menu, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
+    return;
 }
 
 void World::show_tank_info() {
@@ -628,7 +652,7 @@ void World::write_the_last_battle(const char *file) {
 
 void World::input_players_names() {
     scene->clear();
-    view->setBackgroundBrush(QPixmap(":/resources/images/input.png"));
+    view->setBackgroundBrush(QPixmap(":/resources/images/input_menu.png"));
     view->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Button za start_battle
@@ -649,13 +673,13 @@ void World::input_players_names() {
 
     //labeli za unos imena igraca
     QGraphicsTextItem *text1 =  new QGraphicsTextItem(QString("RED PLAYER NAME"));
-    text1->setDefaultTextColor(Qt::red);
+    text1->setDefaultTextColor(Qt::black);
     text1->setFont(QFont("Helvetica", 20, QFont::Bold));
     text1->setPos(250, 250);
     scene->addItem(text1);
 
     QGraphicsTextItem *text2 =  new QGraphicsTextItem(QString("BLUE PLAYER NAME"));
-    text2->setDefaultTextColor(Qt::blue);
+    text2->setDefaultTextColor(Qt::black);
     text2->setFont(QFont("Helvetica", 20, QFont::Bold));
     text2->setPos(250, 350);
     scene->addItem(text2);
@@ -731,22 +755,23 @@ void World::change_name_of_second_tank() {
 QPushButton* World::make_button(QString name) {
 
     QString style_for_buttons = "QPushButton"
-                             "{"
-                              "background-color: teal;"
+                              "{"
+                              "background-color: #CCCCCC;"
                               "border-style: outset;"
                               "border-width: 2.5px;"
                               "border-radius: 10px;"
                               "border-color: beige;"
                               "font: bold 16px;"
                               "padding: 6px;"
-                             "}"
-                             "QPushButton::hover"
-                             "{"
-                             "background-color: #00CDFF"
-                             "}";
+                              "}"
+                              "QPushButton::hover"
+                              "{"
+                              "background-color: #EAEAEA"
+                              "}";
 
 
     QPushButton *button = new QPushButton(name);
+    button->setAttribute(Qt::WA_TranslucentBackground);
     button->setStyleSheet(style_for_buttons);
     scene->addWidget(button);
 
@@ -759,22 +784,22 @@ void World::button_clicked() {
 
 void World::set_volume() {
     if(music->volume() == 0) {
-        QPixmap pixmap(":/resources/images/volumen_100.png");
+        QPixmap pixmap(":/resources/images/volume_3.png");
         bvolumen->setIcon(QIcon(pixmap));
         music->setVolume(30);
     }
     else if(music->volume() == 10) {
-        QPixmap pixmap(":/resources/images/volumen_0.png");
+        QPixmap pixmap(":/resources/images/volume_off.png");
         bvolumen->setIcon(QIcon(pixmap));
         music->setVolume(0);
     }
     else if(music->volume() == 20) {
-        QPixmap pixmap(":/resources/images/volumen_33.png");
+        QPixmap pixmap(":/resources/images/volume_1.png");
         bvolumen->setIcon(QIcon(pixmap));
         music->setVolume(10);
     }
     else if(music->volume() == 30) {
-        QPixmap pixmap(":/resources/images/volumen_66.png");
+        QPixmap pixmap(":/resources/images/volume_2.png");
         bvolumen->setIcon(QIcon(pixmap));
         music->setVolume(20);
     }

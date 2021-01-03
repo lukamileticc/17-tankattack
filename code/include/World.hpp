@@ -49,6 +49,8 @@ public:
     QVector<QString>* read_previous_battles(const char *file);
     void write_the_last_battle(const char *file);
 
+    void end_game_screen(QString message);
+
 public slots:
     void start();
     void quit();

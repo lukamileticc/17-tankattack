@@ -1,26 +1,21 @@
 <RCC>
     <qresource prefix="/resources/images">
-        <file>menu_background.jpg</file>
-        <file>tank_backround.jpg</file>
-        <file>tank_background_2.png</file>
-        <file>bckg.jpg</file>
-        <file>rsz_tank_background_2.png</file>
-        <file>health1_resize.png</file>
-        <file>superpower.jpg</file>
-        <file>speed.png</file>
-        <file>input_names_bg.jpg</file>
-        <file>input_names_bg_2.jpg</file>
-        <file>input.png</file>
-        <file>volumen_0.png</file>
-        <file>volumen_33.png</file>
-        <file>volumen_66.png</file>
-        <file>volumen_100.png</file>
         <file>map_1_background.png</file>
         <file>blue_tank.png</file>
         <file>red_tank.png</file>
         <file>tank_pipe.png</file>
         <file>map_2_background.png</file>
         <file>map_3_background.png</file>
+        <file>battles_log.png</file>
+        <file>boost.png</file>
+        <file>health.png</file>
+        <file>input_menu.png</file>
+        <file>main_menu.png</file>
+        <file>mp_menu.png</file>
+        <file>volume_1.png</file>
+        <file>volume_2.png</file>
+        <file>volume_3.png</file>
+        <file>volume_off.png</file>
     </qresource>
     <qresource prefix="/resources/files">
         <file>mapa1.txt</file>
