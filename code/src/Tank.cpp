@@ -70,6 +70,9 @@ Tank::~Tank() {
     delete tank_hit;
     delete rocket_sound;
    //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
+
+    if(m_isMultiPlayer && m_color == m_HostColor)
+        delete m_Client;
 }
 
 void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -218,19 +221,13 @@ void Tank::advance()
 
     if(m_pause)
         return;
-
+    //pogledati opet taj if
+    //!this->isDestroyed
     if(m_isMultiPlayer && m_color == m_ClientColor)
     {
-        //qDebug() << Client::getX_Primljeno() << " xxxxxxxxxx";
         if(Client::getReceivedX() != 0 && Client::getReceivedY() != 0)
             setPos(Client::getReceivedX(), Client::getReceivedY());
             setRotation(Client::getReceivedAngle());
-        //setRotation(Client::getAngle_Primljeno());
-//        Client::nullifyX();
-//        Client::nullifyY();
-        //Client::nullifyAngle();
-        //qDebug() << Client::getAngle_Primljeno() << "ANGLE PRIMLJENO";
-       //return;
     }
 
 

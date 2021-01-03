@@ -99,6 +99,9 @@ void World::main_menu() {
     m_score_t1 = 0;
     m_score_t2 = 0;
 
+    m_last_map = 0;
+
+
     scene->clear();
     view->setBackgroundBrush(QPixmap(":/resources/images/main_menu.png"));
 
@@ -337,11 +340,19 @@ void World::load_map() {
     char map[] = ":/resources/files/mapa?.txt";
     char map_texture[] = ":/resources/images/map_?_background.png";
 
-    int random_integer = rand_int(NUM_OF_MAPS);
+//    int random_integer = rand_int(NUM_OF_MAPS);
 
-    while(random_integer == m_last_map) {
-        random_integer = rand_int(NUM_OF_MAPS);
+//    while(random_integer == m_last_map) {
+//        random_integer = rand_int(NUM_OF_MAPS);
+//    }
+
+    int random_integer;
+    if(m_last_map != 3)
+    {
+        random_integer = ++m_last_map;
     }
+    else
+        random_integer = 1;
 
     m_last_map = random_integer;
 

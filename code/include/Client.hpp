@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QHostAddress>
+#include <QNetworkInterface>
 class QHostAddress;
 class QJsonDocument;
 class Client : public QObject
@@ -12,6 +13,7 @@ class Client : public QObject
     Q_DISABLE_COPY(Client)
 public:
     explicit Client(QObject *parent = nullptr);
+    ~Client();
 
     void setTanksX(float pozicija_tenka_x);
     void setTanksY(float pozicija_tenka_y);

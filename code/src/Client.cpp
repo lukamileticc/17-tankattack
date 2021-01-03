@@ -20,6 +20,10 @@ Client::Client(QObject *parent)
     , m_clientSocket(new QTcpSocket(this))
     , m_loggedIn(false)
 {
+    x_received = 0;
+    y_received = 0;
+    angle_received = 0;
+
     connect(m_clientSocket, &QTcpSocket::connected, this, &Client::connected);
     connect(m_clientSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
     connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
@@ -39,6 +43,11 @@ void Client::login(const QString &userName)
         qDebug() << userName;
         clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
     }
+}
+
+Client::~Client()
+{
+    disconnectFromHost();
 }
 
 void Client::sendMessage(const QString &text)
@@ -94,8 +103,17 @@ void Client::jsonReceived(const QJsonObject &docObj)
 
 void Client::connectToServer(const QHostAddress &address, quint16 port)
 {
-    m_clientSocket->connectToHost(QHostInfo::localHostName(), 1967);
+    QList<QHostAddress> list = QNetworkInterface::allAddresses();
 
+    QString ipAdress;
+    //Nalazi nasu lokalnu ip adresu
+     for(int nIter=0; nIter<list.count(); nIter++)
+      {
+          if(!list[nIter].isLoopback())
+              if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
+                ipAdress = list[nIter].toString();
+      }
+    m_clientSocket->connectToHost(ipAdress, 1967);
 }
 void Client::onReadyRead()
 {
