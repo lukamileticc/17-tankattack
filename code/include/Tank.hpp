@@ -11,7 +11,7 @@ class Tank : public QObject, public QGraphicsItem{
     Q_OBJECT
 public:
 
-    Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client);
+    Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer);
 
     ~Tank();
 
@@ -114,7 +114,7 @@ private:
 
     //Deo koji se odnosi na rad mreze
     //~~~~~~~~~~~~~
-    bool isMultiPlayer = false;
+    bool m_isMultiPlayer = false;
     Client *m_Client;
     QColor m_HostColor = Qt::blue;
     QColor m_ClientColor = Qt::red;

@@ -10,6 +10,7 @@
 #include <cmath>
 #include <iostream>
 #include <QDebug>
+#include <QGraphicsRotation>
 
 #define ANGLE 9
 #define TANK_W 26
@@ -22,12 +23,14 @@
 #define TANK_BCKWD_SPEED 2.0
 #define ROCKET_SPEED 8.0
 
+#define TEST_MESSAGE "Test"
+
 float timer1 = 0.1;
 int r_power = 0;
 int timer2 = 0;
 
-Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client)
-    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client)
+Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer)
+    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client), m_isMultiPlayer(isMultiPlayer)
 {
     setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 2);
     setPos(m_x, m_y);
@@ -55,7 +58,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
             m_healt_bar = new HealthBar(925, 709, 180, 35);
     }
 
-    if(isMultiPlayer) {
+    if(m_isMultiPlayer) {
         if(m_color != m_ClientColor) {
             m_Client = new Client();
             m_Client->connectToServer(QHostAddress::LocalHost, 1967);
@@ -216,14 +219,17 @@ void Tank::advance()
     if(m_pause)
         return;
 
-    if(isMultiPlayer && m_color == m_ClientColor)
+    if(m_isMultiPlayer && m_color == m_ClientColor)
     {
-        setPos(Client::getX_Primljeno(), Client::getY_Primljeno());
-        rotate(Client::getAngle_Primljeno());
+        //qDebug() << Client::getX_Primljeno() << " xxxxxxxxxx";
+        if(Client::getReceivedX() != 0 && Client::getReceivedY() != 0)
+            setPos(Client::getReceivedX(), Client::getReceivedY());
+            setRotation(Client::getReceivedAngle());
+        //setRotation(Client::getAngle_Primljeno());
 //        Client::nullifyX();
 //        Client::nullifyY();
-        Client::nullifyAngle();
-        qDebug() << Client::getAngle_Primljeno() << "ANGLE PRIMLJENO";
+        //Client::nullifyAngle();
+        //qDebug() << Client::getAngle_Primljeno() << "ANGLE PRIMLJENO";
        //return;
     }
 
@@ -323,7 +329,7 @@ void Tank::advance()
         timer1+=0.1;
         m_tank_rocket_type=Rocket_type::Medium_power;
     }
-//    if(isMultiPlayer && m_color == m_ClientColor){
+//    if(m_isMultiPlayer && m_color == m_ClientColor){
 //    switch (Client::getMovement()) {
 //    case 1:
 //        up = true;
@@ -374,22 +380,22 @@ void Tank::advance()
         move_forward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(-ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
     else if (right && up) {
         move_forward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
@@ -397,11 +403,11 @@ void Tank::advance()
         move_backward();
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
@@ -409,60 +415,59 @@ void Tank::advance()
         move_backward();
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(-ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
     else if (up) {
         move_forward();
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(0);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
     else if (left) {
         rotate(-ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(-ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
     else if (right) {
         rotate(ANGLE);
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(ANGLE);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
     else if (down) {
         move_backward();
 
-        if(isMultiPlayer && m_color != m_ClientColor) {
-            m_Client->setPozicija_TenkaX(m_x);
-            m_Client->setPozicija_TenkaY(m_y);
-            m_Client->setAngle_Tenka(0);
-            m_Client->sendMessage("Proba");
+        if(m_isMultiPlayer && m_color != m_ClientColor) {
+            m_Client->setTanksX(m_x);
+            m_Client->setTanksY(m_y);
+            m_Client->setTanksAngle(rotation());
+            m_Client->sendMessage(TEST_MESSAGE);
         }
     }
 
-    if(isMultiPlayer && m_color == m_ClientColor && Client::isOrderedToShoot()){
+    if(m_isMultiPlayer && m_color == m_ClientColor && Client::isOrderedToShoot()){
         launch = true;
-        qDebug() << "Pucaj!";
         Client::setCantShoot();
     }
 
@@ -470,7 +475,7 @@ void Tank::advance()
         QPointF rckt_pos = mapToScene((TANK_W / 2) - ROCKET_RADIUS, -2 * ROCKET_RADIUS - 0.1);
 
         Rocket *rocket = new Rocket(rckt_pos.x(), rckt_pos.y(), ROCKET_RADIUS, m_tank_rocket_type, m_id, ROCKET_SPEED * r_speed_x , ROCKET_SPEED * r_speed_y, rotation(), this);
-        if(isMultiPlayer && m_color == m_HostColor)
+        if(m_isMultiPlayer && m_color == m_HostColor)
             m_Client->sendMessage("Space");
 
         if(m_id == 0 && rocket->rakete_tenka_0 <= MAX_ROCKET) {

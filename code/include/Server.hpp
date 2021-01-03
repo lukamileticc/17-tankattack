@@ -16,18 +16,7 @@ class Server : public QTcpServer
 public:
     explicit Server(QObject *parent = nullptr);
     ~Server();
-    float x_new;
-    float y_new;
 
-    bool orderedToShoot;
-
-    static float getX();
-    static float getY();
-    static bool isOrderedToShoot();
-
-    int getNumOfClients();
-
-    void waitForClients();
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 private:

@@ -8,12 +8,6 @@
 #include <QJsonValue>
 #include <QTimer>
 
-
-float x_tmp;
-float y_tmp;
-bool  orderedToShoot_tmp;
-int numOfClients = 0;
-bool isStart = false;
 Server::Server(QObject *parent)
     : QTcpServer(parent)
     , m_idealThreadCount(qMax(QThread::idealThreadCount(), 1))
@@ -52,16 +46,6 @@ void Server::incomingConnection(qintptr socketDescriptor)
     connect(worker, &ServerWorker::jsonReceived, this, std::bind(&Server::jsonReceived, this, worker, std::placeholders::_1));
     connect(this, &Server::stopAllClients, worker, &ServerWorker::disconnectFromClient);
     m_clients.append(worker);
-
-    if(m_clients.size() == 2)
-    {
-        QJsonObject message = {
-            {"Start", 1}
-        };
-
-        broadcast(message, nullptr);
-    }
-    emit logMessage(QStringLiteral("New client Connected"));
 }
 void Server::sendJson(ServerWorker *destination, const QJsonObject &message)
 {
@@ -70,12 +54,9 @@ void Server::sendJson(ServerWorker *destination, const QJsonObject &message)
 }
 void Server::broadcast(const QJsonObject &message, ServerWorker *exclude)
 {
-
-    qDebug() << m_clients.size() << "velicina";
     for (ServerWorker *worker : m_clients) {
         Q_ASSERT(worker);
         if (worker != exclude){
-            qDebug() << "poslao";
         sendJson(worker, message);
         break;
         }
@@ -85,18 +66,7 @@ void Server::broadcast(const QJsonObject &message, ServerWorker *exclude)
 void Server::jsonReceived(ServerWorker *sender, const QJsonObject &json)
 {
     Q_ASSERT(sender);
-    emit logMessage(QLatin1String("JSON received ") + QString::fromUtf8(QJsonDocument(json).toJson()));
-
-    QJsonObject message;
-    if(*json.find("Space") != *json.end())
-    {
-        message = {
-
-            {"Space", *json.find("Space")}
-        };
-    }
-    else
-        message = json;
+    QJsonObject message = json;
 
     broadcast(message, sender);
 }
@@ -119,20 +89,4 @@ void Server::stopServer()
     emit stopAllClients();
     close();
 }
-
-float Server::getX()
-{
-
-   return x_tmp;
-}
-float Server::getY()
-{
-    return y_tmp;
-}
-
-int Server::getNumOfClients()
-{
-    return m_clients.size();
-}
-
 

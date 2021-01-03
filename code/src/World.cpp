@@ -183,8 +183,8 @@ void World::start() {
         client = Qt::blue;
     }
 
-    this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client);
-    this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client);
+    this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client, isMultiplayer);
+    this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client, isMultiplayer);
 
     t1->set_name(this->first_tank_name);
     t2->set_name(this->second_tank_name);
