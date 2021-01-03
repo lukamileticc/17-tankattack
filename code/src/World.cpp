@@ -21,6 +21,7 @@
 #include <exception>
 #include <fstream>
 #include <random>
+#define NUM_OF_MAPS 3
 
 bool World::world_pause;
 bool World::isHosting = false;
@@ -270,13 +271,13 @@ void World::show_battles() {
        exit(EXIT_FAILURE);
     }
 
-     QString title = "                      LAST 10 BATTLES:\n";
+     QString title = "LAST 10 BATTLES:\n";
      QString pair_list;
 
      pair_list.append("\n\n");
 
      int i = 1;
-     QString tab = "        ";
+     QString tab = "";
 
      for(const auto& battle : *previous_battles)
         pair_list.append("\n").append(tab)
@@ -287,8 +288,13 @@ void World::show_battles() {
     QFont font("Helvetica", 40, QFont::Bold);
     QFont font_lista("Helvetica", 18);
     QGraphicsTextItem *text = scene->addText(title, font);
-    QGraphicsTextItem *text_list = scene->addText(pair_list, font_lista);
+    int title_x_pos = scene->width() / 2 - text->boundingRect().width() / 2;
+    text->setPos(title_x_pos, 0);
     text->setDefaultTextColor(QColor("white"));
+
+    QGraphicsTextItem *text_list = scene->addText(pair_list, font_lista);
+    int list_x_pos = scene->width() / 2 - text_list->boundingRect().width() / 2;
+    text_list->setPos(list_x_pos, 0);
     text_list->setDefaultTextColor(QColor("white"));
 
     //brisemo pokazivac na vektor
@@ -326,10 +332,10 @@ void World::load_map() {
     char map[] = ":/resources/files/mapa?.txt";
     char map_texture[] = ":/resources/images/map_?_background.png";
 
-    int random_integer = rand_int(3);
+    int random_integer = rand_int(NUM_OF_MAPS);
 
-    while(random_integer == m_last_map){
-        random_integer = rand_int(3);
+    while(random_integer == m_last_map) {
+        random_integer = rand_int(NUM_OF_MAPS);
     }
 
     m_last_map = random_integer;
