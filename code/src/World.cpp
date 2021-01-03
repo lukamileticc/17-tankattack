@@ -87,7 +87,13 @@ void World::show(){
 }
 
 void World::main_menu() {
-    music->play();
+    //ako se zavrsila pesma ,onda se opet pusta
+    if(music->state() == QMediaPlayer::StoppedState
+    || music->state() == QMediaPlayer::PausedState)
+    {
+        qDebug() << music->state();
+        music->play();
+    }
     m_showed_warning = false;
     m_in_game = 0;
     m_score_t1 = 0;
