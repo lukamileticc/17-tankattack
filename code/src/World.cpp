@@ -366,11 +366,15 @@ void World::rounds() {
         return;
     }
     else{
-        world_pause = false;
+        if (world_pause){
+            world_pause = false;
+            m_showed_pause = false;
+            scene->removeItem(info_pause);
+        }
         //Da se ne bi ispisivalo cant remove from the scene
         //ovde se treba proveriti da li je info_pause na sceni
         //ako jeste onda ga brisi! a ako nije da uopste ne ulazi ovde!
-        //scene->removeItem(info_pause);
+
     }
 
     show_tank_info();
