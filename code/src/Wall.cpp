@@ -10,28 +10,24 @@ Wall::Wall(float x, float y, float width, float height)
     setPos(m_x, m_y);
 }
 
-Wall::Wall(const Wall&)
-{
+Wall::Wall(const Wall&) {
 }
 
-Wall Wall::operator=(const Wall&)
-{
+Wall Wall::operator=(const Wall&) {
     return *this;
 }
 
-void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
+void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(QColor(180, 165, 208));
+    painter->setBrush(QColor(239, 239, 239));
     painter->setPen(Qt::NoPen);
     painter->drawRect(0, 0, m_width, m_height);
 }
 
-QRectF Wall::boundingRect() const
-{
+QRectF Wall::boundingRect() const {
     return QRectF(0, 0, m_width, m_height);
 }
 
@@ -39,23 +35,19 @@ int Wall::type() const {
     return 0;
 }
 
-bool Wall::isVertical() const
-{
+bool Wall::isVertical() const {
     return (m_height - m_width) > 0 ? true : false;
 }
 
-bool Wall::isHorizontal() const
-{
+bool Wall::isHorizontal() const {
     return !isVertical();
 }
 
-float Wall::getHeight() const
-{
+float Wall::getHeight() const {
     return m_height;
 }
 
-float Wall::getWidth() const
-{
+float Wall::getWidth() const {
     return m_width;
 }
 
@@ -63,11 +55,10 @@ float Wall::getX() const{
     return m_x;
 }
 
-float Wall::getY() const{
+float Wall::getY() const {
     return m_y;
 }
 
-std::pair<float,float> Wall::getCoordinates() const
-{
+std::pair<float,float> Wall::getCoordinates() const {
     return std::make_pair(m_x, m_y);
 }
