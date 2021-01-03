@@ -1,3 +1,4 @@
+Idemo 0 - 3 Dalje
 Player 1 0 - 3 Player 2
 Player 1 0 - 1 Player 2
 Player 1 0 - 1 Player 2
@@ -7,4 +8,3 @@ Player 1 1 - 0 Player 2
 Player 1 0 - 1 Player 2
 Player 1 1 - 0 Player 2
 Player 1 0 - 0 Player 2
-Nikola 0 - 1 Sara

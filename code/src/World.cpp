@@ -63,12 +63,11 @@ World::~World() {
     //i button sound se ispravno deiicijalizuje
     delete  button_sound;
 
-
-    //info_pause i info_t2 i info_t1 i game_score se pravilno oslobadjaja
+    //info_pause uredan
     delete info_pause;
-    delete info_t2;
-    delete info_t1;
-    delete game_score;
+
+ // info_t2 i info_t1 i game_score se pravilno oslobadjaja
+    //oni se oslobadjaju u show_tank_info
 
 //OVO DOLE NE ZNAM DA OSLOBODIM
     //Ove lajnove ne znam da oslobdim u pm
