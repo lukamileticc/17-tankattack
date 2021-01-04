@@ -6,11 +6,11 @@ TankAttack je 2D multiplayer (komunikacija 2 igrača preko mreže) igrica koja s
 * [General info](#general-info)
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
-* [Setup](#setup)
+* [Setup](#setup-pencil2)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
-* [Developers](#developers)
+* [Developers](#developers-punch-muscle)
 
 ## Setup :pencil2:
 Primer prevodjenja i pokretanja programa koriscenjem Makefile-a:
