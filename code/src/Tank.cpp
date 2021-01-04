@@ -133,8 +133,8 @@ void Tank::move_forward() {
 
     if(!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
-        for(auto item : coll_list) {
-            if (item->type() == 4) {
+        for(auto &item : coll_list) {
+            if (typeid(*item) == typeid (SuperPower)) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
                    m_power=1;
@@ -149,7 +149,7 @@ void Tank::move_forward() {
                delete item;
             }
             else {
-                while(this->collidesWithItem(item) && item->type() != 3) {
+                while(this->collidesWithItem(item) && typeid(*item) != typeid (Rocket)) {
                     m_x += x_v / TANK_FRWD_SPEED;
                     m_y += y_v / TANK_FRWD_SPEED;
                     setPos(m_x, m_y);
@@ -167,8 +167,8 @@ void Tank::move_backward() {
 
     if(!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
-        for(auto item : coll_list) {
-            if (item->type() == 4) {
+        for(auto &item : coll_list) {
+            if (typeid(*item) == typeid (SuperPower)) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
                    m_power=1;
@@ -183,7 +183,7 @@ void Tank::move_backward() {
                delete item;
             }
             else {
-                while(this->collidesWithItem(item) && item->type() != 3) {
+                while(this->collidesWithItem(item) && typeid(*item) != typeid (Rocket)) {
                     m_x -= x_v / TANK_FRWD_SPEED;
                     m_y -= y_v / TANK_FRWD_SPEED;
                     setPos(m_x, m_y);
@@ -199,8 +199,8 @@ void Tank::rotate(float angle) {
 
     if (!scene()->collidingItems(this).isEmpty()) {
         QList<QGraphicsItem *> coll_list = scene()->collidingItems(this);
-        for(auto item : coll_list) {
-            if (item->type() == 4) {
+        for(auto &item : coll_list) {
+            if (typeid(*item) == typeid (SuperPower)) {
                SuperPower *sp  = qgraphicsitem_cast<SuperPower*>(item);
                if(sp->getType() == QString("superpower")){
                    m_power=1;
@@ -234,7 +234,7 @@ void Tank::advance()
     {
         if(Client::getReceivedX() != 0 && Client::getReceivedY() != 0)
             setPos(Client::getReceivedX(), Client::getReceivedY());
-            setRotation(Client::getReceivedAngle());
+        setRotation(Client::getReceivedAngle());
     }
 
 

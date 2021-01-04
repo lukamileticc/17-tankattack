@@ -1,10 +1,10 @@
+sda  [3 - 1] www
+idemo  [0 - 3 ] sada
+Lukindra 3 - 1 Pecindra
+Sloba 3 - 0 NIKOLA
+dsadsa 3 - 0 wwwwwwww
 sadasdad 1 - 3 dadsad
 Player 1 1 - 3 Player 2
 Player 1 2 - 3 Player 2
 Player 1 2 - 3 Player 2
 Player 1 0 - 3 Player 2
-Player 1 0 - 3 Player 2
-dsadsa 0 - 3 dsadsa
-Idemo 0 - 3 Dalje
-Player 1 0 - 3 Player 2
-Player 1 0 - 1 Player 2

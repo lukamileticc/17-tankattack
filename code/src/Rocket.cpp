@@ -72,16 +72,16 @@ void Rocket::move() {
         int wall_collision_count = 0;
         std::vector<Wall *> walls_colided_with;
         QList<QGraphicsItem *> items = scene()->collidingItems(this);
-        for (auto item : items) {
+        for (auto &item : items) {
 
             //0 je id elementa Wall
-            if (item->type() == 0) {
+            if (typeid(*item) == typeid (Wall)) {
                 wall_collision_count++;
                 walls_colided_with.push_back(qgraphicsitem_cast<Wall*>(item));
             }
 
             //1 je id elementa Tank
-            if (item->type() == 1){
+            if (typeid(*item) == typeid (Tank)){
                 if(m_id == 0)
                     rakete_tenka_0 -= 1;
                 else
@@ -191,7 +191,7 @@ void Rocket::move() {
 
     //unistavmo raketu posle izvesnog vremena otprilike oko 5 sekundi
     m_life_time++;
-    if(m_life_time > 300) {
+    if(m_life_time > 200) {
         if(m_id == 0)
             rakete_tenka_0 -= 1;
         else

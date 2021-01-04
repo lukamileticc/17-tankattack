@@ -290,7 +290,9 @@ void World::show_battles() {
     QVector<QString> *previous_battles = nullptr;
 
     try {
-        previous_battles = read_previous_battles(":/resources/files/istorija_borbi.txt");
+        previous_battles = read_previous_battles("../17-tankattack/code/res/istorija_borbi.txt");
+        if(previous_battles != nullptr)
+            qDebug() << "Tu sam";
     }
     catch(const QString &e) {
        qDebug() << e;
@@ -625,10 +627,10 @@ void World::write_the_last_battle(const char *file) {
         previous_battles->pop_back();
     //ubacam na pocetak poslednju borbu koja se desila
     QString last_battle;
-    last_battle.append(first_tank_name).append(" ")
+    last_battle.append(first_tank_name).append(" ").append(" [")
                .append(QString::number(m_score_t1)).append(" ")
                .append("- ")
-               .append(QString::number(m_score_t2)).append(" ")
+               .append(QString::number(m_score_t2)).append("] ")
                .append(second_tank_name).append("\n");
 
     //ovde moze da se doda sa leve i desne strane recimo crvena i plava kockica da ne pise redtank
