@@ -259,34 +259,13 @@ void Tank::advance()
 //        m_tank_rocket_type=Rocket_type::Low_power;
 //    }
 
-    if(m_id == 0){/*
-        unsigned int commands = m_input->key_tank1;
-        if((commands & key_up) == key_up){
-            up = !up;
-            std::cout << "W" << std::endl;
-        }
-        if((commands & key_down) == key_down)
-            down = !down;
-        if((commands & key_right) == key_right)
-            right = !right;
-        if((commands & key_left) == key_left)
-            left = !left;*/
-        up = m_input->k_w;
+    if(m_id == 0){up = m_input->k_w;
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
         launch = m_input->k_space;
     }
-    else if(m_id == 1){/*
-        unsigned int commands = m_input->key_tank2;
-        if((commands & key_up) == key_up)
-            up = !up;
-        if((commands & key_down) == key_down)
-            down = !down;
-        if((commands & key_right) == key_right)
-            right = !right;
-        if((commands & key_left) == key_left)
-            left = !left;*/
+    else if(m_id == 1){
         up = m_input->k_up;
         down = m_input->k_down;
         right = m_input->k_right;
@@ -317,62 +296,12 @@ void Tank::advance()
     x_v *= TANK_FRWD_SPEED;
     y_v *= TANK_FRWD_SPEED;
 
-//kombinacije tastera u narednoj if naredbi nisu semanticki ispravne, nema ih smisla kombinovati
-//    if ((left && right) || (up && down && (left || right))) {
-//        return;
-//    }
-
     if(m_power == 1){
         timer1+=0.1;
         m_tank_rocket_type=Rocket_type::Medium_power;
     }
-//    if(m_isMultiPlayer && m_color == m_ClientColor){
-//    switch (Client::getMovement()) {
-//    case 1:
-//        up = true;
-//        qDebug() << "gore";
-//        Client::nullifyMovement();
-//        break;
-//    case 2:
-//        down = true;
-//        qDebug() << "dole";
-//        Client::nullifyMovement();
-//        break;
-//    case 3:
-//        left = true;
-//        Client::nullifyMovement();
-//        break;
-//    case 4:
-//        right = true;
-//        qDebug() << "desno";
-//        Client::nullifyMovement();
-//        break;
-//    case 5:
-//        left = true;
-//        up = true;
-//        Client::nullifyMovement();
-//        break;
-//    case 6:
-//        right = true;
-//        up = true;
-//        Client::nullifyMovement();
-//        break;
-//    case 7:
-//        left = true;
-//        down = true;
-//        Client::nullifyMovement();
-//        break;
-//    case 8:
-//        right = true;
-//        down = true;
-//        Client::nullifyMovement();
-//        break;
-//    default:
-//        break;
-//    }
-//    }
 
-///////////////////////////////////////////////////////////////////
+
     if (left && up) {
         move_forward();
         rotate(-ANGLE);
@@ -621,66 +550,4 @@ QMediaPlayer* Tank::get_explosion_sound() const {
 void Tank::setColors() {
     m_ClientColor = Qt::blue;
     m_HostColor = Qt::red;
-}
-
-///////////////////////////////////////////
-
-bool Tank::IsAbleToShoot() const {
-    return m_can_shoot;
-}
-
-int Tank::GetCurrentNumsOfLife () const {
-    return m_num_of_lives;
-}
-
-int Tank::GetCurrentNumsOfRockets() const{
-    return m_num_of_rockets;
-
-}
-
-bool Tank::IsDead() const {
-    return m_num_of_lives == 0;
-}
-
-void Tank::SetX(float x) {
-    m_x=x;
-}
-
-void Tank::SetY(float y) {
-    m_y=y;
-}
-
-void Tank::SetSpeed(float speed) {
-    m_speed = speed;
-}
-
-float Tank::GetSpeed() const {
-    return m_speed;
-}
-
-void Tank::SetCanShot() {
-    if (m_can_shoot == 0) {
-        m_can_shoot = false;
-    }
-    else {
-        m_can_shoot = true;
-    }
-}
-
-void Tank::DecreaseNumOfLife() {
-    if (m_health <= 0) {
-        m_num_of_lives -= 1;
-    }
-}
-
-void Tank::IncreaseNumOfLife(){
-    m_num_of_lives += 1;
-}
-
-void Tank::shoot() {
-    m_num_of_rockets -= 1;
-}
-
-void Tank::IncreaseScore(int score){
-    m_score+=score;
 }

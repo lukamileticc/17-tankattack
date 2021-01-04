@@ -83,13 +83,13 @@ private:
     QString first_tank_name = "Player 1";
     QString second_tank_name = "Player 2";
     int m_last_map = -1; // number of last map
-    int m_left_round_time = 0; // timer povecava ovaj brojac kako bi proslo odredjeno vreme nakon
-                               //unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)
+    int m_left_round_time = 0; /* timer povecava ovaj brojac kako bi proslo odredjeno vreme nakon
+                               unistavanja jednog od tenkova (mozda zalutala raketa unisti drugi tenk)*/
+
     //polje koje sluzi da menja sliku dugmeta za pojacavanje tona muzike
     QPushButton* bvolumen = nullptr;
 
     bool isMultiplayer = false;
-
 
     //flag koji oznacava da li smo vec bili u main_menu
     bool main_menu_flag = false;

@@ -19,38 +19,22 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     QPainterPath shape() const override;
+    QMediaPlayer *get_explosion_sound() const;
     int type() const override;
-
-    bool IsAbleToShoot() const;
 
     void decrease_health(int health);
     void increase_health(int health);
-
     void show_tank_info();
-
-    QMediaPlayer *get_explosion_sound() const;
     int get_current_health() const;
-    bool IsDead() const;
-    int GetCurrentNumsOfLife () const;
     float GetX() const;
     float GetY() const;
     float GetSpeed() const;
-    int GetCurrentNumsOfRockets() const;
-
     int get_score() const;
     void set_score(int score);
-//    const std::vector<Rocket> &getRockets() const;
-
-//    void setRockets(const std::vector<Rocket> &mRockets);
     int getId();
     void SetX(float x);
     void SetY(float y);
     void SetSpeed(float speed);
-    void SetCanShot();
-    void DecreaseNumOfLife();
-    void IncreaseNumOfLife();
-    void shoot();
-    void IncreaseScore(int score);
     void SetHealth(float health);
     QString get_name() const;
     void set_name(const QString &name);

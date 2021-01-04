@@ -49,7 +49,6 @@ HEADERS += \
     code/include/ServerWorker.hpp \
     code/include/SuperPower.hpp \
     code/include/World.hpp \
-    code/include/Board.hpp \
     code/include/Rocket.hpp \
     code/include/Map.hpp \
     code/include/Tank.hpp \

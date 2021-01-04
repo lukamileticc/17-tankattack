@@ -8,7 +8,6 @@
 int Rocket::rakete_tenka_0;
 int Rocket::rakete_tenka_1;
 
-//u rocket power ce se prosledjivati enum u zavisnoti koju jacinu poseduje tenk
 Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, int x_v, int y_v, qreal rot,Tank *t)
     :m_x(x),m_y(y),m_r(r),m_rocket_type(rocket_type),m_id(id),m_direction_x(x_v),m_direction_y(y_v),m_rotation(rot),m_t(t)
 {
@@ -29,10 +28,6 @@ Rocket::Rocket(float x, float y, float r, const Rocket_type rocket_type,int id, 
         m_color = Qt::red;
         m_rocket_power = 50;
     }
-//    else if(m_rocket_type == Rocket_type::High_power){
-//        m_color = Qt::blue;
-//        m_rocket_power = 50;
-//    }
     else throw "Nepodrzana jacina metka";
 
 
@@ -78,14 +73,7 @@ void Rocket::move() {
         std::vector<Wall *> walls_colided_with;
         QList<QGraphicsItem *> items = scene()->collidingItems(this);
         for (auto item : items) {
-//            if (item->type()==4){
-//                delete this;
-//                scene()->removeItem(this);
-//                if(m_id == 0)
-//                    rakete_tenka_0 -= 1;
-//                else
-//                    rakete_tenka_1 -= 1;
-//            }
+
             //0 je id elementa Wall
             if (item->type() == 0) {
                 wall_collision_count++;
@@ -211,7 +199,6 @@ void Rocket::move() {
 
         scene()->removeItem(this);
         delete this;
-//        qDebug() << "Raketa je unistena: " << rakete_tenka_0;
     }
 }
 

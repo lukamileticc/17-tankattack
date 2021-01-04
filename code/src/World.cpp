@@ -69,7 +69,7 @@ World::~World() {
 
 
 //OVO DOLE NE ZNAM DA OSLOBODIM!
-    //Ove lajnove ne znam da oslobdim u pm
+
 //    delete line2;
 //    delete line1;
 //    delete warning_name_length;
@@ -358,12 +358,6 @@ int rand_int(unsigned num_of_maps) {
 void World::load_map() {
     char map[] = ":/resources/files/mapa?.txt";
     char map_texture[] = ":/resources/images/map_?_background.png";
-
-//    int random_integer = rand_int(NUM_OF_MAPS);
-
-//    while(random_integer == m_last_map) {
-//        random_integer = rand_int(NUM_OF_MAPS);
-//    }
 
     int random_integer;
     if(m_last_map != 3)
