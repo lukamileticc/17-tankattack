@@ -13,7 +13,7 @@ public:
     Map() = default;
     Map(const char * file);
     Map(int mNumOfWalls, const std::vector<Wall*> &mWalls);
-    ~Map()  = default;
+    ~Map();
     int getNumOfWalls() const;
 
     void setNumOfWalls(int mNumOfWalls);

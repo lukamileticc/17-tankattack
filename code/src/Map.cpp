@@ -26,7 +26,12 @@ Map::Map(const char * file)
     Map::setNumOfWalls(m_walls.size());
 
 }
-
+Map::~Map()
+{
+    //mapa mora da ima destrukot jer poseduje vektor pokazivaca
+    for(auto &w : m_walls)
+        delete w;
+}
 
 int Map::getNumOfWalls() const {
     return m_num_of_walls;

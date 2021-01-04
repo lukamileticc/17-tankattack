@@ -2,6 +2,7 @@
 #define WORLD_HPP
 
 #include "code/include/Tank.hpp"
+#include "code/include/Map.hpp"
 #include <QGraphicsScene>
 #include <QGraphicsWidget>
 #include <QGraphicsView>
@@ -37,6 +38,8 @@ public:
     QMediaPlayer *music = nullptr;
     QMediaPlayer *button_sound = nullptr;
     Input *input = nullptr;
+    Map* m = nullptr; //m je map
+
 
     static bool world_pause;
     static bool isHosting;
@@ -50,6 +53,7 @@ public:
     void write_the_last_battle(const char *file);
 
     void end_game_screen(QString message);
+    void volumen_first();
 
 public slots:
     void start();
@@ -85,6 +89,10 @@ private:
     QPushButton* bvolumen = nullptr;
 
     bool isMultiplayer = false;
+
+
+    //flag koji oznacava da li smo vec bili u main_menu
+    bool main_menu_flag = false;
 };
 
 #endif // WORLD_HPP

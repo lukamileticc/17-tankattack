@@ -56,28 +56,24 @@ World::~World() {
     //UNISTEN TENK SE SAM UNISTAVA , s tim sto na kraju svake runde treba unisti oba tenka
     //jer se u sledece pozivu next_round ona oba opet inicijalizuju
     //TENKOVI SE PRAVILNO OSLOBADJAJU!
-    //I input se pravilno oslobadja!
+    //I input se pravilno oslobadja! i map(m) se pravilno oslobadja
 
     //muzika se pravilno oslobadja
     delete music;
     //i button sound se ispravno deiicijalizuje
     delete  button_sound;
+    //pravilnoo
+    delete bvolumen;
 
-    //info_pause uredan
-    delete info_pause;
+ // info_t2 i info_t1 i game_score i info_pause se pravilno oslobadjaja
 
- // info_t2 i info_t1 i game_score se pravilno oslobadjaja
-    //oni se oslobadjaju u show_tank_info
 
-//OVO DOLE NE ZNAM DA OSLOBODIM
+//OVO DOLE NE ZNAM DA OSLOBODIM!
     //Ove lajnove ne znam da oslobdim u pm
 //    delete line2;
 //    delete line1;
 //    delete warning_name_length;
 
-
-    //bvolumen nije potrebno oslobadjati ,to za nas radi qt-vrvtno
-//  delete bvolumen;
 }
 
 void World::show(){
@@ -87,6 +83,21 @@ void World::show(){
 }
 
 void World::main_menu() {
+
+    if(main_menu_flag == true)
+    {
+        //ako je true vec smo ulazili u main samim tim inicijalizovali bvolumen
+        delete bvolumen;
+        main_menu_flag = true;
+    }
+    if(m_showed_info == true)
+    {
+        delete info_t1;
+        delete info_t2;
+        delete game_score;
+        m_showed_info = false;
+    }
+
     //ako se zavrsila pesma ,onda se opet pusta
     if(music->state() == QMediaPlayer::StoppedState
     || music->state() == QMediaPlayer::PausedState)
@@ -109,8 +120,9 @@ void World::main_menu() {
     //button za pojacavanje i smanjivanje volumena
     bvolumen = make_button("VOLUME");
     bvolumen->move(scene->width() - 100, scene->height() - 100);
-    QPixmap pixmap(":/resources/images/volume_3.png");
-    bvolumen->setIcon(QIcon(pixmap));
+//    QPixmap pixmap(":/resources/images/volume_3.png");
+//    bvolumen->setIcon(QIcon(pixmap));
+    volumen_first();
     bvolumen->setIconSize(QSize(100,100));
     bvolumen->setCheckable(true);
     //ako pravimo bvolumen onda necemo standardni styleSheet
@@ -170,6 +182,13 @@ void World::main_menu() {
 void World::start() {
     music->pause();
     m_ended_round = false;
+    if(m_showed_info == true)
+    {
+        delete info_t1;
+        delete info_t2;
+        delete game_score;
+        m_showed_info = false;
+    }
     m_showed_info = false;
     m_showed_warning = false;
     World::world_pause = false;
@@ -363,13 +382,13 @@ void World::load_map() {
 
     view->setBackgroundBrush(QPixmap(map_texture));
 
-    Map *m = new Map(map);
+    m = new Map(map);
     std::vector<Wall *> walls = m->getWalls();
 
     for(auto w: walls)
         scene->addItem(w);
 
-    delete m;
+    //delete m; ovo ne moze ovde!
 }
 
 void World::rounds() {
@@ -386,6 +405,7 @@ void World::rounds() {
             world_pause = false;
             m_showed_pause = false;
             scene->removeItem(info_pause);
+            delete info_pause;
         }
         //Da se ne bi ispisivalo cant remove from the scene
         //ovde se treba proveriti da li je info_pause na sceni
@@ -469,49 +489,7 @@ void World::end_of_round(QString message) {
         QObject::connect(bm_menu, SIGNAL (released()), this, SLOT (main_menu()), Qt::QueuedConnection);
         QObject::connect(bm_menu, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
     }
-//    {
-//    scene->clear();
-//    view->setBackgroundBrush(Qt::black);
-//    view->setDragMode(QGraphicsView::ScrollHandDrag);
-//    view->setFixedSize(1271, 813);
 
-//    QLabel *label = new QLabel();
-//    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-//    label->setText(message);
-//    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-
-//    QGraphicsTextItem *text = scene->addText(message + " won!", font);
-//    int x_position = 640 - text->boundingRect().width()/2;
-//    text->setPos(x_position, 100);
-//    text->setDefaultTextColor(QColor("white"));
-
-//    //"Score" ispis
-//    QString score1("Score:");
-//    QGraphicsTextItem *score2 = scene->addText(score1,font);
-//    int x_pos = 640 - score2->boundingRect().width()/2;
-//    int y_pos = 300;
-//    score2->setPos(x_pos,y_pos);
-//    score2->setDefaultTextColor(QColor("white"));
-//    //"1:0" rezultat ispis
-//    QString score3;
-//    score3.reserve(100);
-//    score3.append(QString::number (m_score_t1)).append(" : ").append(QString::number (m_score_t2));
-//    QGraphicsTextItem *score4 = scene->addText(score3,font);
-//    int x_pos1 = 640 - score4->boundingRect().width()/2;
-//    int y_pos1 = 400;
-//    score4->setPos(x_pos1,y_pos1);
-//    score4->setDefaultTextColor(QColor("white"));
-//    //ime prvog -- ispis
-//    QGraphicsTextItem *name1 = scene->addText(first_tank_name,font);
-//    int x = 640 - score4->boundingRect().width()/2 - name1->boundingRect().width() - 5;
-//    int y = 400;
-//    name1->setPos(x,y);
-//    name1->setDefaultTextColor(QColor("white"));
-//    //ime drugog -- ispis
-//    QGraphicsTextItem *name2 = scene->addText(second_tank_name,font);
-//    name2->setPos(640 + score4->boundingRect().width()/2 + 5,y);
-//    name2->setDefaultTextColor(QColor("white"));
-//}
 
     //moramo osloboditi oba tenka jer ce u sledecoj rundi da budu opet inicijalizovani
     //tek ovde Brisemo tenkove
@@ -519,6 +497,8 @@ void World::end_of_round(QString message) {
     delete t2;
     //Ovde se brise i input jer ce se kao i tenkovi opet inicijalizovati u sledecoj rundi
     delete input;
+    //ovde mora i mapa da se brise mora! jer ce se ponovo inicijalizovati u startu!
+    delete m;
 
     return;
 }
@@ -807,7 +787,26 @@ QPushButton* World::make_button(QString name) {
 void World::button_clicked() {
     button_sound->play();
 }
+void World::volumen_first()
+{
+    if(music->volume() == 0) {
+        QPixmap pixmap(":/resources/images/volume_off.png");
+        bvolumen->setIcon(QIcon(pixmap));
+    }
+    else if(music->volume() == 10) {
+        QPixmap pixmap(":/resources/images/volume_1.png");
+        bvolumen->setIcon(QIcon(pixmap));
+   }
+    else if(music->volume() == 20) {
+        QPixmap pixmap(":/resources/images/volume_2.png");
+        bvolumen->setIcon(QIcon(pixmap));
+    }
+    else if(music->volume() == 30) {
+        QPixmap pixmap(":/resources/images/volume_3.png");
+        bvolumen->setIcon(QIcon(pixmap));
+    }
 
+}
 void World::set_volume() {
     if(music->volume() == 0) {
         QPixmap pixmap(":/resources/images/volume_3.png");
