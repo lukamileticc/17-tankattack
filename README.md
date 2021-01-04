@@ -13,7 +13,7 @@ TankAttack je 2D multiplayer (komunikacija 2 igrača preko mreže) igrica koja s
 * [Developers](#developers-punch-muscle)
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+![Example screenshot](./screenshots/initial_interface.png)
 
 
 ## Setup :pencil2:
