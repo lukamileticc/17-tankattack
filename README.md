@@ -2,6 +2,15 @@
 
 TankAttack je 2D multiplayer (komunikacija 2 igrača preko mreže) igrica koja simulira bitku između tenkova koji se nalaze u lavirintu. Cilj igrice je eliminisati protivnika pre nego što on eliminiše tebe. Inicijalno ispaljuju tenkovsko đule, a tokom bitke postoji mogućnost skupljanja supermoćnoh oružja koja olakšavaju eliminaciju protivnika. Igrica će imati različite teksture i modove kao što je simulacija bitke između dva igrača koji igraju na istom računaru. Postoje još neke ideje koje ćemo pokušati da uklopimo tokom razvoja projekta. 
 
+## Table of contents
+* [General info](#general-info)
+* [Screenshots](#screenshots)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Features](#features)
+* [Status](#status)
+* [Inspiration](#inspiration)
+* [Developers](#developers)
 
 ## Setup :pencil2:
 Primer prevodjenja i pokretanja programa koriscenjem Makefile-a:
