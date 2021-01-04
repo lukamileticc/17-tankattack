@@ -101,19 +101,9 @@ void Client::jsonReceived(const QJsonObject &docObj)
     }
 }
 
-void Client::connectToServer(const QHostAddress &address, quint16 port)
+void Client::connectToServer(const QString &ipAdress, quint16 port)
 {
-    QList<QHostAddress> list = QNetworkInterface::allAddresses();
-
-    QString ipAdress;
-    //Nalazi nasu lokalnu ip adresu
-     for(int nIter=0; nIter<list.count(); nIter++)
-      {
-          if(!list[nIter].isLoopback())
-              if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
-                ipAdress = list[nIter].toString();
-      }
-    m_clientSocket->connectToHost(ipAdress, 1967);
+    m_clientSocket->connectToHost(ipAdress, port);
 }
 void Client::onReadyRead()
 {

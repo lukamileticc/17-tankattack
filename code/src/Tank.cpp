@@ -61,7 +61,19 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
     if(m_isMultiPlayer) {
         if(m_color != m_ClientColor) {
             m_Client = new Client();
-            m_Client->connectToServer(QHostAddress::LocalHost, 1967);
+
+            QList<QHostAddress> list = QNetworkInterface::allAddresses();
+
+            QString ipAdress;
+            //Nalazi nasu lokalnu ip adresu
+             for(int nIter=0; nIter<list.count(); nIter++)
+              {
+                  if(!list[nIter].isLoopback())
+                      if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
+                        ipAdress = list[nIter].toString();
+              }
+
+            m_Client->connectToServer(ipAdress, 1967);
         }
     }
 }

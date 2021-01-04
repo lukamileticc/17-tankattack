@@ -30,7 +30,7 @@ public:
     static void setCantShoot();
 
 public slots:
-    void connectToServer(const QHostAddress &address, quint16 port);
+    void connectToServer(const QString &ipAdress, quint16 port);
     void login(const QString &userName);
     void sendMessage(const QString &text);
     void disconnectFromHost();
@@ -38,8 +38,6 @@ private slots:
     void onReadyRead();
 signals:
     void connected();
-    void loggedIn();
-    void loginError(const QString &reason);
     void disconnected();
     void messageReceived(const QString &sender, const QString &text);
     void error(QAbstractSocket::SocketError socketError);
