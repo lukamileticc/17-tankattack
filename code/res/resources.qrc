@@ -1,32 +1,28 @@
 <RCC>
-    <qresource prefix="/resources/images">
-        <file>map_1_background.png</file>
-        <file>blue_tank.png</file>
-        <file>red_tank.png</file>
-        <file>tank_pipe.png</file>
-        <file>map_2_background.png</file>
-        <file>map_3_background.png</file>
-        <file>battles_log.png</file>
-        <file>boost.png</file>
-        <file>health.png</file>
-        <file>input_menu.png</file>
-        <file>main_menu.png</file>
-        <file>mp_menu.png</file>
-        <file>volume_1.png</file>
-        <file>volume_2.png</file>
-        <file>volume_3.png</file>
-        <file>volume_off.png</file>
-    </qresource>
-    <qresource prefix="/resources/files">
-        <file>mapa1.txt</file>
-        <file>istorija_borbi.txt</file>
-        <file>mapa2.txt</file>
-        <file>mapa3.txt</file>
-    </qresource>
-    <qresource prefix="/resources/sounds">
-        <file>game_song.mp3</file>
-        <file>button_click.wav</file>
-        <file>rocket_sound.wav</file>
-        <file>explosion.wav</file>
+    <qresource prefix="/resources">
+        <file>images/battles_log.png</file>
+        <file>images/blue_tank.png</file>
+        <file>images/boost.png</file>
+        <file>images/health.png</file>
+        <file>images/input_menu.png</file>
+        <file>images/main_menu.png</file>
+        <file>images/map_1_background.png</file>
+        <file>images/map_2_background.png</file>
+        <file>images/map_3_background.png</file>
+        <file>images/mp_menu.png</file>
+        <file>images/red_tank.png</file>
+        <file>images/tank_pipe.png</file>
+        <file>images/volume_1.png</file>
+        <file>images/volume_2.png</file>
+        <file>images/volume_3.png</file>
+        <file>images/volume_off.png</file>
+        <file>sounds/button_click.wav</file>
+        <file>sounds/explosion.wav</file>
+        <file>sounds/game_song.mp3</file>
+        <file>sounds/rocket_sound.wav</file>
+        <file>maps_and_battles_log/istorija_borbi.txt</file>
+        <file>maps_and_battles_log/mapa1.txt</file>
+        <file>maps_and_battles_log/mapa2.txt</file>
+        <file>maps_and_battles_log/mapa3.txt</file>
     </qresource>
 </RCC>

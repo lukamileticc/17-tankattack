@@ -65,6 +65,7 @@ World::~World() {
     //pravilnoo
     delete bvolumen;
 
+
  // info_t2 i info_t1 i game_score i info_pause se pravilno oslobadjaja
 
 
@@ -290,9 +291,7 @@ void World::show_battles() {
     QVector<QString> *previous_battles = nullptr;
 
     try {
-        previous_battles = read_previous_battles("../17-tankattack/code/res/istorija_borbi.txt");
-        if(previous_battles != nullptr)
-            qDebug() << "Tu sam";
+        previous_battles = read_previous_battles("../17-tankattack/code/res/maps_and_battles_log/istorija_borbi.txt");
     }
     catch(const QString &e) {
        qDebug() << e;
@@ -331,7 +330,7 @@ void World::show_battles() {
 }
 
 void World::start_server() {
-    qDebug() << "mrk1";
+
     Server *server = new Server();
     if (!server->listen(QHostAddress::Any, 1967)) {
         qDebug() << "Server hasn't started!";
@@ -340,12 +339,10 @@ void World::start_server() {
         qDebug() << "Server has started";
 
 
-    //server->waitForClients();
-
     isHosting = true;
 
     start();
-    qDebug() << "mrk";
+
 }
 
 void World::find_game() {
@@ -358,7 +355,7 @@ int rand_int(unsigned num_of_maps) {
 }
 
 void World::load_map() {
-    char map[] = ":/resources/files/mapa?.txt";
+    char map[] = ":/resources/maps_and_battles_log/mapa?.txt";
     char map_texture[] = ":/resources/images/map_?_background.png";
 
     int random_integer;
@@ -373,7 +370,7 @@ void World::load_map() {
 
     char number_of_map[2];
     std::sprintf(number_of_map, "%d", random_integer);
-    map[22] = number_of_map[0];
+    map[37] = number_of_map[0];
     map_texture[23] = number_of_map[0];
 
     view->setBackgroundBrush(QPixmap(map_texture));
@@ -459,7 +456,7 @@ void World::end_of_round(QString message) {
 
     if (m_score_t1 == 3 || m_score_t2 == 3) {
         end_game_screen(message);
-        write_the_last_battle("../17-tankattack/code/res/istorija_borbi.txt");
+        write_the_last_battle("../17-tankattack/code/res/maps_and_battles_log/istorija_borbi.txt");
     }
     else {
         QFont font("Helvetica", 50, QFont::Bold);
