@@ -574,7 +574,8 @@ void World::show_tank_info() {
 
     game_score_string.append(QString::number(m_score_t1)).append(":").append(QString::number(m_score_t2));
     game_score = scene->addText(game_score_string, font2);
-    game_score->setPos(550, 702);
+    int text_x_position = scene->width() / 2 - game_score->boundingRect().width() / 2;
+    game_score->setPos(text_x_position, 702);
     game_score->setDefaultTextColor("white");
 }
 

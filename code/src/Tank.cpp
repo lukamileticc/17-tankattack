@@ -47,10 +47,6 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
     tank_hit->setMedia(QUrl("qrc:/resources/sounds/explosion.wav"));
     tank_hit->setVolume(10);
 
-//    m_health_bar_tank = new HealthBar(50, 10);
-//    m_health_bar_tank->bar_frame->setPos(m_x - 10, m_y - 30);
-//    m_health_bar_tank->bar->setPos(m_x - 10, m_y - 30);
-
     if(m_id == 0) {
             m_healt_bar = new HealthBar(200, 709, 180, 35);
     }
@@ -79,9 +75,9 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
 }
 
 Tank::~Tank() {
+    //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
     delete tank_hit;
     delete rocket_sound;
-   //m_input se unistava na mestu gde su unistena oba tenk---> Na kraju svake runde!
 
     if(m_isMultiPlayer && m_color == m_HostColor)
         delete m_Client;
@@ -233,8 +229,7 @@ void Tank::advance()
 
     if(m_pause)
         return;
-    //pogledati opet taj if
-    //!this->isDestroyed
+
     if(m_isMultiPlayer && m_color == m_ClientColor)
     {
         if(Client::getReceivedX() != 0 && Client::getReceivedY() != 0)
@@ -271,13 +266,14 @@ void Tank::advance()
 //        m_tank_rocket_type=Rocket_type::Low_power;
 //    }
 
-    if(m_id == 0){up = m_input->k_w;
+    if(m_id == 0) {
+        up = m_input->k_w;
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
         launch = m_input->k_space;
     }
-    else if(m_id == 1){
+    else if(m_id == 1) {
         up = m_input->k_up;
         down = m_input->k_down;
         right = m_input->k_right;
@@ -288,7 +284,7 @@ void Tank::advance()
         std::cout << "Greska, nepostojeci tenk" << std::endl;
     }
 
-    if (this->is_destroyed()){
+    if (this->is_destroyed()) {
         return;
     }
 
@@ -308,7 +304,7 @@ void Tank::advance()
     x_v *= TANK_FRWD_SPEED;
     y_v *= TANK_FRWD_SPEED;
 
-    if(m_power == 1){
+    if(m_power == 1) {
         timer1+=0.1;
         m_tank_rocket_type=Rocket_type::Medium_power;
     }
@@ -454,14 +450,14 @@ void Tank::advance()
 
 void Tank::destroy() {
     this->destroyed = true;
-    //ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
-    // da li je tenk unisten!
-//    delete m_health_bar_tank->bar;
-//    delete m_health_bar_tank->barFrame;
+//  ne smemo brisati tenk ovde jer posle moramo proveriti ovaj flag
+//  da li je tenk unisten!
+//  delete m_health_bar_tank->bar;
+//  delete m_health_bar_tank->barFrame;
     scene()->removeItem(this);
-//    delete this;
-   // return;
-    //end_of_round();
+//  delete this;
+//  return;
+//  end_of_round();
 }
 
 bool Tank::is_destroyed() {
@@ -530,11 +526,13 @@ void Tank::decrease_health(int health) {
     if(getId() == 0) {
         delete m_healt_bar->bar;
         m_healt_bar->bar= new QGraphicsRectItem(200, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setPen(Qt::NoPen);
         m_healt_bar->bar->setBrush(Qt::red);
     }
     else {
         delete m_healt_bar->bar;
         m_healt_bar->bar= new QGraphicsRectItem(925, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setPen(Qt::NoPen);
         m_healt_bar->bar->setBrush(Qt::red);
     }
 }

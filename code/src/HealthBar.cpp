@@ -7,9 +7,11 @@ HealthBar::HealthBar(float x, float y, int width, int height)
 {
     bar_frame = new QGraphicsRectItem;
     bar_frame->setRect(x,y, width, height);
+    bar_frame->setPen(Qt::NoPen);
     bar_frame->setBrush(Qt::gray);
 
     bar = new QGraphicsRectItem(x,y, width, height);
+    bar->setPen(Qt::NoPen);
     bar->setBrush(Qt::red);
 }
 

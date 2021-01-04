@@ -78,7 +78,6 @@ void Rocket::move() {
             if (item->type() == 0) {
                 wall_collision_count++;
                 walls_colided_with.push_back(qgraphicsitem_cast<Wall*>(item));
-//                first = false;
             }
 
             //1 je id elementa Tank
@@ -87,6 +86,7 @@ void Rocket::move() {
                     rakete_tenka_0 -= 1;
                 else
                     rakete_tenka_1 -= 1;
+
                 Tank *t = qgraphicsitem_cast<Tank*>(item);
                 t->decrease_health(this->m_rocket_power);
                 //ovaj zvuk moze i kad se tenk unisti a moze i svaki put kad ga pogodi raketa

@@ -4,15 +4,12 @@
 
 Map::Map(int mNumOfWalls, const std::vector<Wall*> &mWalls) : m_num_of_walls(mNumOfWalls), m_walls(mWalls) {}
 
-Map::Map(const char * file)
-{
+Map::Map(const char * file) {
     QFile inputFile(file);
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
+    if (inputFile.open(QIODevice::ReadOnly)) {
        QTextStream in(&inputFile);
        std::vector<int>coordinates;
-       while (!in.atEnd())
-       {
+       while (!in.atEnd()) {
           QString line = in.readLine();
           QStringList lista=line.split(" ");
           for (auto broj : lista)
@@ -26,8 +23,8 @@ Map::Map(const char * file)
     Map::setNumOfWalls(m_walls.size());
 
 }
-Map::~Map()
-{
+
+Map::~Map() {
     //mapa mora da ima destrukot jer poseduje vektor pokazivaca
     for(auto &w : m_walls)
         delete w;

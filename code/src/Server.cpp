@@ -23,6 +23,7 @@ Server::~Server()
         singleThread->wait();
     }
 }
+
 void Server::incomingConnection(qintptr socketDescriptor)
 {
     ServerWorker *worker = new ServerWorker;
@@ -47,11 +48,13 @@ void Server::incomingConnection(qintptr socketDescriptor)
     connect(this, &Server::stopAllClients, worker, &ServerWorker::disconnectFromClient);
     m_clients.append(worker);
 }
+
 void Server::sendJson(ServerWorker *destination, const QJsonObject &message)
 {
     Q_ASSERT(destination);
     QTimer::singleShot(0, destination, std::bind(&ServerWorker::sendJson, destination, message));
 }
+
 void Server::broadcast(const QJsonObject &message, ServerWorker *exclude)
 {
     for (ServerWorker *worker : m_clients) {
