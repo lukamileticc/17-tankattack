@@ -30,7 +30,7 @@ Snimke svih modova igre mozete pogledati na sledecem youtube linku:
 ## Setup :pencil2:
 Prvo je potrebno klonirati repozitorijum i pozicionirati se u njega:
 ```
-$ git clone htttp-adress --ovde ce da bude pravi http
+$ git clone https://gitlab.com/matf-bg-ac-rs/course-rs/projects-2020-2021/17-tankattack.git
 $ cd 17-tankattack/
 ```
 
