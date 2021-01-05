@@ -40,7 +40,6 @@ void Client::login(const QString &userName)
         QJsonObject message;
         message[QStringLiteral("type")] = QStringLiteral("login");
         message[QStringLiteral("username")] = userName;
-        qDebug() << userName;
         clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
     }
 }

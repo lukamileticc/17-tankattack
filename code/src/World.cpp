@@ -212,9 +212,8 @@ void World::start() {
         host = Qt::red;
         client = Qt::blue;
     }
-
-    this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client, isMultiplayer);
-    this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client, isMultiplayer);
+    this->t1 = new Tank(0,Qt::red, 80, 500, input, host, client, isMultiplayer, ipAdress);
+    this->t2 = new Tank(1,Qt::blue, 1045, 500, input, host, client, isMultiplayer, ipAdress);
 
     t1->set_name(this->first_tank_name);
     t2->set_name(this->second_tank_name);
@@ -349,8 +348,53 @@ void World::start_server() {
 }
 
 void World::find_game() {
-    start();
+
+    scene->clear();
+    view->setBackgroundBrush(QPixmap(":/resources/images/input_menu.png"));
+    view->setDragMode(QGraphicsView::ScrollHandDrag);
+
+    //Button za start_battle
+    QPushButton *bbattle = make_button("Start Battle");
+    bbattle->setFixedWidth(200);
+    bbattle->setFixedHeight(66);
+    bbattle->move(scene->width() - bbattle->rect().width() - 25, scene->height() - bbattle->rect().height() - 25);
+    QObject::connect(bbattle,SIGNAL(released()),this,SLOT(start()),Qt::QueuedConnection);
+    QObject::connect(bbattle, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
+    //Button za back
+    QPushButton *bback = make_button("Back");
+    bback->setFixedWidth(200);
+    bback->setFixedHeight(66);
+    bback->move(25, scene->height() - bback->rect().height() - 25);
+    QObject::connect(bback, SIGNAL (released()), this, SLOT (main_menu()),Qt::QueuedConnection);
+    QObject::connect(bback, SIGNAL(pressed()), this, SLOT (button_clicked()), Qt::QueuedConnection);
+
+    //labeli za unos imena igraca
+    QGraphicsTextItem *iptext1 =  new QGraphicsTextItem(QString("ENTER IP ADRESS"));
+    iptext1->setDefaultTextColor(Qt::black);
+    iptext1->setFont(QFont("Helvetica", 20, QFont::Bold));
+    iptext1->setPos(250, 300);
+    scene->addItem(iptext1);
+
+    QFont font = QFont("Helvetica", 12, QFont::Thin);
+
+    //line edit za unos imena igraca
+    lineIp = new QLineEdit("Enter ip adress");
+    lineIp->setGeometry(600, 300, 310, 40);
+    lineIp->setClearButtonEnabled(true);
+    lineIp->setFont(font);
+    scene->addWidget(lineIp);
+
+
+    QObject::connect(lineIp, SIGNAL(textChanged(QString)), this, SLOT(enter_ip_adress()), Qt::QueuedConnection);
+
+    //start();
 }
+void World::enter_ip_adress()
+{
+    this->ipAdress = lineIp->text();
+}
+
 
 void World::generate_superpower()
 {
@@ -373,8 +417,9 @@ void World::generate_superpower()
         }
         }
 
+        }
 }
-}
+
 
 int rand_int(unsigned num_of_maps) {
     srand(time(NULL));

@@ -35,6 +35,7 @@ public:
     Tank *t2 = nullptr;
     QLineEdit *line1 = nullptr;
     QLineEdit *line2 = nullptr;
+    QLineEdit *lineIp = nullptr;
     QMediaPlayer *music = nullptr;
     QMediaPlayer *button_sound = nullptr;
     Input *input = nullptr;
@@ -71,6 +72,7 @@ public slots:
     void start_server();
     void find_game();
     void generate_superpower();
+    void enter_ip_adress();
 
 private:
     int m_in_game=0;
@@ -94,6 +96,10 @@ private:
 
     //flag koji oznacava da li smo vec bili u main_menu
     bool main_menu_flag = false;
+
+
+    //
+    QString ipAdress = "";
 };
 
 #endif // WORLD_HPP

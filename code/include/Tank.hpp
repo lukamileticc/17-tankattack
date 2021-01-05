@@ -11,7 +11,7 @@ class Tank : public QObject, public QGraphicsItem{
     Q_OBJECT
 public:
 
-    Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer);
+    Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer, QString );
 
     ~Tank();
 
@@ -102,6 +102,7 @@ private:
     Client *m_Client;
     QColor m_HostColor = Qt::blue;
     QColor m_ClientColor = Qt::red;
+    QString m_IpAdress;
     //~~~~~~~~~~~~~
 };
 

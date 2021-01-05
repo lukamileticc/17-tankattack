@@ -29,8 +29,8 @@
 float timer1 = 0.1;
 int r_power = 0;
 
-Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer)
-    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client), m_isMultiPlayer(isMultiPlayer)
+Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer, QString ipAdress)
+    :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client), m_isMultiPlayer(isMultiPlayer), m_IpAdress(ipAdress)
 {
     setTransformOriginPoint(TANK_W / 2, (TANK_H / 2) + PIPE_H / 2);
     setPos(m_x, m_y);
@@ -57,19 +57,23 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
     if(m_isMultiPlayer) {
         if(m_color != m_ClientColor) {
             m_Client = new Client();
+            if(m_HostColor == Qt::red)
+            {
+                QList<QHostAddress> list = QNetworkInterface::allAddresses();
 
-            QList<QHostAddress> list = QNetworkInterface::allAddresses();
+                    QString ipAdress;
+                     for(int nIter=0; nIter<list.count(); nIter++)
 
-            QString ipAdress;
-            //Nalazi nasu lokalnu ip adresu
-             for(int nIter=0; nIter<list.count(); nIter++)
-              {
-                  if(!list[nIter].isLoopback())
-                      if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
-                        ipAdress = list[nIter].toString();
-              }
-
-            m_Client->connectToServer(ipAdress, 1967);
+                      {
+                          if(!list[nIter].isLoopback())
+                              if (list[nIter].protocol() == QAbstractSocket::IPv4Protocol )
+                                ipAdress = list[nIter].toString();
+                      }
+                     m_Client->connectToServer(ipAdress, 1967);
+            }
+            else {
+                m_Client->connectToServer(m_IpAdress, 1967);
+            }
         }
     }
 }
