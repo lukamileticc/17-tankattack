@@ -11,7 +11,6 @@
 #include <iostream>
 #include <QDebug>
 #include <QGraphicsRotation>
-#include "../include/Server.hpp"
 
 #define ANGLE 9
 #define TANK_W 26
