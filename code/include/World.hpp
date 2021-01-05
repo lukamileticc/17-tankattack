@@ -70,6 +70,7 @@ public slots:
     void multiplayer_menu();
     void start_server();
     void find_game();
+    void generate_superpower();
 
 private:
     int m_in_game=0;

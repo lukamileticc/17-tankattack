@@ -41,13 +41,13 @@ void SuperPower::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(widget);
 
     if(m_type == QString("health")) {
-        QPixmap pixmap=QPixmap(":/resources/images/health1_resize.png");
+        QPixmap pixmap=QPixmap(":/resources/images/health.png");
         pixmap.scaled(m_size,m_size);
         painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);
     }
     else if (m_type == QString("superpower")) {
-        QPixmap pixmap=QPixmap(":/resources/images/superpower.jpg");
+        QPixmap pixmap=QPixmap(":/resources/images/boost.png");
         pixmap.scaled(m_size,m_size);
         painter->setBrush(pixmap);
         painter->drawRect(0, 0, m_size, m_size);

@@ -27,7 +27,6 @@
 
 float timer1 = 0.1;
 int r_power = 0;
-int timer2 = 0;
 
 Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QColor client, bool isMultiPlayer)
     :m_id(id),m_color(color), m_x(x), m_y(y), m_input(input), m_HostColor(host), m_ClientColor(client), m_isMultiPlayer(isMultiPlayer)
@@ -103,8 +102,6 @@ void Tank::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->setBrush(QPixmap(":/resources/images/tank_pipe.png"));
     painter->drawRect((TANK_W - PIPE_W) / 2, 0, PIPE_W, PIPE_H);
 
-    scene()->addItem(m_healt_bar->bar_frame);
-    scene()->addItem(m_healt_bar->bar);
 //    scene()->addItem(m_health_bar_tank->barFrame);
 //    scene()->addItem(m_health_bar_tank->bar);
 }
@@ -238,33 +235,11 @@ void Tank::advance()
     }
 
 
-//    timer2 += 1;
-//    if(m_end_of_round==0){
-//    if(timer2 % 500 == 0){
-//        int rand = QRandomGenerator::global()->bounded(2);
-//        qDebug() << rand;
-//        qDebug() << "SuperPower";
-
-//        if(rand == 0){
-//            SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-//            scene()->addItem(sp1);
-//        }
-//        else if(rand == 1){
-//            SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-//            scene()->addItem(sp2);
-//        }
-//        else if(rand == 2){
-//            SuperPower *sp3 = new SuperPower(QString("speed"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
-//            scene()->addItem(sp3);
-//        }
-//    }
-//    }
-
-//    if(timer1 > 10){
-//        r_power = 0;
-//        m_power = 0;
-//        m_tank_rocket_type=Rocket_type::Low_power;
-//    }
+    if(timer1 > 10){
+        r_power = 0;
+        m_power = 0;
+        m_tank_rocket_type=Rocket_type::Low_power;
+    }
 
     if(m_id == 0) {
         up = m_input->k_w;
@@ -501,23 +476,19 @@ float Tank:: GetY() const {
 }
 
 void Tank::SetHealth(float health) {
-    Q_UNUSED(health);
-//    m_health=health;
-//    delete m_health_bar_tank->bar;
-//    m_health_bar_tank->bar= new QGraphicsRectItem(0,0,get_current_health()*0.5,10);
-//    m_health_bar_tank->bar->setPos(GetX()-10,GetY()-30);
-//    m_health_bar_tank->bar->setBrush(Qt::green);
-//    if(getId()==0){
-//        delete m_healt_bar->bar;
-//        m_healt_bar->bar= new QGraphicsRectItem(40,704,get_current_health()*3.5,50);
-//        m_healt_bar->bar->setBrush(Qt::green);
-//        QString str = "bottom-right-radius: 10px; top-right-radius: 0px";
-//    }
-//    else{
-//    delete m_healt_bar->bar;
-//    m_healt_bar->bar= new QGraphicsRectItem(770,704,get_current_health()*3.5,50);
-//    m_healt_bar->bar->setBrush(Qt::green);
-//    }
+    m_health=health;
+    if(getId()==0){
+        delete m_healt_bar->bar;
+        m_healt_bar->bar= new QGraphicsRectItem(200, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setBrush(Qt::red);
+        scene()->addItem(m_healt_bar->bar);
+    }
+    else{
+        delete m_healt_bar->bar;
+        m_healt_bar->bar= new QGraphicsRectItem(925, 709, 45 * (get_current_health() / 25), 35);
+        m_healt_bar->bar->setBrush(Qt::red);
+        scene()->addItem(m_healt_bar->bar);
+    }
 }
 
 void Tank::decrease_health(int health) {
@@ -528,12 +499,17 @@ void Tank::decrease_health(int health) {
         m_healt_bar->bar= new QGraphicsRectItem(200, 709, 45 * (get_current_health() / 25), 35);
         m_healt_bar->bar->setPen(Qt::NoPen);
         m_healt_bar->bar->setBrush(Qt::red);
+        scene()->addItem(m_healt_bar->bar);
     }
     else {
         delete m_healt_bar->bar;
         m_healt_bar->bar= new QGraphicsRectItem(925, 709, 45 * (get_current_health() / 25), 35);
         m_healt_bar->bar->setPen(Qt::NoPen);
         m_healt_bar->bar->setBrush(Qt::red);
+        scene()->addItem(m_healt_bar->bar);
+    }
+    if(get_current_health()==0){
+        scene()->removeItem(m_healt_bar->bar);
     }
 }
 
@@ -560,4 +536,10 @@ QMediaPlayer* Tank::get_explosion_sound() const {
 void Tank::setColors() {
     m_ClientColor = Qt::blue;
     m_HostColor = Qt::red;
+}
+
+void Tank::add_health_bar()
+{
+    scene()->addItem(m_healt_bar->bar_frame);
+    scene()->addItem(m_healt_bar->bar);
 }

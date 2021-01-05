@@ -22,7 +22,7 @@
 #include <fstream>
 #include <random>
 #define NUM_OF_MAPS 3
-
+int timer2=0;
 bool World::world_pause;
 bool World::isHosting = false;
 
@@ -226,7 +226,8 @@ void World::start() {
     scene->addItem(t1);
     scene->addItem(t2);
     scene->addItem(input);
-
+    t1->add_health_bar();
+    t2->add_health_bar();
 //    scene->addItem(sp);
 //    scene->addItem(sp1);
 //    scene->addItem(sp2);
@@ -239,6 +240,8 @@ void World::start() {
     QObject::connect(input->timer, SIGNAL(timeout()), t1, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), t2, SLOT(advance()));
     QObject::connect(input->timer, SIGNAL(timeout()), this, SLOT(rounds()));
+    QObject::connect(input->timer, SIGNAL(timeout()), this, SLOT(generate_superpower()));
+
     input->timer->start(33);
 
 //    qDebug() << "helloooo";
@@ -347,6 +350,29 @@ void World::start_server() {
 
 void World::find_game() {
     start();
+}
+
+void World::generate_superpower()
+{
+        timer2 += 1;
+        if(m_ended_round==0){
+        if(timer2 % 500 == 0){
+            int rand = QRandomGenerator::global()->bounded(2);
+            qDebug() << rand;
+            qDebug() << "SuperPower";
+
+            if(rand == 0){
+                SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+                scene->addItem(sp1);
+            }
+            else if(rand == 1){
+                SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+                scene->addItem(sp2);
+            }
+        }
+        }
+
+
 }
 
 int rand_int(unsigned num_of_maps) {

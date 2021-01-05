@@ -53,7 +53,7 @@ public:
     void rotate(float angle);
 
     void setColors();
-
+    void add_health_bar();
     HealthBar* m_healt_bar;
     HealthBar* m_health_bar_tank;
 
