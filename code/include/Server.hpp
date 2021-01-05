@@ -16,6 +16,7 @@ class Server : public QTcpServer
 public:
     explicit Server(QObject *parent = nullptr);
     ~Server();
+    static bool m_two_connected();
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;

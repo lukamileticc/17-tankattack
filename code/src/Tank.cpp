@@ -11,6 +11,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QGraphicsRotation>
+#include "../include/Server.hpp"
 
 #define ANGLE 9
 #define TANK_W 26
@@ -242,11 +243,22 @@ void Tank::advance()
     }
 
     if(m_id == 0) {
+        if(!m_isMultiPlayer){
         up = m_input->k_w;
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
         launch = m_input->k_space;
+        }
+        else{
+            if (Server::m_two_connected()){
+                up = m_input->k_w;
+                down = m_input->k_s;
+                right = m_input->k_d;
+                left = m_input->k_a;
+                launch = m_input->k_space;
+            }
+        }
     }
     else if(m_id == 1) {
         up = m_input->k_up;
@@ -432,7 +444,13 @@ void Tank::destroy() {
     scene()->removeItem(this);
 //  delete this;
 //  return;
-//  end_of_round();
+    //  end_of_round();
+}
+
+bool Tank::isMultiplayer()
+{
+    return m_isMultiPlayer;
+
 }
 
 bool Tank::is_destroyed() {

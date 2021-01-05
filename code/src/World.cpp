@@ -354,6 +354,7 @@ void World::find_game() {
 
 void World::generate_superpower()
 {
+        if(t1->isMultiplayer()==false || t2->isMultiplayer()==false){
         timer2 += 1;
         if(m_ended_round==0){
         if(timer2 % 500 == 0){
@@ -362,17 +363,17 @@ void World::generate_superpower()
             qDebug() << "SuperPower";
 
             if(rand == 0){
-                SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+                SuperPower *sp1 = new SuperPower(QString("superpower"),QRandomGenerator::global()->bounded(1085),QRandomGenerator::global()->bounded(660),30);
                 scene->addItem(sp1);
             }
             else if(rand == 1){
-                SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1240),QRandomGenerator::global()->bounded(600),30);
+                SuperPower *sp2 = new SuperPower(QString("health"),QRandomGenerator::global()->bounded(1085),QRandomGenerator::global()->bounded(660),30);
                 scene->addItem(sp2);
             }
         }
         }
 
-
+}
 }
 
 int rand_int(unsigned num_of_maps) {

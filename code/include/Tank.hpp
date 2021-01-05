@@ -40,7 +40,7 @@ public:
     void set_name(const QString &name);
     //---
     void destroy();
-
+    bool isMultiplayer();
     float getXposition() const;
     float getYposition() const;
 
