@@ -73,6 +73,6 @@ $ sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimed
 
 - [Nikola Mićić, 170/2017](https://gitlab.com/nikolamicic) :boy:
 - [Luka Miletić, 91/2017](https://gitlab.com/lukamileticc) :man:
-- [Nikola Lazarević, 267/2017](https://gitlab.com/_nikolalazarevic) :person_with_blond_hair:
+- [Nikola Lazarević, 267/2017](https://gitlab.com/_nikolalazarevic) 
 - [Slobodan Jovanović, 186/2017](https://gitlab.com/Sloba98) :man_with_gua_pi_mao:
 - [Mihailo Trišović, 474/2018](https://gitlab.com/mihailotrisovic) :baby:
