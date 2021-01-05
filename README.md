@@ -4,37 +4,48 @@ TankAttack je 2D multiplayer (komunikacija 2 igrača preko mreže) igrica koja s
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
-* [Technologies](#technologies)
+* [Screenshots](#screenshots-dart)
+* [Technologies](#technologies-wrench)
 * [Setup](#setup-pencil2)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
 * [Developers](#developers-punch-muscle)
 
-## Screenshots
+## Screenshots :dart:
 ![Example screenshot](./screenshots/initial_interface.png)
 
 
+## Technologies :wrench:
+*
+*
+*
+
 ## Setup :pencil2:
-Primer prevodjenja i pokretanja programa koriscenjem Makefile-a:
+Prvo je potrebno klonirati repozitorijum i pozicionirati se u njega:
+```
+$ git clone htttp-adress --ovde ce da bude pravi http
+$ cd 17-tankattack/
+```
+
+Primer prevodjenja i pokretanja programa koriscenjem qmake-a i Makefile:
 ``` 
-$ mkdir ../build
-$ mv Makefile ../build
-$ cd ../build
+$ mkdir ../build_tank_attack
+$ qmake -makefile -o ../build_tank_attack/Makefile "CONFIG+=tank_attack" tank_attack.pro
+$ cd ../build_tank_attack
 $ make 
 $ ./tank_attack
-```
-Da biste imali zvuk tokom igrice potrebno je da instalirate neke dodatne biblioteke:
-```
-$ sudo apt-get update
-$ sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5
 ```
 Aplikaciju mozete pokrenuti takodje preko QtCreator-a, kako ga instalirati:
 ```
 sudo apt-get install build-essential
 sudo apt-get install qtcreator
 sudo apt-get install qt5-default
+```
+Da biste imali zvuk tokom igrice potrebno je da instalirate neke dodatne biblioteke:
+```
+$ sudo apt-get update
+$ sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5
 ```
 
 
