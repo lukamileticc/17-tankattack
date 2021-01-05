@@ -58,7 +58,7 @@ void Client::sendMessage(const QString &text)
     clientStream.setVersion(QDataStream::Qt_5_7);
     QJsonObject message;
 
-
+    //posalji koordinate tenka
     if(text != "Space")
     {
          message = {
@@ -67,7 +67,7 @@ void Client::sendMessage(const QString &text)
           {"angle", m_angle}
         };
     }
-
+    //posalji da treba da puca
     else if(text == "Space")
     {
         message = {
@@ -84,11 +84,12 @@ void Client::disconnectFromHost()
 
 void Client::jsonReceived(const QJsonObject &docObj)
 {
+    //primio je da treba da puca
     if(*docObj.find("Space") != *docObj.end())
     {
         tmp_Shoot = true;
     }
-
+     //primio je da treba da se pomera
      else {
         QJsonValue xs = *docObj.find("x");
         QJsonValue ys = *docObj.find("y");

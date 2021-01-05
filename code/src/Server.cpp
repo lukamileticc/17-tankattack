@@ -56,6 +56,7 @@ void Server::sendJson(ServerWorker *destination, const QJsonObject &message)
 
 void Server::broadcast(const QJsonObject &message, ServerWorker *exclude)
 {
+    //salji samo drugon klijentu
     for (ServerWorker *worker : m_clients) {
         Q_ASSERT(worker);
         if (worker != exclude){

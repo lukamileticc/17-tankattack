@@ -54,6 +54,7 @@ Tank::Tank(int id,QColor color, float x, float y, Input *input, QColor host, QCo
             m_healt_bar = new HealthBar(925, 709, 180, 35);
     }
 
+     //ako je multiplayer pravi se samo jedan klijent na obe strane
     if(m_isMultiPlayer) {
         if(m_color != m_ClientColor) {
             m_Client = new Client();
@@ -294,7 +295,7 @@ void Tank::advance()
     if (left && up) {
         move_forward();
         rotate(-ANGLE);
-
+        //posalji poruku drugom klijentu da si se pomerio
         if(m_isMultiPlayer && m_color != m_ClientColor) {
             m_Client->setTanksX(m_x);
             m_Client->setTanksY(m_y);
@@ -380,7 +381,7 @@ void Tank::advance()
             m_Client->sendMessage(TEST_MESSAGE);
         }
     }
-
+    //stigla je poruka od drugog klijenta da treba da puca
     if(m_isMultiPlayer && m_color == m_ClientColor && Client::isOrderedToShoot()){
         launch = true;
         Client::setCantShoot();
