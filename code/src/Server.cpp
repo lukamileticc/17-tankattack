@@ -7,7 +7,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QTimer>
-bool two_connected=false;
 Server::Server(QObject *parent)
     : QTcpServer(parent)
     , m_idealThreadCount(qMax(QThread::idealThreadCount(), 1))
@@ -22,11 +21,6 @@ Server::~Server()
         singleThread->quit();
         singleThread->wait();
     }
-}
-
-bool Server::m_two_connected()
-{
-    return two_connected;
 }
 
 void Server::incomingConnection(qintptr socketDescriptor)
@@ -52,9 +46,6 @@ void Server::incomingConnection(qintptr socketDescriptor)
     connect(worker, &ServerWorker::jsonReceived, this, std::bind(&Server::jsonReceived, this, worker, std::placeholders::_1));
     connect(this, &Server::stopAllClients, worker, &ServerWorker::disconnectFromClient);
     m_clients.append(worker);
-    if(m_clients.size()==2){
-        two_connected=true;
-    }
 }
 
 void Server::sendJson(ServerWorker *destination, const QJsonObject &message)

@@ -243,22 +243,12 @@ void Tank::advance()
     }
 
     if(m_id == 0) {
-        if(!m_isMultiPlayer){
         up = m_input->k_w;
         down = m_input->k_s;
         right = m_input->k_d;
         left = m_input->k_a;
         launch = m_input->k_space;
-        }
-        else{
-            if (Server::m_two_connected()){
-                up = m_input->k_w;
-                down = m_input->k_s;
-                right = m_input->k_d;
-                left = m_input->k_a;
-                launch = m_input->k_space;
-            }
-        }
+
     }
     else if(m_id == 1) {
         up = m_input->k_up;
