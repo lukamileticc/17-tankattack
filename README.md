@@ -4,17 +4,22 @@ TankAttack je 2D multiplayer (komunikacija 2 igrača preko mreže) igrica koja s
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
-* [Technologies](#technologies)
+* [Screenshots](#screenshots-dart)
+* [Technologies](#technologies-wrench)
 * [Setup](#setup-pencil2)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
 * [Developers](#developers-punch-muscle)
 
-## Screenshots
+## Screenshots :dart:
 ![Example screenshot](./screenshots/initial_interface.png)
 
+
+## Technologies :wrench:
+*
+*
+*
 
 ## Setup :pencil2:
 Prvo je potrebno klonirati repozitorijum i pozicionirati se u njega:
