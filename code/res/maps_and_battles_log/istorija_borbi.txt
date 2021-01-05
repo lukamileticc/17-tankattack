@@ -1,0 +1,5 @@
+Player 1  [3 - 1] Player 2
+Sloba  [3 - 1] Micko
+Sloba  [3 - 0] Micko
+Nikola  [0 - 3] Mihajlo
+Luka  [0 - 3] Sloba
