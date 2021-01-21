@@ -7,6 +7,7 @@
 * [Screenshots](#screenshots-dart)
 * [Technologies](#technologies-wrench)
 * [Setup](#setup-pencil2)
+* [Playing instructions](#playing-instructions-smile)
 * [Game controls](#game-controls-selfie)
 * [Developers](#developers-punch-muscle)
 
@@ -53,6 +54,21 @@ Da biste imali zvuk tokom igrice potrebno je da instalirate neke dodatne bibliot
 $ sudo apt-get update
 $ sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5
 ```
+## Playing instructions :smile:
+**1. Lokalno**
+- pokrenuti ./tank_attack
+- kliknuti na dugme start game 
+- uneti imena igracima
+- kliknuti na dugme start battle
+
+**2. Preko servera**
+- pokrenuti ./tank_attack
+- kliknuti na dugme multiplayer
+- prvi klijent treba kliknuti na host game i sacekati drugog klijenta
+- drugi klijent treba kliknuti na find game uneti ip adresu
+- zatim kliknuti na dugme start battle
+
+**Snimak koriscenja igrice mozete videti u odeljku screenshots.**
 
 ## Game controls :selfie:
 **Kontrole crvenog tenka:**       
@@ -73,6 +89,6 @@ $ sudo apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimed
 
 - [Nikola Mićić, 170/2017](https://gitlab.com/nikolamicic) :boy:
 - [Luka Miletić, 91/2017](https://gitlab.com/lukamileticc) :man:
-- [Nikola Lazarević, 267/2017](https://gitlab.com/_nikolalazarevic) 
+- [Nikola Lazarević, 267/2017](https://gitlab.com/_nikolalazarevic)
 - [Slobodan Jovanović, 186/2017](https://gitlab.com/Sloba98) :man_with_gua_pi_mao:
 - [Mihailo Trišović, 474/2018](https://gitlab.com/mihailotrisovic) :baby:
